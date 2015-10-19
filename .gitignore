@@ -18,3 +18,9 @@ ehthumbs.db
 [Ll]ibrary/
 sysinfo.txt
 *.stackdump
+
+# =========== #
+# Dev Scripts #
+# =========== #
+*.sh
+
