@@ -3,8 +3,8 @@
 Team Name: Gale
 
 Team:
-Ricky Shields
-Dolly Pham
-Tina Bui
-Brent Melton
-Ronnie Chung
+*Ricky Shields
+*Dolly Pham
+*Tina Bui
+*Brent Melton
+*Ronnie Chung
