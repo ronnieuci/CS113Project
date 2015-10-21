@@ -20,8 +20,8 @@ using System.Text;
         public static readonly int MinimumMatches = 3;
         public static readonly int MinimumMatchesForBonus = 4;
 
-        public static readonly int Match3Score = 10;
-        public static readonly int SubsequentMatchScore = 25000;
+        public static readonly int Match3Score = 2;
+        public static readonly int SubsequentMatchScore = 10;
     }
 
    

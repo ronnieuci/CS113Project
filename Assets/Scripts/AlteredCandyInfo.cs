@@ -11,7 +11,7 @@ public class AlteredCandyInfo
     public int MaxDistance { get; set; }
 
     /// <summary>
-    /// Returns distinct list of altered candy
+    /// Returns distinct list of altered blocks
     /// </summary>
     public IEnumerable<GameObject> AlteredBlock
     {
