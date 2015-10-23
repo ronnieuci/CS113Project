@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class ShapesArray
 {
-
     private GameObject[,] shapes = new GameObject[Constants.Rows, Constants.Columns];
 	
     /// Indexer
@@ -15,61 +14,29 @@ public class ShapesArray
         get
         {
             try
-            {
-                return shapes[row, column];
-            }
+            {	return shapes[row, column];		}
             catch (Exception ex)
-            {
-                
-                throw;
-            }
+            {	throw;	}
         }
         set
-        {
-            shapes[row, column] = value;
-        }
+        {	shapes[row, column] = value;	}
     }
-
 
     /// Swaps the position of two items, also keeping a backup
     public void Swap(GameObject g1, GameObject g2)
     {
-        //hold a backup in case no match is produced
-        backupG1 = g1;
-        backupG2 = g2;
-
         var g1Shape = g1.GetComponent<Shape>();
         var g2Shape = g2.GetComponent<Shape>();
 
-        //get array indexes
-        int g1Row = g1Shape.Row;
-        int g1Column = g1Shape.Column;
-        int g2Row = g2Shape.Row;
-        int g2Column = g2Shape.Column;
-
         //swap them in the array
-        var temp = shapes[g1Row, g1Column];
-        shapes[g1Row, g1Column] = shapes[g2Row, g2Column];
-        shapes[g2Row, g2Column] = temp;
+		var temp = shapes[g1Shape.Row, g1Shape.Column];
+		shapes[g1Shape.Row, g1Shape.Column] = shapes[g2Shape.Row, g2Shape.Column];
+		shapes[g2Shape.Row, g2Shape.Column] = temp;
 
         //swap their respective properties
         Shape.SwapColumnRow(g1Shape, g2Shape);
-
-    }
-	
-	/// Undoes the swap
-    public void UndoSwap()
-    {
-        if (backupG1 == null || backupG2 == null)
-            throw new Exception("Backup is null");
-
-        Swap(backupG1, backupG2);
     }
 
-    private GameObject backupG1;
-    private GameObject backupG2;
-
-	
     /// Returns the matches found for a list of GameObjects
     /// MatchesInfo class is not used as this method is called on subsequent collapses/checks, 
     /// not the one inflicted by user's drag
@@ -78,13 +45,10 @@ public class ShapesArray
     {
         List<GameObject> matches = new List<GameObject>();
         foreach (var go in gos)
-        {
-            matches.AddRange(GetMatches(go).MatchedBlock);
-        }
+        {	matches.AddRange(GetMatches(go).MatchedBlock);	}
         return matches.Distinct();
     }
-
-
+	
     /// Returns the matches found for a single GameObject
     public MatchesInfo GetMatches(GameObject go)
     {

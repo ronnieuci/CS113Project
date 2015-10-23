@@ -6,7 +6,7 @@ public class PlayerInput : MonoBehaviour {
 	//Keys
 	public KeyCode up,down,left,right,move,clear,shiftcw,shiftccw,swap,temp;
 	public ShapesManager sm;
-	public float x,y;
+	public float x,y,tempnum;
 	
 	private string direction;
 	public GameObject cursor;
@@ -31,32 +31,26 @@ public class PlayerInput : MonoBehaviour {
 		if (Input.GetKeyDown (clear)) 	 {sm.ResetBoard(); }
 		if (Input.GetKeyDown (shiftcw))  {RotateBoardCW();}
 		if (Input.GetKeyDown (shiftccw)) {RotateBoardCCW();}
-		if (Input.GetKeyDown (swap)) 	 {SwapPieces();}
 		
 	}
 	
 	void RotateBoardCW(){
-		if (direction == "U") 	   {direction = "R"; sm.SetGravity (direction);}
-		else if (direction == "R") {direction = "D"; sm.SetGravity (direction);}
-		else if (direction == "D") {direction = "L"; sm.SetGravity (direction);}
-		else if (direction == "L") {direction = "U"; sm.SetGravity (direction);}
+		if (direction == "U") 	   {direction = "R"; sm.SetGravityCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(x,y,0));}
+		else if (direction == "R") {direction = "D"; sm.SetGravityCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(x,y,0));}
+		else if (direction == "D") {direction = "L"; sm.SetGravityCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(x,y,0));}
+		else if (direction == "L") {direction = "U"; sm.SetGravityCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(x,y,0));}
 		cursor.transform.Rotate (new Vector3 (0, 0, 90));
 		temp=up; up=right; right=down; down=left; left=temp;
 	}
 	
 	void RotateBoardCCW(){
-		if (direction == "U") 	   {direction = "L"; sm.SetGravity (direction);}
-		else if (direction == "L") {direction = "D"; sm.SetGravity (direction);}
-		else if (direction == "D") {direction = "R"; sm.SetGravity (direction);}
-		else if (direction == "R") {direction = "U"; sm.SetGravity (direction);}
+		if (direction == "U") 	   {direction = "L"; sm.SetGravityCCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(x,y,0));}
+		else if (direction == "L") {direction = "D"; sm.SetGravityCCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(x,y,0));}
+		else if (direction == "D") {direction = "R"; sm.SetGravityCCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(x,y,0));}
+		else if (direction == "R") {direction = "U"; sm.SetGravityCCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(x,y,0));}
 		cursor.transform.Rotate(new Vector3(0,0,-90));
 		temp=up; up=right; right=down; down=left; left=temp;
 	}
-	
-	void SwapPieces(){
-		
-	}
-	
 	
 	public Vector2 getCursorLocation()
 	{

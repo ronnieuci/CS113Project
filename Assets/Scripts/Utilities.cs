@@ -8,11 +8,8 @@ using UnityEngine;
 
 public static class Utilities
 {
-    /// <summary>
+
     /// Helper method to animate potential matches
-    /// </summary>
-    /// <param name="potentialMatches"></param>
-    /// <returns></returns>
     public static IEnumerator AnimatePotentialMatches(IEnumerable<GameObject> potentialMatches)
     {
         for (float i = 1f; i >= 0.3f; i -= 0.1f)
@@ -37,13 +34,8 @@ public static class Utilities
         }
     }
 
-    /// <summary>
     /// Checks if a shape is next to another one
     /// either horizontally or vertically
-    /// </summary>
-    /// <param name="s1"></param>
-    /// <param name="s2"></param>
-    /// <returns></returns>
     public static bool AreVerticalOrHorizontalNeighbors(Shape s1, Shape s2)
     {
         return (s1.Column == s2.Column ||
@@ -52,10 +44,7 @@ public static class Utilities
                         && Mathf.Abs(s1.Row - s2.Row) <= 1;
     }
 
-    /// <summary>
     /// Will check for potential matches vertically and horizontally
-    /// </summary>
-    /// <returns></returns>
     public static IEnumerable<GameObject> GetPotentialMatches(ShapesArray shapes)
     {
         //list that will contain all the matches we find

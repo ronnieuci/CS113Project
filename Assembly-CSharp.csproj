@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\AlteredBlockInfo.cs" />
-     <Compile Include="Assets\Scripts\AlteredCandyInfo.cs" />
      <Compile Include="Assets\Scripts\Constants.cs" />
      <Compile Include="Assets\Scripts\DebugUtilities.cs" />
      <Compile Include="Assets\Scripts\Enums.cs" />

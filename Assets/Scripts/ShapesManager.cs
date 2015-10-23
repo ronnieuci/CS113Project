@@ -8,12 +8,15 @@ public class ShapesManager : MonoBehaviour
 {
 	public Text DebugText, ScoreText;
 	public bool ShowDebugInfo = false;
-	public ShapesArray shapes;
+
+
+	public ShapesArray shapes, boardStart;
 	public PlayerInput play;
 	public Camera cam;
 	
 	public readonly Vector2 BottomRight = new Vector2(0, 0);
 	public readonly Vector2 BlockSize = new Vector2(1, 1);
+	public Vector2 swapDirection1,swapDirection2;
 
 	private int score;
 	private GameState state = GameState.None;
@@ -29,6 +32,7 @@ public class ShapesManager : MonoBehaviour
 	IEnumerable<GameObject> potentialMatches;
 	
 	public SoundManager soundManager;
+
 	void Awake()
 	{
 		DebugText.enabled = ShowDebugInfo;
@@ -38,10 +42,8 @@ public class ShapesManager : MonoBehaviour
 	void Start()
 	{
 		InitializeTypesOnPrefabShapesAndBonuses();
-		
+		InitializeVariables();
 		InitializeBlockAndSpawnPositions();
-		
-		StartCheckForPotentialMatches();
 	}
 
 	/// Initialize shapes
@@ -49,86 +51,42 @@ public class ShapesManager : MonoBehaviour
 	{
 		//just assign the name of the prefab
 		foreach (var item in BlockPrefabs)
-		{
-			item.GetComponent<Shape>().Type = item.name;
-			
-		}
+		{	item.GetComponent<Shape>().Type = item.name;	}
 		
 		//assign the name of the respective "normal" candy as the type of the Bonus
 		foreach (var item in BonusPrefabs)
-		{
-			item.GetComponent<Shape>().Type = BlockPrefabs.
-				Where(x => x.GetComponent<Shape>().Type.Contains(item.name.Split('_')[1].Trim())).Single().name;
-		}
+		{	item.GetComponent<Shape>().Type = BlockPrefabs.Where(x => x.GetComponent<Shape>().Type.Contains(item.name.Split('_')[1].Trim())).Single().name;	}
 	}
-	
-	public void InitializeBlockAndSpawnPositionsFromPremadeLevel()
-	{
-		InitializeVariables();
-		
-		var premadeLevel = DebugUtilities.FillShapesArrayFromResourcesData();
-		
-		if (shapes != null)
-			DestroyAllBlocks();
-		
-		shapes = new ShapesArray();
-		SpawnPositions = new Vector2[Constants.Columns];
-		
-		for (int row = 0; row < Constants.Rows; row++)
-		{
-			for (int column = 0; column < Constants.Columns; column++)
-			{
-				
-				GameObject newBlock = null;
-				
-				newBlock = GetSpecificBlockOrBonusForPremadeLevel(premadeLevel[row, column]);
-				
-				InstantiateAndPlaceNewBlock(row, column, newBlock);
-			}
-		}
-		
-		SetupSpawnPositions();
-	}
-	
-	
+
 	public void InitializeBlockAndSpawnPositions()
-	{
-		InitializeVariables();
-		
+	{	
 		if (shapes != null)
 			DestroyAllBlocks();
 		
 		shapes = new ShapesArray();
 		SpawnPositions = new Vector2[Constants.Columns];
-		
+		swapDirection1 = Vector2.right;
+		swapDirection2 = Vector2.left;
+
 		for (int row = 0; row < Constants.Rows; row++)
 		{
 			for (int column = 0; column < Constants.Columns; column++)
 			{
-				
 				GameObject newBlock = GetRandomBlock();
 				
 				//check if two previous horizontal are of the same type
-				while (column >= 2 && shapes[row, column - 1].GetComponent<Shape>()
-				       .IsSameType(newBlock.GetComponent<Shape>())
+				while (column >= 2 && shapes[row, column - 1].GetComponent<Shape>().IsSameType(newBlock.GetComponent<Shape>()) 
 				       && shapes[row, column - 2].GetComponent<Shape>().IsSameType(newBlock.GetComponent<Shape>()))
-				{
-					newBlock = GetRandomBlock();
-				}
+				{	newBlock = GetRandomBlock();	}
 				
 				//check if two previous vertical are of the same type
-				while (row >= 2 && shapes[row - 1, column].GetComponent<Shape>()
-				       .IsSameType(newBlock.GetComponent<Shape>())
+				while (row >= 2 && shapes[row - 1, column].GetComponent<Shape>().IsSameType(newBlock.GetComponent<Shape>())
 				       && shapes[row - 2, column].GetComponent<Shape>().IsSameType(newBlock.GetComponent<Shape>()))
-				{
-					newBlock = GetRandomBlock();
-				}
-				
+				{	newBlock = GetRandomBlock();	}
 				InstantiateAndPlaceNewBlock(row, column, newBlock);
-				
 			}
 		}
-		
+		boardStart = shapes;
 		SetupSpawnPositions();
 	}
 	
@@ -136,10 +94,8 @@ public class ShapesManager : MonoBehaviour
 	
 	private void InstantiateAndPlaceNewBlock(int row, int column, GameObject newBlock)
 	{
-		GameObject go = Instantiate(newBlock,
-		                            BottomRight + new Vector2(column * BlockSize.x, row * BlockSize.y), Quaternion.identity)
-			as GameObject;
-		
+		GameObject go = Instantiate(newBlock,BottomRight + new Vector2(column * BlockSize.x, row * BlockSize.y), Quaternion.identity) as GameObject;
+	
 		//assign the specific properties
 		go.GetComponent<Shape>().Assign(newBlock.GetComponent<Shape>().Type, row, column);
 		shapes[row, column] = go;
@@ -149,51 +105,43 @@ public class ShapesManager : MonoBehaviour
 	{
 		//create the spawn positions for the new shapes (will pop from the 'ceiling')
 		for (int column = 0; column < Constants.Columns; column++)
-		{
-			SpawnPositions[column] = BottomRight
-				+ new Vector2(column * BlockSize.x, Constants.Rows * BlockSize.y);
-		}
+		{	SpawnPositions[column] = BottomRight + new Vector2(column * BlockSize.x, Constants.Rows * BlockSize.y);	}
 	}
 
 
 	/// Destroy all Block gameobjects and resets board\
 	public void ResetBoard()
-	{
-		for (int row = 0; row < Constants.Rows; row++)
-		{
-			for (int column = 0; column < Constants.Columns; column++)
-			{
-				Destroy(shapes[row, column]);
-			}
-		}
-		InitializeBlockAndSpawnPositions();
-	}
+	{	InitializeBlockAndSpawnPositions();	}
 	
-	public void SetGravity(string direction)
+	public void SetGravityCW(string direction)
 	{
-		if 		(direction.ToUpper() == "U"){ cam.transform.Rotate(new Vector3(0,0,90));Physics.gravity = new Vector3(0,-1, 0); }
-		else if (direction.ToUpper() == "D"){ cam.transform.Rotate(new Vector3(0,0,90));Physics.gravity = new Vector3(0,1, 0);  }
-		else if (direction.ToUpper() == "L"){ cam.transform.Rotate(new Vector3(0,0,90));Physics.gravity = new Vector3(-1,0, 0); }
-		else if (direction.ToUpper() == "R"){ cam.transform.Rotate(new Vector3(0,0,90));Physics.gravity = new Vector3(1,0, 0);  }
-
-
+		if 		(direction.ToUpper() == "U"){ swapDirection1=Vector2.down;swapDirection2=Vector2.up;	}
+		else if (direction.ToUpper() == "R"){ swapDirection1=Vector2.left;swapDirection2=Vector2.right;	}
+		else if (direction.ToUpper() == "D"){ swapDirection1=Vector2.up;swapDirection2=Vector2.down;	}
+		else if (direction.ToUpper() == "L"){ swapDirection1=Vector2.right;swapDirection2=Vector2.left;	}
+		cam.transform.Rotate(new Vector3(0,0,90));
 	}
 
-	/// <summary>
-	/// Destroy all candy gameobjects
-	/// </summary>
+	public void SetGravityCCW(string direction)
+	{
+		if 		(direction.ToUpper() == "U"){ swapDirection1=Vector2.up;swapDirection2=Vector2.down;	}
+		else if (direction.ToUpper() == "R"){ swapDirection1=Vector2.right;swapDirection2=Vector2.left;	}
+		else if (direction.ToUpper() == "D"){ swapDirection1=Vector2.down;swapDirection2=Vector2.up;	}
+		else if (direction.ToUpper() == "L"){ swapDirection1=Vector2.left;swapDirection2=Vector2.right;	}
+		cam.transform.Rotate(new Vector3(0,0,-90));
+	}
+
+
+	/// Destroy all block gameobjects
 	private void DestroyAllBlocks()
 	{
 		for (int row = 0; row < Constants.Rows; row++)
 		{
 			for (int column = 0; column < Constants.Columns; column++)
-			{
-				Destroy(shapes[row, column]);
-			}
+			{	Destroy(shapes[row, column]);	}
 		}
 	}
-	
-	
+
 	// Update is called once per frame
 	void Update()
 	{
@@ -202,38 +150,29 @@ public class ShapesManager : MonoBehaviour
 
 		if (state == GameState.None)
 		{
-			//user has clicked or touched
-			if (Input.GetKey(KeyCode.Space))
+			if (Input.GetKey(play.swap))
 			{
 				//get the hit position
-				var hit = Physics2D.Raycast(play.getCursorLocation(), Vector2.left);
+				var hit = Physics2D.Raycast(play.getCursorLocation(), swapDirection2);
 				if (hit.collider != null) //we have a hit!!!
 				{
 					hitGo = hit.collider.gameObject;
 					state = GameState.SelectionStarted;
-				}
-				
+				}	
 			}
 		}
 		else if (state == GameState.SelectionStarted)
 		{
-				var hit = Physics2D.Raycast(play.getCursorLocation(), Vector2.right);
+				var hit = Physics2D.Raycast(play.getCursorLocation(), swapDirection1);
 
 				//we have a hit
-
 				if (hit.collider == null)
 				{			}
 				else if(hit.collider != null && hitGo != hit.collider.gameObject)
 				{
-					//user did a hit, no need to show him hints 
-					StopCheckForPotentialMatches();
-					
 					//if the two shapes are diagonally aligned (different row and column), just return
-					if (!Utilities.AreVerticalOrHorizontalNeighbors(hitGo.GetComponent<Shape>(),
-					                                                hit.collider.gameObject.GetComponent<Shape>()))
-					{
-						state = GameState.None;
-					}
+					if (!Utilities.AreVerticalOrHorizontalNeighbors(hitGo.GetComponent<Shape>(), hit.collider.gameObject.GetComponent<Shape>()))
+					{	state = GameState.None;	}
 					else
 					{
 						state = GameState.Animating;
@@ -329,9 +268,7 @@ public class ShapesManager : MonoBehaviour
 
 			timesRun++;
 		}
-		
 		state = GameState.None;
-		StartCheckForPotentialMatches();
 	}
 
 	/// Creates a new Bonus based on the shape parameter
@@ -426,21 +363,14 @@ public class ShapesManager : MonoBehaviour
 	{
 		ScoreText.text = "Score: " + score.ToString();
 	}
-	
-	/// <summary>
+
 	/// Get a random explosion
-	/// </summary>
-	/// <returns></returns>
 	private GameObject GetRandomExplosion()
 	{
 		return ExplosionPrefabs[Random.Range(0, ExplosionPrefabs.Length)];
 	}
-	
-	/// <summary>
+
 	/// Gets the specified Bonus for the specific type
-	/// </summary>
-	/// <param name="type"></param>
-	/// <returns></returns>
 	private GameObject GetBonusFromType(string type)
 	{
 		string color = type.Split('_')[1].Trim();
@@ -451,33 +381,8 @@ public class ShapesManager : MonoBehaviour
 		}
 		throw new System.Exception("Wrong type");
 	}
-	
-	/// <summary>
-	/// Starts the coroutines, keeping a reference to stop later
-	/// </summary>
-	private void StartCheckForPotentialMatches()
-	{
-		StopCheckForPotentialMatches();
-		//get a reference to stop it later
-		CheckPotentialMatchesCoroutine = CheckPotentialMatches();
-		StartCoroutine(CheckPotentialMatchesCoroutine);
-	}
-	
-	/// <summary>
-	/// Stops the coroutines
-	/// </summary>
-	private void StopCheckForPotentialMatches()
-	{
-		if (AnimatePotentialMatchesCoroutine != null)
-			StopCoroutine(AnimatePotentialMatchesCoroutine);
-		if (CheckPotentialMatchesCoroutine != null)
-			StopCoroutine(CheckPotentialMatchesCoroutine);
-		ResetOpacityOnPotentialMatches();
-	}
-	
-	/// <summary>
+
 	/// Resets the opacity on potential matches (probably user dragged something?)
-	/// </summary>
 	private void ResetOpacityOnPotentialMatches()
 	{
 		if (potentialMatches != null)
@@ -489,55 +394,5 @@ public class ShapesManager : MonoBehaviour
 			c.a = 1.0f;
 			item.GetComponent<SpriteRenderer>().color = c;
 		}
-	}
-	
-	/// <summary>
-	/// Finds potential matches
-	/// </summary>
-	/// <returns></returns>
-	private IEnumerator CheckPotentialMatches()
-	{
-		yield return new WaitForSeconds(Constants.WaitBeforePotentialMatchesCheck);
-		potentialMatches = Utilities.GetPotentialMatches(shapes);
-		if (potentialMatches != null)
-		{
-			while (true)
-			{
-				
-				AnimatePotentialMatchesCoroutine = Utilities.AnimatePotentialMatches(potentialMatches);
-				StartCoroutine(AnimatePotentialMatchesCoroutine);
-				yield return new WaitForSeconds(Constants.WaitBeforePotentialMatchesCheck);
-			}
-		}
-	}
-	
-	/// <summary>
-	/// Gets a specific candy or Bonus based on the premade level information.
-	/// </summary>
-	/// <param name="info"></param>
-	/// <returns></returns>
-	private GameObject GetSpecificBlockOrBonusForPremadeLevel(string info)
-	{
-		var tokens = info.Split('_');
-		
-		if (tokens.Count() == 1)
-		{
-			foreach (var item in BlockPrefabs)
-			{
-				if (item.GetComponent<Shape>().Type.Contains(tokens[0].Trim()))
-					return item;
-			}
-			
-		}
-		else if (tokens.Count() == 2 && tokens[1].Trim() == "B")
-		{
-			foreach (var item in BonusPrefabs)
-			{
-				if (item.name.Contains(tokens[0].Trim()))
-					return item;
-			}
-		}
-		
-		throw new System.Exception("Wrong type, check your premade level");
 	}
 }

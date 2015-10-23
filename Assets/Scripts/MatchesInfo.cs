@@ -8,15 +8,10 @@ using UnityEngine;
 public class MatchesInfo
 {
     private List<GameObject> matchedBlocks;
-
-    /// Returns distinct list of matched candy
-
+	
     public IEnumerable<GameObject> MatchedBlock
     {
-        get
-        {
-            return matchedBlocks.Distinct();
-        }
+        get	{ return matchedBlocks.Distinct(); }
     }
 
     public void AddObject(GameObject go)

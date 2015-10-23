@@ -9,15 +9,10 @@ public class AlteredBlockInfo
     private List<GameObject> newBlock { get; set; }
     public int MaxDistance { get; set; }
 
-    /// <summary>
-    /// Returns distinct list of altered candy
-    /// </summary>
+    /// Returns distinct list of altered Blocks
     public IEnumerable<GameObject> AlteredBlock
     {
-        get
-        {
-            return newBlock.Distinct();
-        }
+        get	{	return newBlock.Distinct();	}
     }
 
     public void AddBlock(GameObject go)
