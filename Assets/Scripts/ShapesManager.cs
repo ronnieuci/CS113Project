@@ -6,16 +6,14 @@ using UnityEngine.UI;
 
 public class ShapesManager : MonoBehaviour
 {
-	public Text DebugText, ScoreText;
-	public bool ShowDebugInfo = false;
 
-
+	public Text ScoreText;
 	public ShapesArray shapes, boardStart;
 	public PlayerInput play;
 	public Camera cam;
 	
-	public readonly Vector2 BottomRight = new Vector2(0, 0);
-	public readonly Vector2 BlockSize = new Vector2(1, 1);
+	public Vector2 BottomRight;
+	public Vector2 BlockSize = new Vector2(1, 1);
 	public Vector2 swapDirection1,swapDirection2;
 
 	private int score;
@@ -29,14 +27,8 @@ public class ShapesManager : MonoBehaviour
 	private IEnumerator CheckPotentialMatchesCoroutine;
 	private IEnumerator AnimatePotentialMatchesCoroutine;
 	
-	IEnumerable<GameObject> potentialMatches;
-	
-	public SoundManager soundManager;
-
 	void Awake()
-	{
-		DebugText.enabled = ShowDebugInfo;
-	}
+	{ }
 	
 	// Use this for initialization
 	void Start()
@@ -145,9 +137,6 @@ public class ShapesManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (ShowDebugInfo)
-			DebugText.text = DebugUtilities.GetArrayContents(shapes);
-
 		if (state == GameState.None)
 		{
 			if (Input.GetKey(play.swap))
@@ -384,15 +373,5 @@ public class ShapesManager : MonoBehaviour
 
 	/// Resets the opacity on potential matches (probably user dragged something?)
 	private void ResetOpacityOnPotentialMatches()
-	{
-		if (potentialMatches != null)
-			foreach (var item in potentialMatches)
-		{
-			if (item == null) break;
-			
-			Color c = item.GetComponent<SpriteRenderer>().color;
-			c.a = 1.0f;
-			item.GetComponent<SpriteRenderer>().color = c;
-		}
-	}
+	{	}
 }
