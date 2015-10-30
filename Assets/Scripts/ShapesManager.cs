@@ -14,15 +14,13 @@ public class ShapesManager : MonoBehaviour
 	
 	public Vector2 BottomRight;
 	public Vector2 BlockSize = new Vector2(1, 1);
-	public Vector2 swapDirection1,swapDirection2;
+	private Vector2 swapDirection1,swapDirection2;
 
 	private int score;
 	private GameState state = GameState.None;
 	private GameObject hitGo = null;
 	private Vector2[] SpawnPositions;
-	public GameObject[] BlockPrefabs;
-	public GameObject[] ExplosionPrefabs;
-	public GameObject[] BonusPrefabs;
+	public GameObject[] BlockPrefabs,ExplosionPrefabs,BonusPrefabs;
 	
 	private IEnumerator CheckPotentialMatchesCoroutine;
 	private IEnumerator AnimatePotentialMatchesCoroutine;
@@ -260,6 +258,27 @@ public class ShapesManager : MonoBehaviour
 		state = GameState.None;
 	}
 
+
+	private void Collapse()
+	{
+/*		var collapsedBlockInfo = shapes.Collapse(Constants.Columns);
+
+		int maxDistance = Mathf.Max(collapsedBlockInfo.MaxDistance);
+		MoveAndAnimate(collapsedBlockInfo.AlteredBlock, maxDistance);
+
+		//will wait for both of the above animations
+		yield return new WaitForSeconds(Constants.MoveAnimationMinDuration * maxDistance);
+		
+		//search if there are matches with the new/collapsed items
+		totalMatches = shapes.GetMatches(collapsedBlockInfo.AlteredBlock);
+		
+		timesRun++;
+
+*/
+	}
+
+
+
 	/// Creates a new Bonus based on the shape parameter
 	private void CreateBonus(Shape hitGoCache)
 	{
@@ -370,8 +389,4 @@ public class ShapesManager : MonoBehaviour
 		}
 		throw new System.Exception("Wrong type");
 	}
-
-	/// Resets the opacity on potential matches (probably user dragged something?)
-	private void ResetOpacityOnPotentialMatches()
-	{	}
 }

@@ -254,5 +254,43 @@ public class ShapesArray
         }
         return emptyItems;
     }
+
+	private ShapesArray[,] rotateBoardCW()
+	{
+		GameObject[,] temp = new GameObject[Constants.Rows, Constants.Columns];
+		int rowC = 0;
+		int colC = 0;
+		
+		for (int row = 0; row < Constants.Rows; row++) 
+		{
+			for (int column = 8; column >= 0; column--) 
+			{
+				temp[rowC,colC]=shapes[row,column];
+				colC += 1;
+			}
+			rowC += 1;
+		}
+		
+		return temp
+	}
+
+	private ShapesArray[,] rotateBoardCCW()
+	{
+		GameObject[,] temp = new GameObject[Constants.Rows, Constants.Columns];
+		int rowC = 0;
+		int colC = 0;
+		
+		for (int column = 0; column < Constants.Columns; column++) 
+		{
+			for (int row = 8; row >= 0; row--) 
+			{
+				temp[rowC,colC]=shapes[row,column];
+				rowC += 1;
+			}
+			colC += 1;
+		}
+		
+		return temp
+	}
 }
 
