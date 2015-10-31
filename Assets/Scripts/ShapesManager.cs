@@ -11,8 +11,9 @@ public class ShapesManager : MonoBehaviour
 	public ShapesArray shapes, boardStart;
 	public PlayerInput play;
 	public Camera cam;
+	public Transform parent;
 	
-	public Vector2 BottomRight;
+	public Vector2 middlePoint;
 	public Vector2 BlockSize = new Vector2(1, 1);
 	private Vector2 swapDirection1,swapDirection2;
 
@@ -23,10 +24,11 @@ public class ShapesManager : MonoBehaviour
 	public GameObject[] BlockPrefabs,ExplosionPrefabs,BonusPrefabs;
 	
 	private IEnumerator CheckPotentialMatchesCoroutine;
-	private IEnumerator AnimatePotentialMatchesCoroutine;
 	
 	void Awake()
-	{ }
+	{
+		middlePoint = new Vector2 (middlePoint.x - 3.5f, middlePoint.y - 3.5f);
+	}
 	
 	// Use this for initialization
 	void Start()
@@ -43,7 +45,7 @@ public class ShapesManager : MonoBehaviour
 		foreach (var item in BlockPrefabs)
 		{	item.GetComponent<Shape>().Type = item.name;	}
 		
-		//assign the name of the respective "normal" candy as the type of the Bonus
+		//assign the name of the respective "normal" as the type of the Bonus
 		foreach (var item in BonusPrefabs)
 		{	item.GetComponent<Shape>().Type = BlockPrefabs.Where(x => x.GetComponent<Shape>().Type.Contains(item.name.Split('_')[1].Trim())).Single().name;	}
 	}
@@ -73,7 +75,8 @@ public class ShapesManager : MonoBehaviour
 				while (row >= 2 && shapes[row - 1, column].GetComponent<Shape>().IsSameType(newBlock.GetComponent<Shape>())
 				       && shapes[row - 2, column].GetComponent<Shape>().IsSameType(newBlock.GetComponent<Shape>()))
 				{	newBlock = GetRandomBlock();	}
-				InstantiateAndPlaceNewBlock(row, column, newBlock);
+
+				InstantiateAndPlaceNewBlock(row,column, newBlock);
 			}
 		}
 		boardStart = shapes;
@@ -84,18 +87,19 @@ public class ShapesManager : MonoBehaviour
 	
 	private void InstantiateAndPlaceNewBlock(int row, int column, GameObject newBlock)
 	{
-		GameObject go = Instantiate(newBlock,BottomRight + new Vector2(column * BlockSize.x, row * BlockSize.y), Quaternion.identity) as GameObject;
+		GameObject go = Instantiate(newBlock,middlePoint + new Vector2((column * BlockSize.x)+parent.transform.position.x, (row * BlockSize.y)+parent.transform.position.y), Quaternion.identity) as GameObject;
 	
 		//assign the specific properties
 		go.GetComponent<Shape>().Assign(newBlock.GetComponent<Shape>().Type, row, column);
 		shapes[row, column] = go;
+		go.transform.parent = parent;
 	}
 	
 	private void SetupSpawnPositions()
 	{
 		//create the spawn positions for the new shapes (will pop from the 'ceiling')
 		for (int column = 0; column < Constants.Columns; column++)
-		{	SpawnPositions[column] = BottomRight + new Vector2(column * BlockSize.x, Constants.Rows * BlockSize.y);	}
+		{	SpawnPositions[column] = middlePoint + new Vector2((column * BlockSize.x)+parent.transform.position.x, (Constants.Rows * BlockSize.y)+parent.transform.position.y);	}
 	}
 
 
@@ -103,25 +107,6 @@ public class ShapesManager : MonoBehaviour
 	public void ResetBoard()
 	{	InitializeBlockAndSpawnPositions();	}
 	
-	public void SetGravityCW(string direction)
-	{
-		if 		(direction.ToUpper() == "U"){ swapDirection1=Vector2.down;swapDirection2=Vector2.up;	}
-		else if (direction.ToUpper() == "R"){ swapDirection1=Vector2.left;swapDirection2=Vector2.right;	}
-		else if (direction.ToUpper() == "D"){ swapDirection1=Vector2.up;swapDirection2=Vector2.down;	}
-		else if (direction.ToUpper() == "L"){ swapDirection1=Vector2.right;swapDirection2=Vector2.left;	}
-		cam.transform.Rotate(new Vector3(0,0,90));
-	}
-
-	public void SetGravityCCW(string direction)
-	{
-		if 		(direction.ToUpper() == "U"){ swapDirection1=Vector2.up;swapDirection2=Vector2.down;	}
-		else if (direction.ToUpper() == "R"){ swapDirection1=Vector2.right;swapDirection2=Vector2.left;	}
-		else if (direction.ToUpper() == "D"){ swapDirection1=Vector2.down;swapDirection2=Vector2.up;	}
-		else if (direction.ToUpper() == "L"){ swapDirection1=Vector2.left;swapDirection2=Vector2.right;	}
-		cam.transform.Rotate(new Vector3(0,0,-90));
-	}
-
-
 	/// Destroy all block gameobjects
 	private void DestroyAllBlocks()
 	{
@@ -282,9 +267,9 @@ public class ShapesManager : MonoBehaviour
 	/// Creates a new Bonus based on the shape parameter
 	private void CreateBonus(Shape hitGoCache)
 	{
-		GameObject Bonus = Instantiate(GetBonusFromType(hitGoCache.Type), BottomRight
-		                               + new Vector2(hitGoCache.Column * BlockSize.x,
-		              hitGoCache.Row * BlockSize.y), Quaternion.identity)
+		GameObject Bonus = Instantiate(GetBonusFromType(hitGoCache.Type), middlePoint
+		                               + new Vector2((hitGoCache.Column * BlockSize.x)+parent.transform.position.x,
+		              (hitGoCache.Row * BlockSize.y)+parent.transform.position.x), Quaternion.identity)
 			as GameObject;
 		shapes[hitGoCache.Row, hitGoCache.Column] = Bonus;
 		var BonusShape = Bonus.GetComponent<Shape>();
@@ -329,15 +314,10 @@ public class ShapesManager : MonoBehaviour
 	{
 		foreach (var item in movedGameObjects)
 		{
-			item.transform.positionTo(Constants.MoveAnimationMinDuration * distance, BottomRight +
-			                          new Vector2(item.GetComponent<Shape>().Column * BlockSize.x, item.GetComponent<Shape>().Row * BlockSize.y));
+			item.transform.positionTo(Constants.MoveAnimationMinDuration * distance,middlePoint + new Vector2(((item.GetComponent<Shape>().Column * BlockSize.x)+parent.transform.position.x), (item.GetComponent<Shape>().Row * BlockSize.y)+parent.transform.position.y));
 		}
 	}
-	
-	/// <summary>
-	/// Destroys the item from the scene and instantiates a new explosion gameobject
-	/// </summary>
-	/// <param name="item"></param>
+
 	private void RemoveFromScene(GameObject item)
 	{
 		GameObject explosion = GetRandomExplosion();
@@ -345,11 +325,7 @@ public class ShapesManager : MonoBehaviour
 		Destroy(newExplosion, Constants.ExplosionDuration);
 		Destroy(item);
 	}
-	
-	/// <summary>
-	/// Get a random candy
-	/// </summary>
-	/// <returns></returns>
+
 	private GameObject GetRandomBlock()
 	{
 		return BlockPrefabs[Random.Range(0, BlockPrefabs.Length)];
@@ -389,4 +365,15 @@ public class ShapesManager : MonoBehaviour
 		}
 		throw new System.Exception("Wrong type");
 	}
+
+	public void rotateBoardCW()
+	{
+		shapes.rotateBoardCW ();
+	}
+
+	public void rotateBoardCCW()
+	{
+		shapes.rotateBoardCCW ();
+	}
+
 }

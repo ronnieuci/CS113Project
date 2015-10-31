@@ -255,42 +255,42 @@ public class ShapesArray
         return emptyItems;
     }
 
-	private ShapesArray[,] rotateBoardCW()
+	public void rotateBoardCCW()
 	{
 		GameObject[,] temp = new GameObject[Constants.Rows, Constants.Columns];
-		int rowC = 0;
-		int colC = 0;
+
 		
-		for (int row = 0; row < Constants.Rows; row++) 
+		int rowC = 0;
+		for (int col = 8; col > 0; col--) 
 		{
-			for (int column = 8; column >= 0; column--) 
+			int colC = 0;
+			for (int row = 0; row < Constants.Rows; row++ ) 
 			{
-				temp[rowC,colC]=shapes[row,column];
+				temp[rowC,colC] = shapes[row,col];
 				colC += 1;
 			}
 			rowC += 1;
 		}
-		
-		return temp
+		shapes = temp;
 	}
 
-	private ShapesArray[,] rotateBoardCCW()
+	public void rotateBoardCW()
 	{
 		GameObject[,] temp = new GameObject[Constants.Rows, Constants.Columns];
+		
+		
 		int rowC = 0;
-		int colC = 0;
-		
-		for (int column = 0; column < Constants.Columns; column++) 
+		for (int col = 8; col > 0; col--) 
 		{
-			for (int row = 8; row >= 0; row--) 
+			int colC = 0;
+			for (int row = 0; row < Constants.Rows; row++ ) 
 			{
-				temp[rowC,colC]=shapes[row,column];
-				rowC += 1;
+				temp[rowC,colC] = shapes[row,col];
+				colC += 1;
 			}
-			colC += 1;
+			rowC += 1;
 		}
-		
-		return temp
+		shapes = temp;
 	}
 }
 
