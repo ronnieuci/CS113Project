@@ -14,7 +14,7 @@ public class ShapesManager : MonoBehaviour
 	public Transform parent;
 	
 	public Vector2 middlePoint;
-	public Vector2 BlockSize = new Vector2(1, 1);
+	public Vector2 BlockSize = new Vector2(1.01f, 1.01f);
 	private Vector2 swapDirection1,swapDirection2;
 
 	private int score;
@@ -77,18 +77,18 @@ public class ShapesManager : MonoBehaviour
 				{	newBlock = GetRandomBlock();	}
 
 				InstantiateAndPlaceNewBlock(row,column, newBlock);
+
 			}
+
 		}
 		boardStart = shapes;
 		SetupSpawnPositions();
 	}
-	
-	
-	
+
 	private void InstantiateAndPlaceNewBlock(int row, int column, GameObject newBlock)
 	{
-		GameObject go = Instantiate(newBlock,middlePoint + new Vector2((column * BlockSize.x)+parent.transform.position.x, (row * BlockSize.y)+parent.transform.position.y), Quaternion.identity) as GameObject;
-	
+		GameObject go = Instantiate(newBlock,middlePoint + new Vector2((column * BlockSize.x)+parent.transform.position.x, Constants.Columns+(BlockSize.y*row)+parent.transform.position.y), Quaternion.identity) as GameObject;
+
 		//assign the specific properties
 		go.GetComponent<Shape>().Assign(newBlock.GetComponent<Shape>().Type, row, column);
 		shapes[row, column] = go;
@@ -369,6 +369,7 @@ public class ShapesManager : MonoBehaviour
 	public void rotateBoardCW()
 	{	
 		parent.transform.Rotate (0, 0, -90);
+		shapes.RotateCW ();
 	}
 
 	public void rotateBoardCCW()

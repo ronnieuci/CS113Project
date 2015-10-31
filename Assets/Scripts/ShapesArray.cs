@@ -270,5 +270,6 @@ public class ShapesArray
 			}
 			colC += 1;
 		}
+		shapes = temp;
 	}
 }

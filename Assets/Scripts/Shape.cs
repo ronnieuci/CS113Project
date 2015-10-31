@@ -50,6 +50,4 @@ public class Shape : MonoBehaviour
         b.Column = temp;
     }
 }
-
-
-
+	
