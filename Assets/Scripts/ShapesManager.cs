@@ -367,13 +367,10 @@ public class ShapesManager : MonoBehaviour
 	}
 
 	public void rotateBoardCW()
-	{
-		shapes.rotateBoardCW ();
+	{	
+		parent.transform.Rotate (0, 0, -90);
 	}
 
 	public void rotateBoardCCW()
-	{
-		shapes.rotateBoardCCW ();
-	}
-
+	{	parent.transform.Rotate (0, 0, 90);}
 }
