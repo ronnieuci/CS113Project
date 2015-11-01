@@ -5,11 +5,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-
 public static class Utilities
-{
-
-    /// Helper method to animate potential matches
+{	
+	/// Helper method to animate potential matches
     public static IEnumerator AnimatePotentialMatches(IEnumerable<GameObject> potentialMatches)
     {
         for (float i = 1f; i >= 0.3f; i -= 0.1f)

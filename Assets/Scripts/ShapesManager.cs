@@ -14,7 +14,7 @@ public class ShapesManager : MonoBehaviour
 	public Transform parent;
 	
 	public Vector2 middlePoint;
-	public Vector2 BlockSize = new Vector2(1.01f, 1.01f);
+	public Vector2 BlockSize = new Vector2(1.0f, 1.01f);
 	private Vector2 swapDirection1,swapDirection2;
 
 	private int score;
@@ -28,6 +28,8 @@ public class ShapesManager : MonoBehaviour
 	void Awake()
 	{
 		middlePoint = new Vector2 (middlePoint.x - 3.5f, middlePoint.y - 3.5f);
+		swapDirection1 = Vector2.right;
+		swapDirection2 = Vector2.left;
 	}
 	
 	// Use this for initialization
@@ -36,6 +38,45 @@ public class ShapesManager : MonoBehaviour
 		InitializeTypesOnPrefabShapesAndBonuses();
 		InitializeVariables();
 		InitializeBlockAndSpawnPositions();
+	}
+
+	// Update is called once per frame
+	void Update()
+	{
+		if (state == GameState.None) 
+		{
+			if (Input.GetKey (play.swap))
+			{
+				//get the hit position
+				var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection1);
+				print (hit.transform.position);
+				if (hit.collider != null) 
+				{
+					hitGo = hit.collider.gameObject;
+					state = GameState.SelectionStarted;
+				}	
+			}
+		}
+		else if (state == GameState.SelectionStarted) 
+		{
+			print ("C");
+			var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2);
+
+			//we have a hit
+			if (hit.collider == null) {}
+			else if (hit.collider != null && hitGo != hit.collider.gameObject) 
+			{
+				//if the two shapes are diagonally aligned (different row and column), just return
+				if (!Utilities.AreVerticalOrHorizontalNeighbors (hitGo.GetComponent<Shape> (), hit.collider.gameObject.GetComponent<Shape> ())) {
+					state = GameState.None;
+				} 
+				else {
+					state = GameState.Animating;
+					FixSortingLayer (hitGo, hit.collider.gameObject);
+					StartCoroutine (FindMatchesAndCollapse (hit));
+				}
+			}
+		}
 	}
 
 	/// Initialize shapes
@@ -57,8 +98,6 @@ public class ShapesManager : MonoBehaviour
 		
 		shapes = new ShapesArray();
 		SpawnPositions = new Vector2[Constants.Columns];
-		swapDirection1 = Vector2.right;
-		swapDirection2 = Vector2.left;
 
 		for (int row = 0; row < Constants.Rows; row++)
 		{
@@ -116,44 +155,6 @@ public class ShapesManager : MonoBehaviour
 			{	Destroy(shapes[row, column]);	}
 		}
 	}
-
-	// Update is called once per frame
-	void Update()
-	{
-		if (state == GameState.None)
-		{
-			if (Input.GetKey(play.swap))
-			{
-				//get the hit position
-				var hit = Physics2D.Raycast(play.getCursorLocation(), swapDirection2);
-				if (hit.collider != null) //we have a hit!!!
-				{
-					hitGo = hit.collider.gameObject;
-					state = GameState.SelectionStarted;
-				}	
-			}
-		}
-		else if (state == GameState.SelectionStarted)
-		{
-				var hit = Physics2D.Raycast(play.getCursorLocation(), swapDirection1);
-
-				//we have a hit
-				if (hit.collider == null)
-				{			}
-				else if(hit.collider != null && hitGo != hit.collider.gameObject)
-				{
-					//if the two shapes are diagonally aligned (different row and column), just return
-					if (!Utilities.AreVerticalOrHorizontalNeighbors(hitGo.GetComponent<Shape>(), hit.collider.gameObject.GetComponent<Shape>()))
-					{	state = GameState.None;	}
-					else
-					{
-						state = GameState.Animating;
-						FixSortingLayer(hitGo, hit.collider.gameObject);
-						StartCoroutine(FindMatchesAndCollapse(hit));
-					}
-				}
-			}
-		}
 
 	/// Modifies sorting layers for better appearance when dragging/animating
 	private void FixSortingLayer(GameObject hitGo, GameObject hitGo2)
@@ -369,7 +370,6 @@ public class ShapesManager : MonoBehaviour
 	public void rotateBoardCW()
 	{	
 		parent.transform.Rotate (0, 0, -90);
-		shapes.RotateCW ();
 	}
 
 	public void rotateBoardCCW()

@@ -7,17 +7,12 @@ public class PlayerInput : MonoBehaviour {
 	public KeyCode up,down,left,right,move,clear,shiftcw,shiftccw,swap,temp;
 	public ShapesManager sm;
 	public float x,y,tempnum;
-
-
-
-	private string direction;
 	public GameObject cursor;
+	private string direction;
 	
-	void Awake()
-	{	direction = "U";	}
+	void Awake(){}
 	
-	void Start()
-	{}
+	void Start(){}
 
 	void Update () 
 	{
