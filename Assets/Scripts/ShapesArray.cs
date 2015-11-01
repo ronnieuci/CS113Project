@@ -272,4 +272,21 @@ public class ShapesArray
 		}
 		shapes = temp;
 	}
+
+	public void arrayCollapse(){
+		for (int col = 0; col < Constants.Columns; col++)
+		{
+			for (int row = 0; row < Constants.Rows; row++) 
+			{
+				bool done = false;
+				while (!done){
+					if (row+1 <= 7 && shapes[row+1,col] == null){
+						shapes[row+1,col]= shapes[row,col];
+						shapes[row,col] = null;
+					}
+					else{ done = true;}
+				}
+			}
+		}
+	}
 }

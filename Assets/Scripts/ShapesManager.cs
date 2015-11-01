@@ -12,6 +12,7 @@ public class ShapesManager : MonoBehaviour
 	public PlayerInput play;
 	public Camera cam;
 	public Transform parent;
+	public bool onSide;
 	
 	public Vector2 middlePoint;
 	public Vector2 BlockSize = new Vector2(1.0f, 1.01f);
@@ -30,6 +31,7 @@ public class ShapesManager : MonoBehaviour
 		middlePoint = new Vector2 (middlePoint.x - 3.5f, middlePoint.y - 3.5f);
 		swapDirection1 = Vector2.right;
 		swapDirection2 = Vector2.left;
+		onSide = false;
 	}
 	
 	// Use this for initialization
@@ -49,22 +51,20 @@ public class ShapesManager : MonoBehaviour
 			{
 				//get the hit position
 				var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection1);
-				print (hit.transform.position);
 				if (hit.collider != null) 
-				{
-					hitGo = hit.collider.gameObject;
-					state = GameState.SelectionStarted;
-				}	
+
+				hitGo = hit.collider.gameObject;
+				state = GameState.SelectionStarted;
+
 			}
 		}
 		else if (state == GameState.SelectionStarted) 
 		{
-			print ("C");
 			var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2);
 
 			//we have a hit
 			if (hit.collider == null) {}
-			else if (hit.collider != null && hitGo != hit.collider.gameObject) 
+			else if (hitGo != hit.collider.gameObject) 
 			{
 				//if the two shapes are diagonally aligned (different row and column), just return
 				if (!Utilities.AreVerticalOrHorizontalNeighbors (hitGo.GetComponent<Shape> (), hit.collider.gameObject.GetComponent<Shape> ())) {
@@ -370,8 +370,11 @@ public class ShapesManager : MonoBehaviour
 	public void rotateBoardCW()
 	{	
 		parent.transform.Rotate (0, 0, -90);
+		shapes.arrayCollapse();
 	}
 
 	public void rotateBoardCCW()
-	{	parent.transform.Rotate (0, 0, 90);}
+	{	parent.transform.Rotate (0, 0, 90);
+		shapes.arrayCollapse();
+	}
 }

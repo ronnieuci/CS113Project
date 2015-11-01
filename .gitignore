@@ -18,6 +18,12 @@ ehthumbs.db
 [Ll]ibrary/
 sysinfo.txt
 *.stackdump
+*.csproj
+*.sln
+*.tmp
+*.userprefs
+*.pidb
+*.pidb.meta
 
 # =========== #
 # Dev Scripts #

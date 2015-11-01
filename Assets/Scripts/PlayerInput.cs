@@ -31,12 +31,3 @@ public class PlayerInput : MonoBehaviour {
 		return cursor.transform.position;
 	} 
 }
-
-/*
- * 		if (direction == "U") 	   {direction = "R"; sm.SetGravityCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(cursor.transform.localPosition.x,cursor.transform.localPosition.y,0));}
-		else if (direction == "R") {direction = "D"; sm.SetGravityCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(cursor.transform.localPosition.x,cursor.transform.localPosition.y,0));}
-		else if (direction == "D") {direction = "L"; sm.SetGravityCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(cursor.transform.localPosition.x,cursor.transform.localPosition.y,0));}
-		else if (direction == "L") {direction = "U"; sm.SetGravityCW (direction);tempnum=x;x=y;y=tempnum;cursor.transform.localPositionTo(Constants.MoveAnimationMinDuration,new Vector3(cursor.transform.localPosition.x,cursor.transform.localPosition.y,0));}
-		cursor.transform.Rotate (new Vector3 (0, 0, 90));
-		temp=up; up=right; right=down; down=left; left=temp;
-*/
