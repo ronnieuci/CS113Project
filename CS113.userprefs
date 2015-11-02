@@ -1,10 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ShapesArray.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ShapesManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/ShapesManager.cs" Line="228" Column="4" />
-      <File FileName="Assets/Scripts/SoundManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ShapesArray.cs" Line="10" Column="29" />
+      <File FileName="Assets/Scripts/ShapesManager.cs" Line="147" Column="100" />
+      <File FileName="Assets/Scripts/ShapesArray.cs" Line="7" Column="1" />
+      <File FileName="Assets/Scripts/AlteredBlockInfo.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/PlayerInput.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

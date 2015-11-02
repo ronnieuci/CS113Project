@@ -12,12 +12,10 @@ public class PlayerInput : MonoBehaviour
 	private string direction;
 	
 	void Awake ()
-	{
-	}
+	{}
 	
 	void Start ()
-	{
-	}
+	{}
 
 	void Update ()
 	{

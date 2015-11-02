@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 
 	public ShapesManager player1,player2;
+	public SoundManager sound;
 
 	void OnGUI() {
 		}

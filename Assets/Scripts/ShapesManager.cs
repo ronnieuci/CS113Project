@@ -8,11 +8,9 @@ public class ShapesManager : MonoBehaviour
 {
 
 	public Text ScoreText;
-	public ShapesArray shapes, boardStart;
+	public ShapesArray shapes;
 	public PlayerInput play;
-	public Camera cam;
 	public Transform parent;
-	public bool onSide;
 	public Vector2 middlePoint;
 	public Vector2 BlockSize = new Vector2 (1.0f, 1.01f);
 	private Vector2 swapDirection1, swapDirection2;
@@ -22,26 +20,23 @@ public class ShapesManager : MonoBehaviour
 	private Vector2[] SpawnPositions;
 	public GameObject[] BlockPrefabs, ExplosionPrefabs, BonusPrefabs;
 	private IEnumerator CheckPotentialMatchesCoroutine;
-	
+	private bool rotating;
+
 	void Awake ()
 	{
 		middlePoint = new Vector2 (middlePoint.x - 3.5f, middlePoint.y - 3.5f);
 		swapDirection1 = Vector2.right;
 		swapDirection2 = Vector2.left;
-		onSide = false;
-	}
-	
-	// Use this for initialization
-	void Start ()
-	{
-		InitializeTypesOnPrefabShapesAndBonuses ();
-		InitializeVariables ();
-		InitializeBlockAndSpawnPositions ();
+		rotating = false;
 	}
 
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
 	{
+		if (!rotating) {
+			Collapse();
+		}
+
 		if (state == GameState.None) {
 			if (Input.GetKey (play.swap)) {
 				//get the hit position
@@ -53,7 +48,7 @@ public class ShapesManager : MonoBehaviour
 			} 
 		} else if (state == GameState.SelectionStarted) {
 			var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2);
-
+			
 			//we have a hit
 			if (hit.collider == null) {
 			} else if (hit.collider != null && hitGo != hit.collider.gameObject) {
@@ -67,6 +62,17 @@ public class ShapesManager : MonoBehaviour
 				}
 			}
 		}
+
+	}
+
+
+	
+	// Use this for initialization
+	void Start ()
+	{
+		InitializeTypesOnPrefabShapesAndBonuses ();
+		InitializeVariables ();
+		InitializeBlockAndSpawnPositions ();
 	}
 
 	/// Initialize shapes
@@ -83,12 +89,21 @@ public class ShapesManager : MonoBehaviour
 		}
 	}
 
+	private void InitializeVariables ()
+	{
+		score = 0;
+		ShowScore ();
+	}
+
 	public void InitializeBlockAndSpawnPositions ()
 	{	
 		if (shapes != null)
 			DestroyAllBlocks ();
 		
 		shapes = new ShapesArray ();
+
+
+
 		SpawnPositions = new Vector2[Constants.Columns];
 
 		for (int row = 0; row < Constants.Rows; row++) {
@@ -108,11 +123,8 @@ public class ShapesManager : MonoBehaviour
 				}
 
 				InstantiateAndPlaceNewBlock (row, column, newBlock);
-
 			}
-
 		}
-		boardStart = shapes;
 		SetupSpawnPositions ();
 	}
 
@@ -124,6 +136,20 @@ public class ShapesManager : MonoBehaviour
 		go.GetComponent<Shape> ().Assign (newBlock.GetComponent<Shape> ().Type, row, column);
 		shapes [row, column] = go;
 		go.transform.parent = parent;
+	}
+
+	private void Collapse(){
+		for (int row = 0; row < Constants.Rows; row++) {
+			for (int col = 0; col < Constants.Columns; col++) {
+				if (shapes [col, row] != null) {
+					{
+						while (shapes[col,row].transform.position.y > -3.5f +(col*1)) {
+							shapes [col, row].transform.Translate( Vector3.Lerp(new Vector3 (0,0,0),new Vector3 (0,-0.25f,0),0.5f));
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private void SetupSpawnPositions ()
@@ -236,26 +262,6 @@ public class ShapesManager : MonoBehaviour
 		state = GameState.None;
 	}
 
-	private void Collapse ()
-	{
-/*		var collapsedBlockInfo = shapes.Collapse(Constants.Columns);
-
-		int maxDistance = Mathf.Max(collapsedBlockInfo.MaxDistance);
-		MoveAndAnimate(collapsedBlockInfo.AlteredBlock, maxDistance);
-
-		//will wait for both of the above animations
-		yield return new WaitForSeconds(Constants.MoveAnimationMinDuration * maxDistance);
-		
-		//search if there are matches with the new/collapsed items
-		totalMatches = shapes.GetMatches(collapsedBlockInfo.AlteredBlock);
-		
-		timesRun++;
-
-*/
-	}
-
-
-
 	/// Creates a new Bonus based on the shape parameter
 	private void CreateBonus (Shape hitGoCache)
 	{
@@ -319,22 +325,16 @@ public class ShapesManager : MonoBehaviour
 	{
 		return BlockPrefabs [Random.Range (0, BlockPrefabs.Length)];
 	}
-	
-	private void InitializeVariables ()
-	{
-		score = 0;
-		ShowScore ();
-	}
-	
+		
 	private void IncreaseScore (int amount)
 	{
 		score += amount;
 		ShowScore ();
 	}
-	
+
 	private void ShowScore ()
 	{
-		ScoreText.text = "Score: " + score.ToString ();
+		ScoreText.text = score.ToString ();
 	}
 
 	/// Get a random explosion
@@ -356,13 +356,15 @@ public class ShapesManager : MonoBehaviour
 
 	public void rotateBoardCW ()
 	{	
+		rotating = true;
 		parent.transform.Rotate (0, 0, -90);
-		shapes.arrayCollapse ();
+		rotating = false;
 	}
 
 	public void rotateBoardCCW ()
 	{
+		rotating = true;
 		parent.transform.Rotate (0, 0, 90);
-		shapes.arrayCollapse ();
+		rotating = false;
 	}
 }

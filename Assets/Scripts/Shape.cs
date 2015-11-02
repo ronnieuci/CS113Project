@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Shape : MonoBehaviour
 {
+	public AudioClip clip;
+
 	public BonusType Bonus { get; set; }
 
 	public int Column { get; set; }
@@ -13,9 +15,7 @@ public class Shape : MonoBehaviour
 	public int Row { get; set; }
 
 	public string Type { get; set; }
-
-	public MusicPlayer sound;
-
+	
 	public Shape ()
 	{
 		Bonus = BonusType.None;
@@ -53,11 +53,5 @@ public class Shape : MonoBehaviour
 		a.Column = b.Column;
 		b.Column = temp;
 	}
-
-	public void onCollisionEnter2d ()
-	{
-
-	}
-
 }
 	
