@@ -204,6 +204,7 @@ public class ShapesManager : MonoBehaviour
 			foreach (var item in totalMatches) {
 				shapes.Remove (item);
 				RemoveFromScene (item);
+
 			}
 			
 			//check and instantiate Bonus if needed

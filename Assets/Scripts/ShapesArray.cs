@@ -7,6 +7,7 @@ using UnityEngine;
 public class ShapesArray
 {
     private GameObject[,] shapes = new GameObject[Constants.Rows, Constants.Columns];
+	public AudioClip blockDrop;
 	
     /// Indexer
     public GameObject this[int row, int column]
@@ -287,6 +288,8 @@ public class ShapesArray
 					else
 					{ 
 						done = true;
+						SoundManager.instance.PlaySingle(blockDrop);
+
 
 					}
 				}
