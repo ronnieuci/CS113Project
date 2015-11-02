@@ -12,6 +12,8 @@ public class Shape : MonoBehaviour
 
     public string Type { get; set; }
 
+	public MusicPlayer sound;
+
     public Shape()
     {
         Bonus = BonusType.None;
@@ -49,5 +51,11 @@ public class Shape : MonoBehaviour
         a.Column = b.Column;
         b.Column = temp;
     }
+
+	public void onCollisionEnter2d()
+	{
+		sound
+	}
+
 }
 	

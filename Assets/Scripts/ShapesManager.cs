@@ -45,39 +45,33 @@ public class ShapesManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (state == GameState.None) 
-		{
-			if (Input.GetKey (play.swap))
-			{
+		if (state == GameState.None) {
+			if (Input.GetKey (play.swap)) {
 				//get the hit position
 				var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection1);
-				if (hit.collider != null) 
-
-				hitGo = hit.collider.gameObject;
-				state = GameState.SelectionStarted;
-
-			}
+				if (hit.collider != null) {
+					hitGo = hit.collider.gameObject;
+					state = GameState.SelectionStarted;
+				}
+			} 
 		}
-		else if (state == GameState.SelectionStarted) 
-		{
-			var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2);
+		else if (state == GameState.SelectionStarted) {
+				var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2);
 
-			//we have a hit
-			if (hit.collider == null) {}
-			else if (hitGo != hit.collider.gameObject) 
-			{
-				//if the two shapes are diagonally aligned (different row and column), just return
-				if (!Utilities.AreVerticalOrHorizontalNeighbors (hitGo.GetComponent<Shape> (), hit.collider.gameObject.GetComponent<Shape> ())) {
-					state = GameState.None;
-				} 
-				else {
-					state = GameState.Animating;
-					FixSortingLayer (hitGo, hit.collider.gameObject);
-					StartCoroutine (FindMatchesAndCollapse (hit));
+				//we have a hit
+				if (hit.collider == null) {
+				} else if (hit.collider != null && hitGo != hit.collider.gameObject) {
+					//if the two shapes are diagonally aligned (different row and column), just return
+					if (!Utilities.AreVerticalOrHorizontalNeighbors (hitGo.GetComponent<Shape> (), hit.collider.gameObject.GetComponent<Shape> ())) {
+						state = GameState.None;
+					} else {
+						state = GameState.Animating;
+						FixSortingLayer (hitGo, hit.collider.gameObject);
+						StartCoroutine (FindMatchesAndCollapse (hit));
+					}
 				}
 			}
 		}
-	}
 
 	/// Initialize shapes
 	private void InitializeTypesOnPrefabShapesAndBonuses()

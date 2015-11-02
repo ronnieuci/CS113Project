@@ -284,7 +284,11 @@ public class ShapesArray
 						shapes[row+1,col]= shapes[row,col];
 						shapes[row,col] = null;
 					}
-					else{ done = true;}
+					else
+					{ 
+						done = true;
+
+					}
 				}
 			}
 		}

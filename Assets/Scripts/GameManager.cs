@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour {
 
 	public ShapesManager player1,player2;
 
+	void OnGUI() {
+		}
+
 	// Use this for initialization
 	void Start () {}
 	
