@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ShapesManager : MonoBehaviour
 {
 
-	public Text ScoreText;
+	public Text ScoreText; 
 	public ShapesArray shapes;
 	public PlayerInput play;
 	public Transform parent;
@@ -45,6 +45,9 @@ public class ShapesManager : MonoBehaviour
 					hitGo = hit.collider.gameObject;
 					state = GameState.SelectionStarted;
 				}
+				else {
+						print (play.getCursorLocation());
+					}
 			} 
 		} else if (state == GameState.SelectionStarted) {
 			var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2);

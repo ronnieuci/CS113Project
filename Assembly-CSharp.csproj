@@ -47,7 +47,6 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\AlteredBlockInfo.cs" />
      <Compile Include="Assets\Scripts\Constants.cs" />
-     <Compile Include="Assets\Scripts\DebugUtilities.cs" />
      <Compile Include="Assets\Scripts\Enums.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\MatchesInfo.cs" />

@@ -1,13 +1,20 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ShapesManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerInput.cs">
     <Files>
-      <File FileName="Assets/Scripts/ShapesManager.cs" Line="337" Column="1" />
+      <File FileName="Assets/Scripts/ShapesManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/ShapesArray.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/AlteredBlockInfo.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PlayerInput.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/PlayerInput.cs" Line="33" Column="5" />
       <File FileName="Assets/Scripts/SoundManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameManager.cs" Line="10" Column="28" />
+      <File FileName="Assets/Scripts/ShapeInfo.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Shape.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Constants.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Utilities.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/MatchesInfo.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Enums.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/DebugUtilities.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

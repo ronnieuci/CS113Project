@@ -9,8 +9,7 @@ public class PlayerInput : MonoBehaviour
 	public ShapesManager sm;
 	public float x, y, tempnum;
 	public GameObject cursor;
-	private string direction;
-	
+
 	void Awake ()
 	{}
 	
@@ -23,33 +22,40 @@ public class PlayerInput : MonoBehaviour
 			if (x > 0) { 
 				cursor.transform.localPositionTo (Constants.MoveAnimationMinDuration, new Vector3 (cursor.transform.localPosition.x - 1, cursor.transform.localPosition.y, 0)); 
 				x -= 1;
+				
 			}
 		}
-		if (Input.GetKeyDown (right)) {
+		else if (Input.GetKeyDown (right)) {
 			if (x < 6) { 
 				cursor.transform.localPositionTo (Constants.MoveAnimationMinDuration, new Vector3 (cursor.transform.localPosition.x + 1, cursor.transform.localPosition.y, 0)); 
 				x += 1;
+
+				
 			}
 		}
-		if (Input.GetKeyDown (up)) {
+		else if (Input.GetKeyDown (up)) {
 			if (y < 7) { 
 				cursor.transform.localPositionTo (Constants.MoveAnimationMinDuration, new Vector3 (cursor.transform.localPosition.x, cursor.transform.localPosition.y + 1, 0)); 
 				y += 1;
+				
 			}
 		}
-		if (Input.GetKeyDown (down)) {
+		else if (Input.GetKeyDown (down)) {
 			if (y > 0) {
 				cursor.transform.localPositionTo (Constants.MoveAnimationMinDuration, new Vector3 (cursor.transform.localPosition.x, cursor.transform.localPosition.y - 1, 0));
 				y -= 1;
+				
 			}
 		}
-		if (Input.GetKeyDown (clear)) {
+		else if (Input.GetKeyDown (clear)) {
 			sm.ResetBoard ();
+			
 		}
-		if (Input.GetKeyDown (shiftcw)) {
+		else if (Input.GetKeyDown (shiftcw)) {
 			sm.rotateBoardCW ();
+			
 		}
-		if (Input.GetKeyDown (shiftccw)) {
+		else if (Input.GetKeyDown (shiftccw)) {
 			sm.rotateBoardCCW ();
 		}
 	}
