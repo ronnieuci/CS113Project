@@ -40,7 +40,7 @@ public class ShapesManager : MonoBehaviour
 		if (state == GameState.None) {
 			if (Input.GetKey (play.swap)) {
 				//get the hit position
-				var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection1);
+				var hit = Physics2D.Raycast(play.getCursorLocation (), swapDirection1,1.0f);
 				if (hit.collider != null) {
 					hitGo = hit.collider.gameObject;
 					state = GameState.SelectionStarted;
@@ -50,7 +50,7 @@ public class ShapesManager : MonoBehaviour
 					}
 			} 
 		} else if (state == GameState.SelectionStarted) {
-			var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2);
+			var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2,1.0f);
 			
 			//we have a hit
 			if (hit.collider == null) {
