@@ -14,7 +14,7 @@ public class ShapesManager : MonoBehaviour
 	public Vector2 middlePoint;
 	public Vector2 BlockSize = new Vector2 (1.0f, 1.01f);
 	private Vector2 swapDirection1, swapDirection2;
-	private int score;
+	public int score;
 	private GameState state = GameState.None;
 	private GameObject hitGo = null;
 	private Vector2[] SpawnPositions;

@@ -199,7 +199,10 @@ public class ShapesArray
     /// Removes (sets as null) an item from the array
     public void Remove(GameObject item)
     {
-        shapes[item.GetComponent<Shape>().Row, item.GetComponent<Shape>().Column] = null;
+		if (shapes[item.GetComponent<Shape>().Row, item.GetComponent<Shape>().Column] != null)
+		{
+        	shapes[item.GetComponent<Shape>().Row, item.GetComponent<Shape>().Column] = null;
+		}
     }
 
 
