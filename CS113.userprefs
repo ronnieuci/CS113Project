@@ -1,11 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ScorePoint.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerInput.cs">
     <Files>
-      <File FileName="Assets/Scripts/ShapesManager.cs" Line="17" Column="8" />
-      <File FileName="Assets/Scripts/ScorePoint.cs" Line="17" Column="44" />
-      <File FileName="Assets/Scripts/GameManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ShapesArray.cs" Line="202" Column="89" />
+      <File FileName="Assets/Scripts/PlayerInput.cs" Line="18" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
