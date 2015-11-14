@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class ShapesArray
 {
 
-    private GameObject[,] shapes = new GameObject[Constants.Rows, Constants.Columns];
+    public GameObject[,] shapes = new GameObject[Constants.Rows, Constants.Columns];
     
 	/// Indexer
     public GameObject this[int row, int column]
@@ -24,21 +24,21 @@ public class ShapesArray
         set
         {	shapes[row, column] = value;	}
     }
-
-    /// Swaps the position of two items, also keeping a backup
-    public void Swap(GameObject g1, GameObject g2)
-    {
-        var g1Shape = g1.GetComponent<Shape>();
-        var g2Shape = g2.GetComponent<Shape>();
-
-        //swap them in the array
-		var temp = shapes[g1Shape.Row, g1Shape.Column];
-		shapes[g1Shape.Row, g1Shape.Column] = shapes[g2Shape.Row, g2Shape.Column];
-		shapes[g2Shape.Row, g2Shape.Column] = temp;
-
-        //swap their respective properties
-        Shape.SwapColumnRow(g1Shape, g2Shape);
-    }
+	
+	/// Swaps the position of two items, also keeping a backup
+	public void Swap(GameObject g1, GameObject g2)
+	{
+			var g1Shape = g1.GetComponent<Shape> ();
+			var g2Shape = g2.GetComponent<Shape> ();
+			
+			//swap them in the array
+			var temp = shapes [g1Shape.Row, g1Shape.Column];
+			shapes [g1Shape.Row, g1Shape.Column] = shapes [g2Shape.Row, g2Shape.Column];
+			shapes [g2Shape.Row, g2Shape.Column] = temp;
+			
+			//swap their respective properties
+			Shape.SwapColumnRow (g1Shape, g2Shape);
+	}
 
     /// Returns the matches found for a list of GameObjects
     /// MatchesInfo class is not used as this method is called on subsequent collapses/checks, 
@@ -239,7 +239,7 @@ public class ShapesArray
                             shapes[row, column].GetComponent<Shape>().Column = column;
 
                             collapseInfo.AddBlock(shapes[row, column]);
-                            break;
+							break;
                         }
                     }
                 }
@@ -279,23 +279,10 @@ public class ShapesArray
 		shapes = temp;
 	}
 
-	public void arrayCollapse(){
-		for (int col = 0; col < Constants.Columns; col++)
-		{
-			for (int row = 0; row < Constants.Rows; row++) 
-			{
-				bool done = false;
-				while (!done){
-					if (row+1 <= 7 && shapes[row+1,col] == null){
-						shapes[row+1,col]= shapes[row,col];
-						shapes[row,col] = null;
-					}
-					else
-					{ 
-						done = true;
-					}
-				}
-			}
-		}
+	public void arrayCollapse(int column,int row,int orow,int ocol)
+	{
+		var temp = shapes [column, row];
+		shapes [column,row] = shapes [column+ocol, row+orow];
+		shapes [column + ocol, row + orow] = temp;
 	}
 }

@@ -32,6 +32,6 @@ public class SoundManager : MonoBehaviour {
 //		efxSource.Play ();
 
 		// New 
-		efxSource.PlayClipAtPoint (clip, transform.position);
+//		efxSource.PlayClipAtPoint (clip, transform.position);
 	}
 }
