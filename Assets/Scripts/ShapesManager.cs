@@ -11,7 +11,7 @@ public class ShapesManager : MonoBehaviour
 	public PlayerInput play;
 	public Transform parent;
 	public Vector2 middlePoint;
-	public Vector2 BlockSize = new Vector2 (1.0f, 1.0f);
+	public Vector2 BlockSize = new Vector2 (0.2f, 0.2f);
 	private Vector2 swapDirection1, swapDirection2;
 	public int score;
 	private float xDiv,yDiv;
@@ -167,7 +167,8 @@ public class ShapesManager : MonoBehaviour
 		for (int row = 0; row < Constants.Rows; row++) {
 			for (int column = 0; column < Constants.Columns; column++) 
 			{
-				RemoveFromScene(shapes [row, column]);
+				if (shapes[row,column] != null)
+					RemoveFromScene(shapes [row, column]);
 			}
 		}
 		InitializeBlockAndSpawnPositions ();
@@ -375,6 +376,7 @@ public class ShapesManager : MonoBehaviour
 			}
 		}
 		shapes.shapes = ret;
+		RotateCollapse ();
 
 
 	}
