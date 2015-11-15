@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 244320624456446a4beaa20b7a504e14
+timeCreated: 1447525643
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - spotlight: {fileID: 102518, guid: 958a3023903084a018bdef0d19fdcdab, type: 2}
+  - standby: {instanceID: 0}
+  - attack1: {instanceID: 0}
+  - attack2: {instanceID: 0}
+  - attack3: {instanceID: 0}
+  - win: {instanceID: 0}
+  - loss: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

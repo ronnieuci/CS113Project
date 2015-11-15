@@ -14,6 +14,7 @@ public class ShapesManager : MonoBehaviour
 	public Vector2 BlockSize = new Vector2 (0.2f, 0.2f);
 	private Vector2 swapDirection1, swapDirection2;
 	public int score;
+	public int[] ch = new int[3];
 	private float xDiv,yDiv;
 	private GameState state = GameState.None;
 	private GameObject hitGo = null;
@@ -21,6 +22,7 @@ public class ShapesManager : MonoBehaviour
 	public GameObject NullBlock;
 	public GameObject[] BlockPrefabs, ExplosionPrefabs, BonusPrefabs;
 	private IEnumerator CheckPotentialMatchesCoroutine;
+	public Characters[] playerChar = new Characters[3];
 
 	void Awake ()
 	{
@@ -31,9 +33,25 @@ public class ShapesManager : MonoBehaviour
 
 	void Start ()
 	{
+		ch [0] = 1;
+		ch [1] = 2;
+		ch [2] = 3;
+
 		InitializeTypesOnPrefabShapesAndBonuses ();
 		InitializeVariables ();
 		InitializeBlockAndSpawnPositions ();
+		setCharacters (ch);
+	}
+
+
+	void setCharacters(int[] c)
+	{
+		int m = 0;
+		foreach(int i in c)
+		{
+			playerChar[m].setChar(i,m);
+			m+=1;
+		}
 	}
 
 	// Update is called once per frame

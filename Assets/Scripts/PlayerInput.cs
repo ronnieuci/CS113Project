@@ -5,9 +5,10 @@ public class PlayerInput : MonoBehaviour
 {
 	
 	//Keys
-	public KeyCode up, down, left, right, move, clear, shiftcw, shiftccw, swap, temp;
+	public KeyCode up, down, left, right, move, clear, shiftcw, shiftccw, swap;
+	private KeyCode temp;
 	public ShapesManager sm;
-	public float tempnum;
+	private float tempnum;
 	public int x, y;
 	public GameObject cursor;
 
