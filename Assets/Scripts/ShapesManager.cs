@@ -70,7 +70,6 @@ public class ShapesManager : MonoBehaviour
 					state = GameState.SelectionStarted;
 				}
 			} 
-
 		} else if (state == GameState.SelectionStarted) {
 			var hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2, 1.0f);
 
@@ -81,9 +80,7 @@ public class ShapesManager : MonoBehaviour
 				{
 					Destroy (hitGo);
 					state = GameState.None;
-				}
-				else
-				{
+				} else {
 					InstantiateAndPlaceNewBlock (play.y,play.x, NullBlock);
 					hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2, 1.0f);
 					state = GameState.Animating;
@@ -96,9 +93,7 @@ public class ShapesManager : MonoBehaviour
 				if (!Utilities.AreVerticalOrHorizontalNeighbors (hitGo.GetComponent<Shape> (), hit.collider.gameObject.GetComponent<Shape> ())) 
 				{
 					state = GameState.None;
-				} 
-				else 
-				{
+				} else {
 					state = GameState.Animating;
 					FixSortingLayer (hitGo, hit.collider.gameObject);
 					StartCoroutine (FindMatches (hit));
@@ -131,7 +126,7 @@ public class ShapesManager : MonoBehaviour
 	public void InitializeBlockAndSpawnPositions ()
 	{	
 		if (shapes != null)
-			DestroyAllBlocks ();
+			ResetBoard ();
 		shapes = new ShapesArray ();
 		SpawnPositions = new Vector2[Constants.Columns];
 
@@ -178,8 +173,7 @@ public class ShapesManager : MonoBehaviour
 		}
 	}
 
-
-	/// Destroy all Block gameobjects and resets board\
+	/// Destroy all Block gameobjects and resets board
 	public void ResetBoard ()
 	{
 		for (int row = 0; row < Constants.Rows; row++) {
@@ -192,16 +186,6 @@ public class ShapesManager : MonoBehaviour
 		InitializeBlockAndSpawnPositions ();
 	}
 	
-	/// Destroy all block gameobjects
-	private void DestroyAllBlocks ()
-	{
-		for (int row = 0; row < Constants.Rows; row++) {
-			for (int column = 0; column < Constants.Columns; column++) {
-				Destroy (shapes [row, column]);
-			}
-		}
-	}
-
 	/// Modifies sorting layers for better appearance when dragging/animating
 	private void FixSortingLayer (GameObject hitGo, GameObject hitGo2)
 	{
@@ -226,18 +210,12 @@ public class ShapesManager : MonoBehaviour
 
 		List<int> columns = new List<int>();
 
-		if (hitGo.GetComponent<Shape> ().Type == NullBlock.name)
-			Destroy (hitGo);
-		else if (hitGo2.GetComponent<Shape> ().Type == NullBlock.name)
-			Destroy (hitGo2);
+		columns.Add((int)(hitGo.transform.position.x+8.5f));
+		columns.Add((int)(hitGo2.transform.position.x+8.5f));
 
 		//get the matches via the helper methods
 		var hitGomatchesInfo = shapes.GetMatches (hitGo);
 		var hitGo2matchesInfo = shapes.GetMatches (hitGo2);
-				
-		columns.Add((int)(hitGo.transform.position.x+8.5f));
-		columns.Add((int)(hitGo2.transform.position.x+8.5f));
-		
 		var totalMatches = hitGomatchesInfo.MatchedBlock.Union (hitGo2matchesInfo.MatchedBlock).Distinct ();
 
 		//if more than 3 matches and no Bonus is contained in the line, we will award a new Bonus
@@ -254,7 +232,14 @@ public class ShapesManager : MonoBehaviour
 			//cache it
 			hitGoCache.Assign (shape.Type, shape.Row, shape.Column);
 		}
+
+		if (hitGo.GetComponent<Shape> ().Type == NullBlock.name)
+			Destroy (hitGo);
+		if (hitGo2.GetComponent<Shape> ().Type == NullBlock.name)
+			Destroy (hitGo2);
+
 		int timesRun = 1;
+	RESTART:
 		if (totalMatches.Count () > 0) {
 			while (totalMatches.Count() >= Constants.MinimumMatches) {
 				//increase score
@@ -275,41 +260,42 @@ public class ShapesManager : MonoBehaviour
 				//check and instantiate Bonus if needed
 				if (addBonus)
 					CreateBonus (hitGoCache);
-			
-				addBonus = false;
+					addBonus = false;
 
 				//the order the 2 methods below get called is important!!!
 				//collapse the ones gone
 				var collapsedBlockInfo = shapes.Collapse (columns);
 				int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
-
-				while (maxDistance > 0)
-				{
-					MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
-					//will wait for both of the above animations
-					yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
 			
-					//search if there are matches with the new/collapsed items
-					totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
-					timesRun++;
+				MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
+				//will wait for both of the above animations
+				yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
+			
+				//search if there are matches with the new/collapsed items
+				totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
+				timesRun++;
 
-					collapsedBlockInfo = shapes.Collapse (columns);
-					maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
-				}
+				collapsedBlockInfo = shapes.Collapse (columns);
+				maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
 			}
-		}
-		else
-		{
+		} else {
 			var collapsedBlockInfo = shapes.Collapse (columns);
-			
 			int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
+			while (collapsedBlockInfo.MaxDistance > 0 )
+			{
 			
-			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
-			//will wait for both of the above animations
-			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
+				MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
+				//will wait for both of the above animations
+				yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
 			
-			//search if there are matches with the new/collapsed items
-			totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
+				//search if there are matches with the new/collapsed items
+				totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
+
+				collapsedBlockInfo = shapes.Collapse (columns);
+				maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
+				if (totalMatches.Count() > 0)
+					goto RESTART;	
+			}
 		}
 		state = GameState.None;
 	}
