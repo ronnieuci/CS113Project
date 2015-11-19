@@ -8,6 +8,8 @@ public class ShapesManager : MonoBehaviour
 {
 	public Text ScoreText; 
 	public ShapesArray shapes;
+	public SoundManager sound;
+	public AudioClip blockDrop,blockSlide;
 	public PlayerInput play;
 	public Transform parent;
 	public Vector2 middlePoint;
@@ -204,9 +206,11 @@ public class ShapesManager : MonoBehaviour
 		shapes.Swap (hitGo, hitGo2);
 		
 		//move the swapped ones
+		sound.PlaySingle (blockSlide);
 		hitGo.transform.positionTo (Constants.AnimationDuration, hitGo2.transform.position);
 		hitGo2.transform.positionTo (Constants.AnimationDuration, hitGo.transform.position);
 		yield return new WaitForSeconds (Constants.AnimationDuration);
+
 
 		List<int> columns = new List<int>();
 
@@ -273,7 +277,7 @@ public class ShapesManager : MonoBehaviour
 				MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
 				//will wait for both of the above animations
 				yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
-			
+				sound.PlaySingle(blockDrop);
 				//search if there are matches with the new/collapsed items
 				totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
 				timesRun++;
@@ -292,6 +296,8 @@ public class ShapesManager : MonoBehaviour
 				MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
 				//will wait for both of the above animations
 				yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
+			
+				sound.PlaySingle(blockDrop);
 			
 				//search if there are matches with the new/collapsed items
 				totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
