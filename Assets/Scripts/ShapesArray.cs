@@ -6,10 +6,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class ShapesArray
+public class ShapesArray : MonoBehaviour
 {
 
     public GameObject[,] shapes = new GameObject[Constants.Rows, Constants.Columns];
+	private GameObject NullBlock;
     
 	/// Indexer
     public GameObject this[int row, int column]
@@ -24,7 +25,12 @@ public class ShapesArray
         set
         {	shapes[row, column] = value;	}
     }
-	
+
+	public void setNullBlock(GameObject bl)
+	{
+		NullBlock = bl;
+	}
+
 	/// Swaps the position of two items, also keeping a backup
 	public void Swap(GameObject g1, GameObject g2)
 	{
@@ -219,9 +225,9 @@ public class ShapesArray
             for (int row = 0; row < Constants.Rows - 1; row++)
             {
                 //if you find a null item
-                if (shapes[row, column] == null)
-                {
-                    //start searching for the first non-null
+				if (shapes[row, column] == null)
+				    {
+					//start searching for the first non-null
                     for (int row2 = row + 1; row2 < Constants.Rows; row2++)
                     {
                         //if you find one, bring it down (i.e. replace it with the null you found)
@@ -243,6 +249,30 @@ public class ShapesArray
                         }
                     }
                 }
+				else if(shapes[row,column] == NullBlock)
+				{
+					//start searching for the first non-null
+					for (int row2 = row + 1; row2 < Constants.Rows; row2++)
+					{
+						//if you find one, bring it down (i.e. replace it with the null you found)
+						if (shapes[row2, column] != null)
+						{
+							shapes[row, column] = shapes[row2, column];
+							shapes[row2, column] = null;
+							
+							//calculate the biggest distance
+							if (row2 - row > collapseInfo.MaxDistance) 
+								collapseInfo.MaxDistance = row2 - row;
+							
+							//assign new row and column (name does not change)
+							shapes[row, column].GetComponent<Shape>().Row = row;
+							shapes[row, column].GetComponent<Shape>().Column = column;
+							
+							collapseInfo.AddBlock(shapes[row, column]);
+							break;
+						}
+					}
+				}
             }
         }
 

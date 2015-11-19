@@ -233,10 +233,13 @@ public class ShapesManager : MonoBehaviour
 			hitGoCache.Assign (shape.Type, shape.Row, shape.Column);
 		}
 
-		if (hitGo.GetComponent<Shape> ().Type == NullBlock.name)
+		if (hitGo.GetComponent<Shape> ().Type == NullBlock.name) {
+			shapes.setNullBlock (hitGo);
 			Destroy (hitGo);
-		if (hitGo2.GetComponent<Shape> ().Type == NullBlock.name)
+		} else if (hitGo2.GetComponent<Shape> ().Type == NullBlock.name) {
+			shapes.setNullBlock (hitGo2);
 			Destroy (hitGo2);
+		}
 
 		int timesRun = 1;
 	RESTART:
@@ -281,6 +284,8 @@ public class ShapesManager : MonoBehaviour
 		} else {
 			var collapsedBlockInfo = shapes.Collapse (columns);
 			int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
+			if (maxDistance < 1)
+				maxDistance = 1;
 			while (collapsedBlockInfo.MaxDistance > 0 )
 			{
 			
@@ -381,8 +386,6 @@ public class ShapesManager : MonoBehaviour
 		}
 		shapes.shapes = ret;
 		RotateCollapse ();
-
-
 	}
 
 	public void rotateBoardCCW ()
