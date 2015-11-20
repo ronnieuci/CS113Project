@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class ShapesManager : MonoBehaviour
 {
+	public Sprite BG;
 	public Text ScoreText; 
 	public ShapesArray shapes;
 	public SoundManager sound;
@@ -35,14 +36,15 @@ public class ShapesManager : MonoBehaviour
 
 	void Start ()
 	{
-		ch [0] = 1;
-		ch [1] = 2;
-		ch [2] = 3;
+		ch [0] = 5;
+		ch [1] = 1;
+		ch [2] = 5;
 
 		InitializeTypesOnPrefabShapesAndBonuses ();
 		InitializeVariables ();
 		InitializeBlockAndSpawnPositions ();
 		setCharacters (ch);
+
 	}
 
 

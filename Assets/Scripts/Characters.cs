@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Characters : MonoBehaviour {
-
+	
 	public Animator[,] charAnim;
 	private Color charColor;
 	private GameObject sprite;
@@ -10,14 +10,14 @@ public class Characters : MonoBehaviour {
 	public Transform parent;
 
 	void Awake () 
-	{
+	{ 
 		playRot = new Quaternion(0,0,0,0);
+		if (parent.position.x > 0) 
+		{	playRot = new Quaternion(0,180,0,0);}
 	}
 
 	void Start () 
-	{
-
-	}
+	{	}
 	
 	// Update is called once per frame
 	void Update () 
@@ -29,9 +29,6 @@ public class Characters : MonoBehaviour {
 
 	public void setChar(int c,int location)
 	{
-		if (parent.position.x > 0) 
-		{	playRot = new Quaternion(0,180,0,0);}
-
 
 		if (c == 1) {
 			setAssassin();
@@ -42,6 +39,7 @@ public class Characters : MonoBehaviour {
 		} else {
 			setBlank();
 		}
+
 		setLocation (location);
 		this.GetComponent<Renderer> ().material.SetColor("_Color", charColor);
 	}
@@ -72,6 +70,7 @@ public class Characters : MonoBehaviour {
 	public void setBlank()
 	{
 		setColor( new Color (0.0f, 0.0f, 0.0f, 0.0f));
+		sprite = Instantiate(Resources.Load("Prefabs/Characters/Blank"),parent.transform.position,playRot) as GameObject;
 	}
 
 	public void setLocation(int loc)
