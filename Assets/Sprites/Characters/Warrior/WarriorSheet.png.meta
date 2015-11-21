@@ -1,0 +1,188 @@
+fileFormatVersion: 2
+guid: 900f3ee446b35420292e43d97e52bb39
+timeCreated: 1448128076
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: WarriorSheet_0
+    21300002: WarriorSheet_1
+    21300004: WarriorSheet_2
+    21300006: WarriorSheet_3
+    21300008: WarriorSheet_4
+    21300010: WarriorSheet_5
+    21300012: WarriorSheet_6
+    21300014: WarriorSheet_7
+    21300016: WarriorSheet_8
+    21300018: WarriorSheet_9
+    21300020: WarriorSheet_10
+    21300022: WarriorSheet_11
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: WarriorSheet_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 0
+        width: 145
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_1
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 0
+        width: 136
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_2
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 0
+        width: 146
+        height: 218
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_3
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 0
+        width: 136
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_4
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 0
+        width: 146
+        height: 218
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_5
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 122
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_6
+      rect:
+        serializedVersion: 2
+        x: 1010
+        y: 3
+        width: 135
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_7
+      rect:
+        serializedVersion: 2
+        x: 1206
+        y: 0
+        width: 145
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_8
+      rect:
+        serializedVersion: 2
+        x: 1415
+        y: 0
+        width: 136
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_9
+      rect:
+        serializedVersion: 2
+        x: 1607
+        y: 0
+        width: 190
+        height: 265
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_10
+      rect:
+        serializedVersion: 2
+        x: 1813
+        y: 2
+        width: 145
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WarriorSheet_11
+      rect:
+        serializedVersion: 2
+        x: 2021
+        y: 2
+        width: 137
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

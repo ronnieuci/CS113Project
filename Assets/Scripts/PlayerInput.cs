@@ -5,7 +5,7 @@ public class PlayerInput : MonoBehaviour
 {
 	
 	//Keys
-	public KeyCode up, down, left, right, move, clear, shiftcw, shiftccw, swap;
+	public KeyCode up, down, left, right, move, clear, shiftcw, shiftccw, swap, attack1, attack2;
 	private KeyCode temp;
 	public ShapesManager sm;
 	private float tempnum;
@@ -39,12 +39,15 @@ public class PlayerInput : MonoBehaviour
 				cursor.transform.localPosition += Vector3.up;
 				y += 1;
 			}
-		}
-		else if (Input.GetKeyDown (down)) {
-			if (cursor.transform.localPosition.y> -3) {
+		} else if (Input.GetKeyDown (down)) {
+			if (cursor.transform.localPosition.y > -3) {
 				cursor.transform.localPosition += Vector3.down;
 				y -= 1;
 			}
+		} else if (Input.GetKeyDown (attack1)) {
+			sm.attack1(1);
+		} else if (Input.GetKeyDown (attack2)) {
+			sm.attack2(1);
 		}
 		else if (Input.GetKeyDown (clear)) {
 			sm.ResetBoard ();

@@ -1,17 +1,15 @@
 fileFormatVersion: 2
 guid: 244320624456446a4beaa20b7a504e14
-timeCreated: 1447525643
+timeCreated: 1448134575
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
-  - spotlight: {fileID: 102518, guid: 958a3023903084a018bdef0d19fdcdab, type: 2}
-  - standby: {instanceID: 0}
-  - attack1: {instanceID: 0}
-  - attack2: {instanceID: 0}
-  - attack3: {instanceID: 0}
-  - win: {instanceID: 0}
-  - loss: {instanceID: 0}
+  - BGM: {fileID: 21300000, guid: b148365246b2b4313916aea080c9d63a, type: 3}
+  - BGA: {fileID: 21300000, guid: b28017fd8950f41d99ec1c90a5e305e5, type: 3}
+  - BGW: {fileID: 21300000, guid: ae91cbac5e57c4e75932969a6dfb4a8a, type: 3}
+  - parent: {instanceID: 0}
+  - charAnim: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

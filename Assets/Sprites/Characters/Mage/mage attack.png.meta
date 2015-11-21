@@ -1,15 +1,11 @@
 fileFormatVersion: 2
-guid: e51b3e2cec7c8439796e7f23c9196706
-timeCreated: 1447486725
+guid: 9ec381a1baa41400ab58d1eaa5fbbe31
+timeCreated: 1448130526
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: idle sheet_0
-    21300002: idle sheet_1
-    21300004: idle sheet_2
-    21300006: idle sheet_3
-    21300008: idle sheet_4
-    21300010: idle sheet_5
+    21300000: mage attack_0
+    21300002: mage attack_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -56,63 +52,23 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: idle sheet_0
+    - name: mage attack_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 2
-        width: 150
-        height: 220
+        x: 4
+        y: 1
+        width: 131
+        height: 214
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle sheet_1
+    - name: mage attack_1
       rect:
         serializedVersion: 2
-        x: 170
-        y: 2
-        width: 150
-        height: 220
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle sheet_2
-      rect:
-        serializedVersion: 2
-        x: 325
-        y: 2
-        width: 150
-        height: 220
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle sheet_3
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 2
-        width: 150
-        height: 220
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle sheet_4
-      rect:
-        serializedVersion: 2
-        x: 635
-        y: 2
-        width: 150
-        height: 220
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle sheet_5
-      rect:
-        serializedVersion: 2
-        x: 790
-        y: 2
-        width: 150
-        height: 220
+        x: 154
+        y: 1
+        width: 122
+        height: 214
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

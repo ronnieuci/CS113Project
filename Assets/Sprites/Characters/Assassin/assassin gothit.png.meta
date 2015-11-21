@@ -1,9 +1,11 @@
 fileFormatVersion: 2
-guid: b0a88418d24f6490c904a1d2e7bdd5f8
-timeCreated: 1447796112
+guid: fa838de4292c74acb9f96d913f177fd0
+timeCreated: 1448130825
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: assassin gothit_0
+    21300002: assassin gothit_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -49,7 +51,27 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: assassin gothit_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 1
+        width: 142
+        height: 195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: assassin gothit_1
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 1
+        width: 138
+        height: 196
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
   assetBundleName: 

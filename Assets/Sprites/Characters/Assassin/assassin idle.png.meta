@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: bf6bffb8ee80945ea8c7efce393fc535
-timeCreated: 1447796540
+timeCreated: 1448126308
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -59,62 +59,62 @@ TextureImporter:
     - name: assassin idle_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 0
-        width: 153
-        height: 222
+        x: 8
+        y: 1
+        width: 142
+        height: 195
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: assassin idle_1
       rect:
         serializedVersion: 2
         x: 168
         y: 0
-        width: 153
-        height: 222
+        width: 142
+        height: 188
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: assassin idle_2
       rect:
         serializedVersion: 2
-        x: 321
+        x: 330
         y: 0
-        width: 153
-        height: 222
+        width: 142
+        height: 195
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: assassin idle_3
       rect:
         serializedVersion: 2
-        x: 474
+        x: 487
         y: 0
-        width: 153
-        height: 222
+        width: 142
+        height: 188
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: assassin idle_4
       rect:
         serializedVersion: 2
-        x: 627
+        x: 653
         y: 0
-        width: 153
-        height: 222
+        width: 142
+        height: 194
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: assassin idle_5
       rect:
         serializedVersion: 2
-        x: 780
+        x: 812
         y: 0
-        width: 153
-        height: 222
+        width: 142
+        height: 190
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

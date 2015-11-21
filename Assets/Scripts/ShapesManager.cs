@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ShapesManager : MonoBehaviour
 {
-	public Sprite BG;
+	public GameObject BG;
 	public Text ScoreText; 
 	public ShapesArray shapes;
 	public SoundManager sound;
@@ -26,28 +26,35 @@ public class ShapesManager : MonoBehaviour
 	public GameObject[] BlockPrefabs, ExplosionPrefabs, BonusPrefabs;
 	private IEnumerator CheckPotentialMatchesCoroutine;
 	public Characters[] playerChar = new Characters[3];
+	private SpriteRenderer backg;
 
 	void Awake ()
 	{
 		swapDirection1 = Vector2.right;
 		swapDirection2 = Vector2.left;
 		xDiv = -3.5f; yDiv = -11.5f;
+		backg = BG.GetComponent<SpriteRenderer>();
 	}
 
 	void Start ()
 	{
-		ch [0] = 5;
-		ch [1] = 1;
-		ch [2] = 5;
+		if (parent.position.x > 0) {
+			ch [0] = 5;
+			ch [1] = 2;
+			ch [2] = 5;
+		} else {
+			ch [0] = 5;
+			ch [1] = 1;
+			ch [2] = 5;
+		}
+
 
 		InitializeTypesOnPrefabShapesAndBonuses ();
 		InitializeVariables ();
 		InitializeBlockAndSpawnPositions ();
 		setCharacters (ch);
-
 	}
-
-
+	
 	void setCharacters(int[] c)
 	{
 		int m = 0;
@@ -56,10 +63,16 @@ public class ShapesManager : MonoBehaviour
 			playerChar[m].setChar(i,m);
 			m+=1;
 		}
+
+		if (parent.position.x > 0) {
+			backg.material.color = Color.cyan;
+		}
+		backg.sprite = playerChar [1].BG;
 	}
 
 	// Update is called once per frame
 	void FixedUpdate (){
+
 		if (state == GameState.None) {
 			if (Input.GetKey (play.swap)) {
 				//get the hit position
@@ -393,7 +406,6 @@ public class ShapesManager : MonoBehaviour
 			}
 		}
 		shapes.shapes = ret;
-		RotateCollapse ();
 	}
 
 	public void rotateBoardCCW ()
@@ -401,17 +413,27 @@ public class ShapesManager : MonoBehaviour
 		parent.transform.Rotate (0, 0, -90);
 	}
 
-	public IEnumerator RotateCollapse()
-	{
-		var collapsedBlockInfo = shapes.Collapse (Enumerable.Range(0,(Constants.Columns-1)));
-		
-		int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
-		
-		MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
-		//will wait for both of the above animations
-		yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
-		
-		//search if there are matches with the new/collapsed items
-		var totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
-	}
+	void setBGgrad(int a)
+	{	}
+
+
+//	public IEnumerator RotateCollapse()
+//	{
+//		var collapsedBlockInfo = shapes.Collapse (Enumerable.Range(0,(Constants.Columns-1)));
+//		
+//		int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
+//		
+//		MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
+//		//will wait for both of the above animations
+//		yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
+//		
+//		//search if there are matches with the new/collapsed items
+//		var totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
+//	}
+
+	public void attack1(int i){
+		playerChar[i].sprite.GetComponent<Animator> ().Play ("Attack");}
+
+	public void attack2(int i){
+		playerChar[i].sprite.GetComponent<Animator> ().Play ("Hit");}
 }

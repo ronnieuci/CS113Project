@@ -1,15 +1,11 @@
 fileFormatVersion: 2
-guid: 83bba36b2b79e4ee4949263591dd3847
-timeCreated: 1448130471
+guid: cdab1093435b24033b2a17adb5c38606
+timeCreated: 1448130577
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: mage idle_0
-    21300002: mage idle_1
-    21300004: mage idle_2
-    21300006: mage idle_3
-    21300008: mage idle_4
-    21300010: mage idle_5
+    21300000: mage gothit_0
+    21300002: mage gothit_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -56,7 +52,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: mage idle_0
+    - name: mage gothit_0
       rect:
         serializedVersion: 2
         x: 9
@@ -66,52 +62,12 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: mage idle_1
+    - name: mage gothit_1
       rect:
         serializedVersion: 2
-        x: 148
+        x: 149
         y: 4
-        width: 130
-        height: 199
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: mage idle_2
-      rect:
-        serializedVersion: 2
-        x: 290
-        y: 2
-        width: 132
-        height: 213
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: mage idle_3
-      rect:
-        serializedVersion: 2
-        x: 425
-        y: 4
-        width: 132
-        height: 199
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: mage idle_4
-      rect:
-        serializedVersion: 2
-        x: 564
-        y: 2
-        width: 131
-        height: 214
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: mage idle_5
-      rect:
-        serializedVersion: 2
-        x: 708
-        y: 2
-        width: 130
+        width: 129
         height: 199
       alignment: 0
       pivot: {x: 0, y: 0}
