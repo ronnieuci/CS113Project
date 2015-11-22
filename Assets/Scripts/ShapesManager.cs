@@ -12,11 +12,13 @@ public class ShapesManager : MonoBehaviour
 	public SoundManager sound;
 	public AudioClip blockDrop,blockSlide;
 	public PlayerInput play;
+	public GameObject cursor;
 	public Transform parent;
 	public Vector2 middlePoint;
 	public Vector2 BlockSize = new Vector2 (0.2f, 0.2f);
 	private Vector2 swapDirection1, swapDirection2;
 	public int score;
+	private int g1,g2;
 	public int[] ch = new int[3];
 	private float xDiv,yDiv;
 	private GameState state = GameState.None;
@@ -34,6 +36,8 @@ public class ShapesManager : MonoBehaviour
 		swapDirection2 = Vector2.left;
 		xDiv = -3.5f; yDiv = -11.5f;
 		backg = BG.GetComponent<SpriteRenderer>();
+		g1 = 41;
+		g2 = 41;
 	}
 
 	void Start ()
@@ -44,7 +48,7 @@ public class ShapesManager : MonoBehaviour
 			ch [2] = 5;
 		} else {
 			ch [0] = 5;
-			ch [1] = 1;
+			ch [1] = 3;
 			ch [2] = 5;
 		}
 
@@ -68,10 +72,14 @@ public class ShapesManager : MonoBehaviour
 			backg.material.color = Color.cyan;
 		}
 		backg.sprite = playerChar [1].BG;
+
+		cursor.GetComponent<SpriteRenderer> ().color = playerChar [1].charColor;
 	}
 
 	// Update is called once per frame
 	void FixedUpdate (){
+		
+		playerChar [1].animatetheGems(g1,g2);
 
 		if (state == GameState.None) {
 			if (Input.GetKey (play.swap)) {
@@ -216,6 +224,7 @@ public class ShapesManager : MonoBehaviour
 
 	private IEnumerator FindMatches (RaycastHit2D hit2)
 	{
+		int timesRun = 0;
 		//get the second item that was part of the swipe
 		var hitGo2 = hit2.collider.gameObject;
 		shapes.Swap (hitGo, hitGo2);
@@ -225,7 +234,6 @@ public class ShapesManager : MonoBehaviour
 		hitGo.transform.positionTo (Constants.AnimationDuration, hitGo2.transform.position);
 		hitGo2.transform.positionTo (Constants.AnimationDuration, hitGo.transform.position);
 		yield return new WaitForSeconds (Constants.AnimationDuration);
-
 
 		List<int> columns = new List<int>();
 
@@ -259,8 +267,8 @@ public class ShapesManager : MonoBehaviour
 			shapes.setNullBlock (hitGo2);
 			Destroy (hitGo2);
 		}
+		timesRun += 1;
 
-		int timesRun = 1;
 	RESTART:
 		if (totalMatches.Count () > 0) {
 			while (totalMatches.Count() >= Constants.MinimumMatches) {
@@ -413,9 +421,37 @@ public class ShapesManager : MonoBehaviour
 		parent.transform.Rotate (0, 0, -90);
 	}
 
-	void setBGgrad(int a)
-	{	}
-
+//	void setBGgrad(int a)
+//	{	
+//		Gradient g = new Gradient();
+//		
+//		// Populate the color keys at the relative time 0 and 1 (0 and 100%)
+//		var gck = new GradientColorKey[3];
+//		
+//		gck[1].color = Color.gray;
+//		if (parent.position.x < 0) {
+//			gck[0].color = Color.white;
+//			gck[2].color = Color.black;
+//		} else {
+//			gck[2].color = Color.white;
+//			gck[0].color = Color.black;
+//		}
+//		gck[0].time = 0.0f;
+//		gck[1].time = 0.5f;
+//		gck[2].time = 1.0f;
+//		
+//		// Populate the alpha  keys at relative time 0 and 1  (0 and 100%)
+//		var gak = new GradientAlphaKey[2];
+//		gak[0].alpha = 1.0f;
+//		gak[0].time = 0.0f;
+//		gak[1].alpha = 1.0f;
+//		gak[1].time = 0.5f;
+//		gak[2].alpha = 1.0f;
+//		gak[2].time = 1.0f;
+//		
+//		g.SetKeys(gck, gak);
+//	}
+//
 
 //	public IEnumerator RotateCollapse()
 //	{
