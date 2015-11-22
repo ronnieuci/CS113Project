@@ -36,8 +36,8 @@ public class ShapesManager : MonoBehaviour
 		swapDirection2 = Vector2.left;
 		xDiv = -3.5f; yDiv = -11.5f;
 		backg = BG.GetComponent<SpriteRenderer>();
-		g1 = 41;
-		g2 = 41;
+		g1 = 0;
+		g2 = 0;
 	}
 
 	void Start ()
@@ -48,10 +48,9 @@ public class ShapesManager : MonoBehaviour
 			ch [2] = 5;
 		} else {
 			ch [0] = 5;
-			ch [1] = 3;
+			ch [1] = 1;
 			ch [2] = 5;
 		}
-
 
 		InitializeTypesOnPrefabShapesAndBonuses ();
 		InitializeVariables ();
@@ -65,6 +64,7 @@ public class ShapesManager : MonoBehaviour
 		foreach(int i in c)
 		{
 			playerChar[m].setChar(i,m);
+			playerChar[m].setBlockBonus(SetCharBlocks(i));
 			m+=1;
 		}
 
@@ -271,45 +271,52 @@ public class ShapesManager : MonoBehaviour
 
 	RESTART:
 		if (totalMatches.Count () > 0) {
-			while (totalMatches.Count() >= Constants.MinimumMatches) {
-				//increase score
-				IncreaseScore ((totalMatches.Count () - 2) * Constants.Match3Score);
-			
-				if (timesRun >= 2)
-					IncreaseScore (Constants.SubsequentMatchScore);
+			//increase score
+			IncreaseScore ((totalMatches.Count () - 2) * Constants.Match3Score);
+		
+			if (timesRun >= 2)
+				IncreaseScore (Constants.SubsequentMatchScore);
 
-				foreach (var item in totalMatches) {
-					if (item != null) {
-						//get the columns that we had a collapse
-						columns.Add (item.GetComponent<Shape> ().Column);
-						shapes.Remove (item);
-						RemoveFromScene (item);
+			foreach (var item in totalMatches) {
+				if (item != null) {
+					//get the columns that we had a collapse
+					columns.Add (item.GetComponent<Shape> ().Column);
+					if (item.GetComponent<Shape>().IsSameType(playerChar[1].bonus[0].GetComponent<Shape>()))
+					{
+						g1 += 1;
 					}
+					else if (item.GetComponent<Shape>().IsSameType(playerChar[1].bonus[1].GetComponent<Shape>()))
+					{
+						g2 += 1;
+					}
+					shapes.Remove (item);
+					RemoveFromScene (item);
 				}
-			
-				//check and instantiate Bonus if needed
-				if (addBonus)
-					CreateBonus (hitGoCache);
-					addBonus = false;
-
-				//the order the 2 methods below get called is important!!!
-				//collapse the ones gone
-				var collapsedBlockInfo = shapes.Collapse (columns);
-				int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
-			
-				MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
-				//will wait for both of the above animations
-				yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
-				sound.PlaySingle(blockDrop);
-				//search if there are matches with the new/collapsed items
-				totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
-				timesRun++;
-
-				collapsedBlockInfo = shapes.Collapse (columns);
-				maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
 			}
-		} else {
+		
+			//check and instantiate Bonus if needed
+			if (addBonus)
+				CreateBonus (hitGoCache);
+				addBonus = false;
+
+			//the order the 2 methods below get called is important!!!
+			//collapse the ones gone
 			var collapsedBlockInfo = shapes.Collapse (columns);
+			int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
+
+			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
+			//will wait for both of the above animations
+			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
+			sound.PlaySingle(blockDrop);
+			//search if there are matches with the new/collapsed items
+			totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
+			timesRun++;
+
+			goto RESTART;
+
+		} else {
+
+			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range(0,7));
 			int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
 			if (maxDistance < 1)
 				maxDistance = 1;
@@ -328,7 +335,7 @@ public class ShapesManager : MonoBehaviour
 				collapsedBlockInfo = shapes.Collapse (columns);
 				maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
 				if (totalMatches.Count() > 0)
-					goto RESTART;	
+					goto RESTART;
 			}
 		}
 		state = GameState.None;
@@ -372,6 +379,33 @@ public class ShapesManager : MonoBehaviour
 	private GameObject GetRandomBlock ()
 	{
 		return BlockPrefabs [Random.Range (0, BlockPrefabs.Length)];
+	}
+
+	private GameObject[] SetCharBlocks (int character)
+	{
+		GameObject[] a = new GameObject[2];
+
+		if (character == 1) {
+			a [0] = GetBlock (5);
+			a [1] = GetBlock (1);
+		} else if (character == 2) {
+			a [0] = GetBlock (0);
+			a [1] = GetBlock (3);
+		} else if (character == 3) {
+			a [0] = GetBlock (4);
+			a [1] = GetBlock (2);
+		} else {
+			a [0] = GetBlock (0);
+			a [1] = GetBlock (0);
+		}
+		return a;
+	}
+
+	private GameObject GetBlock (int i)
+	{
+		var a = BlockPrefabs[i];
+		a.GetComponent<Shape> ().Type = a.name;
+		return a;
 	}
 		
 	private void IncreaseScore (int amount)
@@ -420,39 +454,7 @@ public class ShapesManager : MonoBehaviour
 	{
 		parent.transform.Rotate (0, 0, -90);
 	}
-
-//	void setBGgrad(int a)
-//	{	
-//		Gradient g = new Gradient();
-//		
-//		// Populate the color keys at the relative time 0 and 1 (0 and 100%)
-//		var gck = new GradientColorKey[3];
-//		
-//		gck[1].color = Color.gray;
-//		if (parent.position.x < 0) {
-//			gck[0].color = Color.white;
-//			gck[2].color = Color.black;
-//		} else {
-//			gck[2].color = Color.white;
-//			gck[0].color = Color.black;
-//		}
-//		gck[0].time = 0.0f;
-//		gck[1].time = 0.5f;
-//		gck[2].time = 1.0f;
-//		
-//		// Populate the alpha  keys at relative time 0 and 1  (0 and 100%)
-//		var gak = new GradientAlphaKey[2];
-//		gak[0].alpha = 1.0f;
-//		gak[0].time = 0.0f;
-//		gak[1].alpha = 1.0f;
-//		gak[1].time = 0.5f;
-//		gak[2].alpha = 1.0f;
-//		gak[2].time = 1.0f;
-//		
-//		g.SetKeys(gck, gak);
-//	}
-//
-
+	
 //	public IEnumerator RotateCollapse()
 //	{
 //		var collapsedBlockInfo = shapes.Collapse (Enumerable.Range(0,(Constants.Columns-1)));

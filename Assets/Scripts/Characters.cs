@@ -5,19 +5,23 @@ public class Characters : MonoBehaviour
 {
 	public Color charColor;
 	public GameObject sprite;
-	public GameObject casing1,casing2;
-	public GameObject gem1,gem2;
+	public GameObject casing1,casing2,gem1,gem2;
+	public GameObject[] bonus = new GameObject[2];
 	private Quaternion playRot;
 	public Transform parent;
 	public Sprite BG;
-	private int slide;
+	private int slider1,slider2;
+	private bool Down1,Down2;
 
 	void Awake () 
 	{ 
 		playRot = new Quaternion(0,0,0,0);
 		if (parent.position.x > 0) 
 		{	playRot = new Quaternion(0,180,0,0);}
-		slide = 50;
+		slider1 = 0;
+		slider2 = 0;
+		Down1 = false;
+		Down2 = false;
 	}
 
 	public void setChar(int c,int location)
@@ -108,46 +112,120 @@ public class Characters : MonoBehaviour
 		gem2.transform.position = new Vector3 ((sprite.transform.position.x+1.15f),(sprite.transform.position.y-1.15f),(sprite.transform.position.z));
 	}
 
+	public void setBlockBonus(GameObject[] a)
+	{
+		bonus[0] = a[0];
+		bonus[1] = a[1];
+	}
+
 	public void animatetheGems(int g1,int g2)
 	{
-		animateGem (gem1, g1);
-		animateGem (gem2, g2);
+		animateGem1 (g1);
+		animateGem2 (g2);
 	}
 
-	private void animateGem(GameObject gem,int gemCount)
+	private void animateGem1(int gemCount)
 	{
-		bool gcDown = (slide >= 100);
-		if (!gcDown) {
-			if (gemCount < 5) {
-				slide += 1;
-			} else if (gemCount >= 5 && gemCount < 25) {
-				slide += 2;
-			} else if (gemCount >= 25 && gemCount < 30) {
-				slide += 4;
-			} else if (gemCount >= 30 && gemCount < 40) {
-				slide += 6;
-			} else if (gemCount >= 40 && gemCount < 50) {
-				slide += 8;
+		if (gemCount != 0) {
+
+			if (!Down1) {
+				if (gemCount < 0) {
+					slider1 = 0; 
+				} else if (gemCount >= 0 && gemCount < 10) {
+					slider1 += 3;
+				} else if (gemCount >= 10 && gemCount < 20) {
+					slider1 += 6;
+				} else if (gemCount >= 20 && gemCount < 30) {
+					slider1 += 12;
+				} else if (gemCount >= 30 && gemCount < 40) {
+					slider1 += 25;
+				} else if (gemCount >= 40 && gemCount < 50) {
+					slider1 += 50;
+				} else {
+					Down1 = true;
+				}
+			} else if (Down1) {
+				if (gemCount < 5 && gemCount >= 0) {
+					slider1 += -3;
+				} else if (gemCount >= 05 && gemCount < 20) {
+					slider1 += -6;
+				} else if (gemCount >= 20 && gemCount < 30) {
+					slider1 += -12;
+				} else if (gemCount >= 30 && gemCount < 40) {
+					slider1 += -25;
+				} else if (gemCount >= 40 && gemCount < 50) {
+					slider1 += -50;
+				} else {
+					Down1 = false;
+				}
 			}
-		} else if (gcDown) {
-			if (gemCount < 5) {
-				slide += -1;
-			} else if (gemCount >= 5 && gemCount < 25) {
-				slide += -2;
-			} else if (gemCount >= 25 && gemCount < 30) {
-				slide += -4;
-			} else if (gemCount >= 30 && gemCount < 40) {
-				slide += -6;
-			} else if (gemCount >= 40 && gemCount < 50) {
-				slide += -8;
+			if (slider1 >= 500) {
+				Down1 = true;
+			} else if (slider1 <= 0) {
+				Down1 = false;
 			}
-		}
-		var a = gem1.GetComponent<Renderer> ();
-		if (gemCount < 50) {
-			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, ((float)((50+slide)/100))));
-		} else {
-			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 1.0f));
+
+			var a = gem1.GetComponent<Renderer> ();
+			if (gemCount <= 0) {
+				a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 0.4f));
+			} else if (gemCount > 0 && gemCount < 50) {
+				a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, ((float)((500.0f + slider1) / 1000))));
+			} else {
+				a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 1.5f));
+			}
 		}
 	}
 
+	private void animateGem2(int gemCount)
+	{
+		if (gemCount != 0) {
+				
+				if (!Down2) {
+					if (gemCount < 0) {
+						slider2 = 0; 
+					} else if (gemCount >= 0 && gemCount < 10) {
+						slider2 += 3;
+					} else if (gemCount >= 10 && gemCount < 20) {
+						slider2 += 6;
+					} else if (gemCount >= 20 && gemCount < 30) {
+						slider2 += 12;
+					} else if (gemCount >= 30 && gemCount < 40) {
+						slider2 += 25;
+					} else if (gemCount >= 40 && gemCount < 50) {
+						slider2 += 50;
+					} else {
+						Down2 = true;
+					}
+				} else if (Down2) {
+					if (gemCount < 5 && gemCount >= 0) {
+						slider2 += -3;
+					} else if (gemCount >= 05 && gemCount < 20) {
+						slider2 += -6;
+					} else if (gemCount >= 20 && gemCount < 30) {
+						slider2 += -12;
+					} else if (gemCount >= 30 && gemCount < 40) {
+						slider2 += -25;
+					} else if (gemCount >= 40 && gemCount < 50) {
+						slider2 += -50;
+					} else {
+						Down2 = false;
+					}
+				}
+				if (slider2 >= 500) {
+					Down2 = true;
+				} else if (slider2 <= 0) {
+					Down2 = false;
+				}
+			}
+
+		var a = gem2.GetComponent<Renderer> ();
+		if (gemCount <= 0) {
+			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 0.4f));
+		}
+		else if (gemCount > 0 && gemCount < 50) {
+			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, ((float)((500.0f+slider2)/1000))));
+		} else {
+			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 1.5f));
+		}
+	}
 }

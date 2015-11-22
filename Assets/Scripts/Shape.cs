@@ -6,14 +6,9 @@ using UnityEngine;
 
 public class Shape : MonoBehaviour
 {
-	public AudioClip clip;
-
 	public BonusType Bonus { get; set; }
-
 	public int Column { get; set; }
-
 	public int Row { get; set; }
-
 	public string Type { get; set; }
 	
 	public Shape ()
