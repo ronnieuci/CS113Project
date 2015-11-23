@@ -147,7 +147,7 @@ public class ShapesManager : MonoBehaviour
 		//if more than 3 matches and no Bonus is contained in the line, we will award a new Bonus
 		bool addBonus = totalMatches.Count () >= Constants.MinimumMatchesForBonus &&
 			!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGomatchesInfo.BonusesContained) &&
-				!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGo2matchesInfo.BonusesContained);
+			!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGo2matchesInfo.BonusesContained);
 		
 		Shape hitGoCache = null;
 		if (addBonus) {
@@ -159,21 +159,17 @@ public class ShapesManager : MonoBehaviour
 			hitGoCache.Assign (shape.Type, shape.Row, shape.Column);
 		}
 		
-		if (hitGo.GetComponent<Shape> ().IsSameType(NullBlock.GetComponent<Shape>())) {
+		if (hitGo.GetComponent<Shape> ().IsSameType (NullBlock.GetComponent<Shape> ())) {
 			shapes.setNullBlock (hitGo);
 			Destroy (hitGo);
-		}
+		} 
+
 		if (hitGo2.GetComponent<Shape> ().IsSameType(NullBlock.GetComponent<Shape>())) {
 			shapes.setNullBlock (hitGo2);
 			Destroy (hitGo2);
 		}
-		
-	RESTART:
 
-			foreach(var a in totalMatches)
-		{
-			print (timesRun + ":-" + a.name + ":" + a.GetComponent<Shape> ().Column + "=" + a.GetComponent<Shape> ().Row);
-		}
+	RESTART:	
 		if (totalMatches.Count () >= Constants.MinimumMatches) {
 			//increase score
 			IncreaseScore ((totalMatches.Count () - 2) * Constants.Match3Score);
@@ -192,29 +188,74 @@ public class ShapesManager : MonoBehaviour
 					RemoveFromScene (item);
 				}
 			}
-			
+
 			//check and instantiate Bonus if needed
-			if (addBonus)
+			if (addBonus) {
 				CreateBonus (hitGoCache);
-			addBonus = false;
-			
+				addBonus = false;
+			}
+
 			//the order the 2 methods below get called is important!!!
+
 			//collapse the ones gone
-			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range (0, 7));
-			int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
-			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
+			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range (0, 8));
+			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, collapsedBlockInfo.MaxDistance);
 			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
 			sound.PlaySingle (blockDrop);
 			
 			
 			//search if there are matches with the new/collapsed items
 			totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
-			timesRun++;
-			goto RESTART;
+			if (totalMatches.Count () >= Constants.MinimumMatches) {
+				timesRun++;
+				goto RESTART;
+			}
+		} else {
+			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range (0, 8));
+			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, collapsedBlockInfo.MaxDistance);
+			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
+			sound.PlaySingle (blockDrop);
+
+			//search if there are matches with the new/collapsed items
+			totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
+			if (totalMatches.Count () >= Constants.MinimumMatches) {
+				timesRun++;
+				goto RESTART;
+			}
 		}
 		state = GameState.None;
 	}
+
 	
+	public void collapseComplete()
+	{
+		for (int col = 0; col < Constants.Columns; col++) {
+			//begin from bottom row
+			for (int row = 0; row < Constants.Rows; row++)
+			{
+				var alpha = Physics2D.Raycast (new Vector2 ((parent.transform.position.x - 3.50f) + col, (parent.transform.position.y - 3.5f) + row), Vector2.right, 0.51f);
+				if (alpha.collider == null) 
+				{
+					int count = 0;
+					while(count+row < Constants.Rows)
+					{
+						var beta = Physics2D.Raycast (new Vector2 ((parent.transform.position.x - 2.5f) + col, (parent.transform.position.y - 3.5f) + row), Vector2.up, count+1.0f);
+						if (beta.collider == null)
+						{
+							print ("a");
+							count+=1;
+						}
+						else{
+							var gop = beta.collider.gameObject.transform.position;
+							gop = new Vector2(gop.x,gop.y-count);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
 
 	
 	/// Initialize shapes
@@ -312,33 +353,6 @@ public class ShapesManager : MonoBehaviour
 		}
 	}
 
-	public bool collapseComplete()
-	{
-		for (int col = 0; col <= Constants.Columns - 1; col++) {
-			//begin from bottom row
-			for (int row = 0; row <= Constants.Rows - 1; row++) {
-				var alpha = Physics2D.Raycast(new Vector2((parent.transform.position.x -4.0f)+col,(parent.transform.position.y - 3.5f)+row),Vector2.right,0.5f);
-				if(alpha.collider == null)
-				{	
-					for (int row2 = row+1; row2 <= Constants.Rows - 1; row2++) 
-					{
-						var beta = Physics2D.Raycast(new Vector2((parent.transform.position.x -4.0f)+col,(parent.transform.position.y - 3.5f)+row),Vector2.right,0.5f);
-						if(beta.collider != null)
-						{
-							print ("A");
-							return false;
-						}
-						else{
-							print (col + " = " + row2);
-						}
-					}
-					break;
-				}
-			}
-		}
-		return true;
-	}
-
 	/// Creates a new Bonus based on the shape parameter
 	private void CreateBonus (Shape hitGoCache)
 	{
@@ -362,7 +376,9 @@ public class ShapesManager : MonoBehaviour
 	private void MoveAndAnimate (IEnumerable<GameObject> movedGameObjects, int distance)
 	{
 		foreach (var item in movedGameObjects) {
-			item.transform.positionTo (Constants.MoveAnimationMinDuration * distance, middlePoint + new Vector2 ((xDiv + (item.GetComponent<Shape> ().Column * BlockSize.x) + parent.transform.position.x),(xDiv +(item.GetComponent<Shape> ().Row * BlockSize.y)) + parent.transform.position.y));
+			if (item != null) {
+				item.transform.positionTo (Constants.MoveAnimationMinDuration * distance, middlePoint + new Vector2 ((xDiv + (item.GetComponent<Shape> ().Column * BlockSize.x) + parent.transform.position.x), (xDiv + (item.GetComponent<Shape> ().Row * BlockSize.y)) + parent.transform.position.y));
+			}
 		}
 	}
 

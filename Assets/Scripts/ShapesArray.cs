@@ -222,7 +222,7 @@ public class ShapesArray : MonoBehaviour
         foreach (var column in columns)
         {
             //begin from bottom row
-            for (int row = 0; row < Constants.Rows - 1; row++)
+            for (int row = 0; row < Constants.Rows; row++)
             {
                 //if you find a null item
 				if (shapes[row, column] == null)
