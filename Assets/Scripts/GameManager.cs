@@ -4,6 +4,8 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
+// THIS IS ONLY TO LINK THE TWO PLAYERS TOGETHER --- MAY BE REMOVING THIS, IF UN-NEEDED
+
 public class GameManager : MonoBehaviour {
 
 	public ShapesManager player1,player2;

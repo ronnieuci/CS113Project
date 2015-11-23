@@ -3,29 +3,31 @@ using System.Collections;
 
 public class Characters : MonoBehaviour 
 {
-	public Color charColor;
-	public GameObject sprite,casing1,casing2,gem1,gem2;
-	public GameObject[] bonus = new GameObject[2];
-	public Transform parent;
-	public Sprite BG;
+	public Color charColor;											//Primary color for Character (Used for cursor and spotlight
+	public GameObject sprite,casing1,casing2,gem1,gem2;				//Gameobject instances for character sprie, gem casings, and gems
+	public GameObject[] bonus = new GameObject[2];					//List of block types (colors) that gives helps to build up their special attacks
+	public Transform parent;										//"Parent" object to keep Player's objects in relative space to one another. (Packaging)
+	public Sprite BG;												//Links to Background for the Character
 
-	private Quaternion playRot;
-	private int slider1,slider2;
-	private bool Down1,Down2;
+	private Quaternion playRot;										//Rotation used to flip if player two
+	private int slider1,slider2;									//Integer used as slider for variable gem blinking (gem 1 and gem 2)
+	private bool Down1,Down2;										//Boolean used to determine direction of slider movement (+ or -)
 
 	void Awake () 
 	{ 
-		slider1 = 0;
-		slider2 = 0;
-		Down1 = false;
-		Down2 = false;
+		//Set Default number and boolean values for gem blinking
+		slider1 = 0; Down1 = false;											
+		slider2 = 0; Down2 = false;
 
-		playRot = new Quaternion(0,0,0,0);
+		//Set rotation for character sprites
 		if (parent.position.x > 0) 
 		{	playRot = new Quaternion(0,180,0,0);  }
+		else if (parent.position.x < 0) 
+		{	playRot = new Quaternion(0,  0,0,0);  }
 
 	}
 
+	//Set Character's settings based on provided index - (provided by menu through ShapeManager)
 	public void setChar(int c,int location)
 	{
 		if (c == 1) {
@@ -37,21 +39,33 @@ public class Characters : MonoBehaviour
 		} else {
 			setBlank();
 		}
+		// Space to add more characters....
 
-		setLocation (location);
+		//Setup sprite and gems at location (Currently coded to put one character in spot #1)
+		setLocation (location);									
+
+		//Set Default alpha levels for gems before blinking ("Dark")
 		var a = gem1.GetComponent<Renderer> ();
 		var b = gem2.GetComponent<Renderer> ();
 		a.material.SetColor ("_Color", new Color(a.material.color.r,a.material.color.g,a.material.color.b,0.5f));
 		b.material.SetColor ("_Color", new Color(a.material.color.r,a.material.color.g,a.material.color.b,0.5f));
 
+		//Set color for Spotlight
 		this.GetComponent<Renderer> ().material.SetColor("_Color", charColor);
 	}
 
-	private void setColor(Color c)
-	{
-		charColor = c;
-	}
 
+	/*========================================================================================/
+	 *	 							Format for Set____()									 ||
+	 * 				 1)	 Set Color for Character's cursor and Spotlight						 || 
+	 * 				 2)  Load Sprite Prefab for the character in question					 || 
+	 * 				 3)	 Load Casings for Special Abilities meter gems				 		 || 
+	 * 				 4)	 Load Gems into the Casing, with color based on type				 || 
+	 * 				 5)	 Set Background to use image based on type							 || 
+	 * 																						 ||
+	 *=======================================================================================*/
+
+	//Set Character up as Assassin Subset
 	private void setAssassin()
 	{
 		setColor( new Color (0.118f, 1.0f , 0.0f, 0.745f));
@@ -64,6 +78,7 @@ public class Characters : MonoBehaviour
 		BG = Resources.Load("Backgrounds/Assassin", typeof(Sprite)) as Sprite;
 	}
 
+	//Set Character up as Mage Subset
 	private void setMage()
 	{
 		setColor( new Color (0.47f, 0.0f, 0.77f, 0.745f));
@@ -75,6 +90,7 @@ public class Characters : MonoBehaviour
 		BG = Resources.Load("Backgrounds/Mage", typeof(Sprite)) as Sprite;
 	}
 
+	//Set Character up as Warrior Subset
 	private void setWarrior()
 	{
 		setColor( new Color (0.96f, 0.196f, 0.0f, 0.745f));
@@ -86,6 +102,7 @@ public class Characters : MonoBehaviour
 		BG = Resources.Load("Backgrounds/Warrior", typeof(Sprite)) as Sprite;
 	}
 
+	//Set all settings as blank (Allow more than one character used at a time, if we get to it)
 	private void setBlank()
 	{
 		setColor( new Color (0.0f, 0.0f, 0.0f, 0.0f));
@@ -94,10 +111,10 @@ public class Characters : MonoBehaviour
 		casing2 = Instantiate(Resources.Load("Prefabs/Characters/Blank"),parent.transform.position,playRot) as GameObject;
 		gem1 = Instantiate(Resources.Load("Prefabs/Characters/Blank"),parent.transform.position,playRot) as GameObject;
 		gem2 = Instantiate(Resources.Load("Prefabs/Characters/Blank"),parent.transform.position,playRot) as GameObject;
-
 		BG = Resources.Load("Backgrounds/Assassin", typeof(Sprite)) as Sprite;
 	}
 
+	//Move sprites for all created sprites
 	private void setLocation(int loc)
 	{
 		sprite.transform.parent = parent;
@@ -112,19 +129,22 @@ public class Characters : MonoBehaviour
 		gem1.transform.position = new Vector3 ((sprite.transform.position.x-1.15f),(sprite.transform.position.y-1.15f),(sprite.transform.position.z));
 		gem2.transform.position = new Vector3 ((sprite.transform.position.x+1.15f),(sprite.transform.position.y-1.15f),(sprite.transform.position.z));
 	}
-	
+
+	//Set types of blocks that count towards special abilities
 	public void setBlockBonus(GameObject[] a)
 	{
 		bonus[0] = a[0];
 		bonus[1] = a[1];
 	}
 
+	//Called to animate the blinking of the gems (Faster Flashing means closer to "Full Power")
 	public void animatetheGems(int g1,int g2)
 	{
 		animateGem1 (g1);
 		animateGem2 (g2);
 	}
 
+	//Gem Animation #1
 	private void animateGem1(int gemCount)
 	{
 		if (gemCount != 0) {
@@ -177,6 +197,7 @@ public class Characters : MonoBehaviour
 		}
 	}
 
+	//Gem Animation #2
 	private void animateGem2(int gemCount)
 	{
 		if (gemCount != 0) {
@@ -229,4 +250,8 @@ public class Characters : MonoBehaviour
 			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 1.5f));
 		}
 	}
+
+	private void setColor(Color c)
+	{	charColor = c;	 }
+
 }

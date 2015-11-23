@@ -9,10 +9,9 @@ using UnityEngine.UI;
 public class ShapesArray : MonoBehaviour
 {
 
-    public GameObject[,] shapes = new GameObject[Constants.Rows, Constants.Columns];
-	private GameObject NullBlock;
+    public GameObject[,] shapes = new GameObject[Constants.Rows, Constants.Columns];		//Array used to map or manage blocks
+	private GameObject NullBlock;															//Instance of Nullblock, used for swapping blocks to an empty space
     
-	/// Indexer
     public GameObject this[int row, int column]
     {
         get
@@ -26,9 +25,9 @@ public class ShapesArray : MonoBehaviour
         {	shapes[row, column] = value;	}
     }
 
-	public void setNullBlock(GameObject bl)
+	public void setNullBlock(GameObject block)
 	{
-		NullBlock = bl;
+		NullBlock = block;
 	}
 
 	/// Swaps the position of two items, also keeping a backup
@@ -49,7 +48,6 @@ public class ShapesArray : MonoBehaviour
     /// Returns the matches found for a list of GameObjects
     /// MatchesInfo class is not used as this method is called on subsequent collapses/checks, 
     /// not the one inflicted by user's drag
-
     public IEnumerable<GameObject> GetMatches(IEnumerable<GameObject> gos)
     {
         List<GameObject> matches = new List<GameObject>();
@@ -59,13 +57,11 @@ public class ShapesArray : MonoBehaviour
     }
 	
     /// Returns the matches found for a single GameObject
-    public MatchesInfo GetMatches(GameObject go)
-    {
+    public MatchesInfo GetMatches(GameObject go) {
         MatchesInfo matchesInfo = new MatchesInfo();
 
         var horizontalMatches = GetMatchesHorizontally(go);
-        if (ContainsDestroyRowColumnBonus(horizontalMatches))
-        {
+        if (ContainsDestroyRowColumnBonus(horizontalMatches)) {
             horizontalMatches = GetEntireRow(go);
             if (!BonusTypeUtilities.ContainsDestroyWholeRowColumn(matchesInfo.BonusesContained))
                 matchesInfo.BonusesContained |= BonusType.DestroyWholeRowColumn;
@@ -73,8 +69,7 @@ public class ShapesArray : MonoBehaviour
         matchesInfo.AddObjectRange(horizontalMatches);
 
         var verticalMatches = GetMatchesVertically(go);
-        if (ContainsDestroyRowColumnBonus(verticalMatches))
-        {
+        if (ContainsDestroyRowColumnBonus(verticalMatches)) {
             verticalMatches = GetEntireColumn(go);
             if (!BonusTypeUtilities.ContainsDestroyWholeRowColumn(matchesInfo.BonusesContained))
                 matchesInfo.BonusesContained |= BonusType.DestroyWholeRowColumn;
@@ -83,77 +78,64 @@ public class ShapesArray : MonoBehaviour
 
         return matchesInfo;
     }
-
-    private bool ContainsDestroyRowColumnBonus(IEnumerable<GameObject> matches)
-    {
-        if (matches.Count() >= Constants.MinimumMatches)
-        {
-            foreach (var go in matches)
-            {
+	
+    private bool ContainsDestroyRowColumnBonus(IEnumerable<GameObject> matches) {
+        if (matches.Count() >= Constants.MinimumMatches) {
+            foreach (var go in matches) {
                 if (BonusTypeUtilities.ContainsDestroyWholeRowColumn
                     (go.GetComponent<Shape>().Bonus))
                     return true;
             }
         }
-
         return false;
     }
 
-    private IEnumerable<GameObject> GetEntireRow(GameObject go)
-    {
+    private IEnumerable<GameObject> GetEntireRow(GameObject go) {
         List<GameObject> matches = new List<GameObject>();
         int row = go.GetComponent<Shape>().Row;
-        for (int column = 0; column < Constants.Columns; column++)
-        {
+        for (int column = 0; column < Constants.Columns; column++) {
             matches.Add(shapes[row, column]);
         }
         return matches;
     }
 
-    private IEnumerable<GameObject> GetEntireColumn(GameObject go)
-    {
+    private IEnumerable<GameObject> GetEntireColumn(GameObject go) {
         List<GameObject> matches = new List<GameObject>();
         int column = go.GetComponent<Shape>().Column;
-        for (int row = 0; row < Constants.Rows; row++)
-        {
+        for (int row = 0; row < Constants.Rows; row++) {
             matches.Add(shapes[row, column]);
         }
         return matches;
     }
 	
     /// Searches horizontally for matches
-    private IEnumerable<GameObject> GetMatchesHorizontally(GameObject go)
-    {
+    private IEnumerable<GameObject> GetMatchesHorizontally(GameObject go) {
         List<GameObject> matches = new List<GameObject>();
         matches.Add(go);
         var shape = go.GetComponent<Shape>();
         //check left
-        if (shape.Column != 0)
-            for (int column = shape.Column - 1; column >= 0; column--)
-            {
-				if (shapes[shape.Row, column] == null)
-				{ break;}
-				else if (shapes[shape.Row, column].GetComponent<Shape>().IsSameType(shape))
-                {
-                    matches.Add(shapes[shape.Row, column]);
-                }
-                else
-				{	break;	}
-            }
+        if (shape.Column != 0) {
+			for (int column = shape.Column - 1; column >= 0; column--) {
+				if (shapes [shape.Row, column] == null) {
+					break;
+				} else if (shapes [shape.Row, column].GetComponent<Shape> ().IsSameType (shape)) {
+					matches.Add (shapes [shape.Row, column]);
+				} else {
+					break;
+				}
+			}
+		}
 
         //check right
         if (shape.Column != Constants.Columns - 1)
-            for (int column = shape.Column + 1; column < Constants.Columns; column++)
-            {
-				if (shapes[shape.Row, column] == null)
-				{ break;}
-                else if (shapes[shape.Row, column].GetComponent<Shape>().IsSameType(shape))
-                {
-                    matches.Add(shapes[shape.Row, column]);
-                }
-                else
-                    break;
-            }
+			for (int column = shape.Column + 1; column < Constants.Columns; column++) {
+				if (shapes [shape.Row, column] == null) {
+					break;
+				} else if (shapes [shape.Row, column].GetComponent<Shape> ().IsSameType (shape)) {
+					matches.Add (shapes [shape.Row, column]);
+				} else
+					break;
+			}
 
         //we want more than three matches
         if (matches.Count < Constants.MinimumMatches)
@@ -170,30 +152,23 @@ public class ShapesArray : MonoBehaviour
         var shape = go.GetComponent<Shape>();
         //check bottom
         if (shape.Row != 0)
-            for (int row = shape.Row - 1; row >= 0; row--)
-            {
-                if (shapes[row, shape.Column] != null &&
-                    shapes[row, shape.Column].GetComponent<Shape>().IsSameType(shape))
-                {
-                    matches.Add(shapes[row, shape.Column]);
-                }
-                else
-                    break;
-            }
+			for (int row = shape.Row - 1; row >= 0; row--) {
+				if (shapes [row, shape.Column] != null &&
+					shapes [row, shape.Column].GetComponent<Shape> ().IsSameType (shape)) {
+					matches.Add (shapes [row, shape.Column]);
+				} else
+					break;
+			}
 
         //check top
         if (shape.Row != Constants.Rows - 1)
-            for (int row = shape.Row + 1; row < Constants.Rows; row++)
-            {
-                if (shapes[row, shape.Column] != null && 
-                    shapes[row, shape.Column].GetComponent<Shape>().IsSameType(shape))
-                {
-                    matches.Add(shapes[row, shape.Column]);
-                }
-                else
-                    break;
-            }
-
+			for (int row = shape.Row + 1; row < Constants.Rows; row++) {
+				if (shapes [row, shape.Column] != null && 
+					shapes [row, shape.Column].GetComponent<Shape> ().IsSameType (shape)) {
+					matches.Add (shapes [row, shape.Column]);
+				} else
+					break;
+			}
 
         if (matches.Count < Constants.MinimumMatches)
             matches.Clear();
@@ -201,16 +176,13 @@ public class ShapesArray : MonoBehaviour
         return matches.Distinct();
     }
 
-
     /// Removes (sets as null) an item from the array
     public void Remove(GameObject item)
     {
-		if (item != null)
-		{
-        	shapes[item.GetComponent<Shape>().Row, item.GetComponent<Shape>().Column] = null;
+		if (item != null) {
+			shapes [item.GetComponent<Shape> ().Row, item.GetComponent<Shape> ().Column] = null;
 		}
-    }
-
+	}
 
     /// Collapses the array on the specific columns, after checking for empty items on them
     public AlteredBlockInfo Collapse(IEnumerable<int> columns)
@@ -219,89 +191,78 @@ public class ShapesArray : MonoBehaviour
 
 
         ///search in every column
-        foreach (var column in columns)
-        {
-            //begin from bottom row
-            for (int row = 0; row < Constants.Rows; row++)
-            {
-                //if you find a null item
-				if (shapes[row, column] == null)
-				    {
+        foreach (var column in columns) {
+			//begin from bottom row
+			for (int row = 0; row < Constants.Rows; row++) {
+				//if you find a null item
+				if (shapes [row, column] == null) {
 					//start searching for the first non-null
-                    for (int row2 = row + 1; row2 < Constants.Rows; row2++)
-                    {
-                        //if you find one, bring it down (i.e. replace it with the null you found)
-                        if (shapes[row2, column] != null)
-                        {
-                            shapes[row, column] = shapes[row2, column];
-                            shapes[row2, column] = null;
-
-                            //calculate the biggest distance
-                            if (row2 - row > collapseInfo.MaxDistance) 
-                                collapseInfo.MaxDistance = row2 - row;
-
-                            //assign new row and column (name does not change)
-                            shapes[row, column].GetComponent<Shape>().Row = row;
-                            shapes[row, column].GetComponent<Shape>().Column = column;
-
-                            collapseInfo.AddBlock(shapes[row, column]);
-							break;
-                        }
-                    }
-                }
-				else if(shapes[row,column] == NullBlock)
-				{
-					//start searching for the first non-null
-					for (int row2 = row + 1; row2 < Constants.Rows; row2++)
-					{
+					for (int row2 = row + 1; row2 < Constants.Rows; row2++) {
 						//if you find one, bring it down (i.e. replace it with the null you found)
-						if (shapes[row2, column] != null)
-						{
-							shapes[row, column] = shapes[row2, column];
-							shapes[row2, column] = null;
+						if (shapes [row2, column] != null) {
+							shapes [row, column] = shapes [row2, column];
+							shapes [row2, column] = null;
+
+							//calculate the biggest distance
+							if (row2 - row > collapseInfo.MaxDistance) 
+								collapseInfo.MaxDistance = row2 - row;
+
+							//assign new row and column (name does not change)
+							shapes [row, column].GetComponent<Shape> ().Row = row;
+							shapes [row, column].GetComponent<Shape> ().Column = column;
+
+							collapseInfo.AddBlock (shapes [row, column]);
+							break;
+						}
+					}
+				} else if (shapes [row, column] == NullBlock) {
+					//start searching for the first non-null
+					for (int row2 = row + 1; row2 < Constants.Rows; row2++) {
+						//if you find one, bring it down (i.e. replace it with the null you found)
+						if (shapes [row2, column] != null) {
+							shapes [row, column] = shapes [row2, column];
+							shapes [row2, column] = null;
 							
 							//calculate the biggest distance
 							if (row2 - row > collapseInfo.MaxDistance) 
 								collapseInfo.MaxDistance = row2 - row;
 							
 							//assign new row and column (name does not change)
-							shapes[row, column].GetComponent<Shape>().Row = row;
-							shapes[row, column].GetComponent<Shape>().Column = column;
+							shapes [row, column].GetComponent<Shape> ().Row = row;
+							shapes [row, column].GetComponent<Shape> ().Column = column;
 							
-							collapseInfo.AddBlock(shapes[row, column]);
+							collapseInfo.AddBlock (shapes [row, column]);
 							break;
 						}
 					}
 				}
-            }
-        }
-
+			}
+		}
         return collapseInfo;
     }
 	
     /// Searches the specific column and returns info about null items
     public IEnumerable<ShapeInfo> GetEmptyItemsOnColumn(int column)
     {
-        List<ShapeInfo> emptyItems = new List<ShapeInfo>();
-        for (int row = 0; row < Constants.Rows; row++)
-        {
-            if (shapes[row, column] == null)
-                emptyItems.Add(new ShapeInfo() { Row = row, Column = column });
-        }
-        return emptyItems;
-    }
+		List<ShapeInfo> emptyItems = new List<ShapeInfo> ();
+		for (int row = 0; row < Constants.Rows; row++) {
+			if (shapes [row, column] == null)
+				emptyItems.Add (new ShapeInfo () { Row = row, Column = column });
+		}
+		return emptyItems;
+	}
 
+
+	//Moving blocks in the array to match CW-rotation
 	public void RotateCW(){
 
 		GameObject[,] temp = new GameObject[Constants.Rows, Constants.Columns];
 		int colC = 0;
 		int rowC = 8;
 
-		for (int col = 0; col < Constants.Columns; col++)
-		{
-			for (int row = 0; row < Constants.Rows; row++) 
-			{
-				temp[col,row] = shapes[colC,rowC];
+		for (int col = 0; col < Constants.Columns; col++) {
+			for (int row = 0; row < Constants.Rows; row++) {
+				temp [col, row] = shapes [colC, rowC];
 				rowC -= 1;
 			}
 			colC += 1;
@@ -309,11 +270,20 @@ public class ShapesArray : MonoBehaviour
 		shapes = temp;
 	}
 
-	public void arrayCollapse(int column,int row,int orow,int ocol)
-	{
-		var temp = shapes [column, row];
-		shapes [column,row] = shapes [column+ocol, row+orow];
-		shapes [column + ocol, row + orow] = temp;
+	//Moving blocks in the array to match CCW-rotation
+	public void RotateCCW(){
+		
+		GameObject[,] temp = new GameObject[Constants.Rows, Constants.Columns];
+		int colC = 0;
+		int rowC = 8;
+		
+		for (int col = 0; col < Constants.Columns; col++) {
+			for (int row = 0; row < Constants.Rows; row++) {
+				temp [col, row] = shapes [colC, rowC];
+				rowC -= 1;
+			}
+			colC += 1;
+		}
+		shapes = temp;
 	}
-
 }

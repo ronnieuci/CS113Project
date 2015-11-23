@@ -6,30 +6,29 @@ using UnityEngine.UI;
 
 public class ShapesManager : MonoBehaviour
 {
-	public AudioClip blockDrop,blockSlide;
-	public Characters[] playerChar = new Characters[3];
-	public GameObject NullBlock;
-	public GameObject[] BlockPrefabs, ExplosionPrefabs, BonusPrefabs;
-	public GameObject BG,cursor;
-	public int score;
-	public PlayerInput play;
-	public ShapesArray shapes;
-	public SoundManager sound;
-	public Text ScoreText;
-	public Transform parent;
-	public Vector2 middlePoint;
-	public Vector2 BlockSize = new Vector2 (1.0f, 1.0f);
+	public AudioClip blockDrop,blockSlide;															//Sounds for various events
+	public Characters[] playerChar = new Characters[3];												//Array for characters player is using
+	public GameObject NullBlock;																	//Instance of NullBlock(Used for shape movement)
+	public GameObject[] BlockPrefabs, ExplosionPrefabs, BonusPrefabs;								//List of Blocks, Special Blocks, and explosion instances
+	public GameObject BG,cursor;																	//Reference to background and cursor for each character
+	public int score;																				//Integer to store score
+	public PlayerInput play;																		//Instance for player's inputs
+	public ShapesArray shapes;																		//Instance of shape array
+	public SoundManager sound;																		//Instance of sound player
+	public Text ScoreText;																			//On-Screen Text for score (Not currently on screen)
+	public Transform parent;																		//Parent pointer for Blocks
+	public Vector2 middlePoint;																		//Middle-point of the gameboard
+	public Vector2 BlockSize = new Vector2 (1.0f, 1.0f);											//Size of each block
 
-	private float xDiv,yDiv;
-	private GameState state = GameState.None;
-	private GameObject hitGo = null;
-	private GameObject hitGo2 = null;
-	private IEnumerator CheckPotentialMatchesCoroutine;
-	private int g1,g2;
-	private int[] ch = new int[3];
-	private SpriteRenderer backg;
-	private Vector2 swapDirection1, swapDirection2;
-	private Vector2[] SpawnPositions;
+	private float xDiv,yDiv;																		//Used for block and board placement
+	private GameState state = GameState.None;														//Default GameState (used to split up coding in Update)
+	private GameObject hitGo = null;																//Reference for block one when swapping blocks with cursor
+	private GameObject hitGo2 = null;																//Reference for block two when swapping blocks with cursor		
+	private int g1,g2;																				//Integer to track number of Special attack gems accumulated
+	private int[] ch = new int[3];																	//Integer Array to store character choices in menu
+	private SpriteRenderer backg;																	//Reference to Background for each character
+	private Vector2 swapDirection1, swapDirection2;													//Directions that cursor checks
+	private Vector2[] SpawnPositions;																//No Longer in use (needs to be removed, but currently breaks)
 
 	void Awake ()
 	{
@@ -43,6 +42,7 @@ public class ShapesManager : MonoBehaviour
 
 	void Start ()
 	{
+		//Test Characters
 		if (parent.position.x > 0) {
 			ch [0] = 5;
 			ch [1] = 2;
@@ -225,39 +225,7 @@ public class ShapesManager : MonoBehaviour
 		}
 		state = GameState.None;
 	}
-
-	
-	public void collapseComplete()
-	{
-		for (int col = 0; col < Constants.Columns; col++) {
-			//begin from bottom row
-			for (int row = 0; row < Constants.Rows; row++)
-			{
-				var alpha = Physics2D.Raycast (new Vector2 ((parent.transform.position.x - 3.50f) + col, (parent.transform.position.y - 3.5f) + row), Vector2.right, 0.51f);
-				if (alpha.collider == null) 
-				{
-					int count = 0;
-					while(count+row < Constants.Rows)
-					{
-						var beta = Physics2D.Raycast (new Vector2 ((parent.transform.position.x - 2.5f) + col, (parent.transform.position.y - 3.5f) + row), Vector2.up, count+1.0f);
-						if (beta.collider == null)
-						{
-							print ("a");
-							count+=1;
-						}
-						else{
-							var gop = beta.collider.gameObject.transform.position;
-							gop = new Vector2(gop.x,gop.y-count);
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
-
-
-	
+		
 	/// Initialize shapes
 	private void InitializeTypesOnPrefabShapesAndBonuses ()
 	{
@@ -468,21 +436,7 @@ public class ShapesManager : MonoBehaviour
 	{
 		parent.transform.Rotate (0, 0, -90);
 	}
-	
-//	public IEnumerator RotateCollapse()
-//	{
-//		var collapsedBlockInfo = shapes.Collapse (Enumerable.Range(0,(Constants.Columns-1)));
-//		
-//		int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
-//		
-//		MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
-//		//will wait for both of the above animations
-//		yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
-//		
-//		//search if there are matches with the new/collapsed items
-//		var totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
-//	}
-		
+			
 	public void attack1(int i){
 		playerChar[i].sprite.GetComponent<Animator> ().Play ("Attack");}
 

@@ -36,8 +36,7 @@ public class Shape : MonoBehaviour
 		Row = row;
 		Type = type;
 	}
-	
-	/// We could do a shallow copy/exchange here, but anyway...
+
 	public static void SwapColumnRow (Shape a, Shape b)
 	{
 		int temp = a.Row;

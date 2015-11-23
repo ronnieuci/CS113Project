@@ -15,14 +15,12 @@ public class AlteredBlockInfo
         get	{	return newBlock.Distinct();	}
     }
 
-    public void AddBlock(GameObject go)
-    {
+    public void AddBlock(GameObject go){
         if (!newBlock.Contains(go))
             newBlock.Add(go);
     }
 
-    public AlteredBlockInfo()
-    {
+    public AlteredBlockInfo(){
         newBlock = new List<GameObject>();
     }
 }

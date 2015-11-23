@@ -9,27 +9,22 @@ public class MatchesInfo
 {
     private List<GameObject> matchedBlocks;
 	
-    public IEnumerable<GameObject> MatchedBlock
-    {
+    public IEnumerable<GameObject> MatchedBlock {
         get	{ return matchedBlocks.Distinct(); }
     }
 
-    public void AddObject(GameObject go)
-    {
-        if (!matchedBlocks.Contains(go))
-            matchedBlocks.Add(go);
-    }
+    public void AddObject(GameObject go) {
+		if (!matchedBlocks.Contains (go))
+			matchedBlocks.Add (go);
+	}
 
-    public void AddObjectRange(IEnumerable<GameObject> gos)
-    {
-        foreach (var item in gos)
-        {
-            AddObject(item);
-        }
-    }
+    public void AddObjectRange(IEnumerable<GameObject> gos) {
+		foreach (var item in gos) {
+			AddObject (item);
+		}
+	}
 
-    public MatchesInfo()
-    {
+    public MatchesInfo() {
         matchedBlocks = new List<GameObject>();
         BonusesContained = BonusType.None;
     }
