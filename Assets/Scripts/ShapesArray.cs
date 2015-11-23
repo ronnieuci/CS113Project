@@ -316,25 +316,4 @@ public class ShapesArray : MonoBehaviour
 		shapes [column + ocol, row + orow] = temp;
 	}
 
-	public bool collapsedCompleted ()
-	{
-		return (columnCollCompleted (0) && columnCollCompleted (1) && columnCollCompleted (2) && columnCollCompleted (3) && columnCollCompleted (4) && columnCollCompleted (5) && columnCollCompleted (6) && columnCollCompleted (7));
-	}
-
-	private bool columnCollCompleted (int column){
-
-		for (int row = 0; row < Constants.Rows; row++)
-		{
-			if (shapes[row, column] == null){
-				for (int row2 = row+1; row2 < Constants.Rows; row2++)
-				{
-					if(shapes[row, column] != null)
-					{
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
 }

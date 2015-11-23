@@ -6,29 +6,30 @@ using UnityEngine.UI;
 
 public class ShapesManager : MonoBehaviour
 {
-	public GameObject BG;
-	public Text ScoreText; 
+	public AudioClip blockDrop,blockSlide;
+	public Characters[] playerChar = new Characters[3];
+	public GameObject NullBlock;
+	public GameObject[] BlockPrefabs, ExplosionPrefabs, BonusPrefabs;
+	public GameObject BG,cursor;
+	public int score;
+	public PlayerInput play;
 	public ShapesArray shapes;
 	public SoundManager sound;
-	public AudioClip blockDrop,blockSlide;
-	public PlayerInput play;
-	public GameObject cursor;
+	public Text ScoreText;
 	public Transform parent;
 	public Vector2 middlePoint;
-	public Vector2 BlockSize = new Vector2 (0.2f, 0.2f);
-	private Vector2 swapDirection1, swapDirection2;
-	public int score;
-	private int g1,g2;
-	public int[] ch = new int[3];
+	public Vector2 BlockSize = new Vector2 (1.0f, 1.0f);
+
 	private float xDiv,yDiv;
 	private GameState state = GameState.None;
 	private GameObject hitGo = null;
-	private Vector2[] SpawnPositions;
-	public GameObject NullBlock;
-	public GameObject[] BlockPrefabs, ExplosionPrefabs, BonusPrefabs;
+	private GameObject hitGo2 = null;
 	private IEnumerator CheckPotentialMatchesCoroutine;
-	public Characters[] playerChar = new Characters[3];
+	private int g1,g2;
+	private int[] ch = new int[3];
 	private SpriteRenderer backg;
+	private Vector2 swapDirection1, swapDirection2;
+	private Vector2[] SpawnPositions;
 
 	void Awake ()
 	{
@@ -48,7 +49,7 @@ public class ShapesManager : MonoBehaviour
 			ch [2] = 5;
 		} else {
 			ch [0] = 5;
-			ch [1] = 1;
+			ch [1] = 3;
 			ch [2] = 5;
 		}
 
@@ -68,11 +69,9 @@ public class ShapesManager : MonoBehaviour
 			m+=1;
 		}
 
-		if (parent.position.x > 0) {
-			backg.material.color = Color.cyan;
-		}
+		if (parent.position.x > 0) 
+		{ }
 		backg.sprite = playerChar [1].BG;
-
 		cursor.GetComponent<SpriteRenderer> ().color = playerChar [1].charColor;
 	}
 
@@ -110,7 +109,8 @@ public class ShapesManager : MonoBehaviour
 					hit = Physics2D.Raycast (play.getCursorLocation (), swapDirection2, 1.0f);
 					state = GameState.Animating;
 					FixSortingLayer (hitGo, hit.collider.gameObject);
-					StartCoroutine (FindMatches (hit));
+					hitGo2 = hit.collider.gameObject;
+					StartCoroutine (FindMatches ());
 				}
 			}
 			else if (hit.collider != null && hitGo != hit.collider.gameObject) {
@@ -121,11 +121,101 @@ public class ShapesManager : MonoBehaviour
 				} else {
 					state = GameState.Animating;
 					FixSortingLayer (hitGo, hit.collider.gameObject);
-					StartCoroutine (FindMatches (hit));
+					hitGo2 = hit.collider.gameObject;
+					StartCoroutine (FindMatches ());
 				}
 			}
 		}
 	}
+
+	private IEnumerator FindMatches ()
+	{
+		int timesRun = 0;
+		
+		//move the swapped ones
+		sound.PlaySingle (blockSlide);
+		shapes.Swap (hitGo, hitGo2);
+		hitGo.transform.positionTo (Constants.AnimationDuration, hitGo2.transform.position);
+		hitGo2.transform.positionTo (Constants.AnimationDuration, hitGo.transform.position);
+		yield return new WaitForSeconds (Constants.AnimationDuration);
+		
+		//get the matches via the helper methods
+		var hitGomatchesInfo = shapes.GetMatches (hitGo);
+		var hitGo2matchesInfo = shapes.GetMatches (hitGo2);
+		var totalMatches = hitGomatchesInfo.MatchedBlock.Union (hitGo2matchesInfo.MatchedBlock).Distinct ();
+
+		//if more than 3 matches and no Bonus is contained in the line, we will award a new Bonus
+		bool addBonus = totalMatches.Count () >= Constants.MinimumMatchesForBonus &&
+			!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGomatchesInfo.BonusesContained) &&
+				!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGo2matchesInfo.BonusesContained);
+		
+		Shape hitGoCache = null;
+		if (addBonus) {
+			hitGoCache = new Shape ();
+			//get the game object that was of the same type
+			var sameTypeGo = hitGomatchesInfo.MatchedBlock.Count () > 0 ? hitGo : hitGo2;
+			var shape = sameTypeGo.GetComponent<Shape> ();
+			//cache it
+			hitGoCache.Assign (shape.Type, shape.Row, shape.Column);
+		}
+		
+		if (hitGo.GetComponent<Shape> ().IsSameType(NullBlock.GetComponent<Shape>())) {
+			shapes.setNullBlock (hitGo);
+			Destroy (hitGo);
+		}
+		if (hitGo2.GetComponent<Shape> ().IsSameType(NullBlock.GetComponent<Shape>())) {
+			shapes.setNullBlock (hitGo2);
+			Destroy (hitGo2);
+		}
+		
+	RESTART:
+
+			foreach(var a in totalMatches)
+		{
+			print (timesRun + ":-" + a.name + ":" + a.GetComponent<Shape> ().Column + "=" + a.GetComponent<Shape> ().Row);
+		}
+		if (totalMatches.Count () >= Constants.MinimumMatches) {
+			//increase score
+			IncreaseScore ((totalMatches.Count () - 2) * Constants.Match3Score);
+			
+			if (timesRun >= 1)
+				IncreaseScore (Constants.SubsequentMatchScore);
+			
+			foreach (var item in totalMatches) {
+				if (item != null) {
+					if (item.GetComponent<Shape> ().IsSameType (playerChar [1].bonus [0].GetComponent<Shape> ())) {
+						g1 += 1;
+					} else if (item.GetComponent<Shape> ().IsSameType (playerChar [1].bonus [1].GetComponent<Shape> ())) {
+						g2 += 1;
+					}
+					shapes.Remove (item);
+					RemoveFromScene (item);
+				}
+			}
+			
+			//check and instantiate Bonus if needed
+			if (addBonus)
+				CreateBonus (hitGoCache);
+			addBonus = false;
+			
+			//the order the 2 methods below get called is important!!!
+			//collapse the ones gone
+			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range (0, 7));
+			int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
+			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
+			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
+			sound.PlaySingle (blockDrop);
+			
+			
+			//search if there are matches with the new/collapsed items
+			totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
+			timesRun++;
+			goto RESTART;
+		}
+		state = GameState.None;
+	}
+	
+
 	
 	/// Initialize shapes
 	private void InitializeTypesOnPrefabShapesAndBonuses ()
@@ -222,123 +312,31 @@ public class ShapesManager : MonoBehaviour
 		}
 	}
 
-	private IEnumerator FindMatches (RaycastHit2D hit2)
+	public bool collapseComplete()
 	{
-		int timesRun = 0;
-		//get the second item that was part of the swipe
-		var hitGo2 = hit2.collider.gameObject;
-		shapes.Swap (hitGo, hitGo2);
-		
-		//move the swapped ones
-		sound.PlaySingle (blockSlide);
-		hitGo.transform.positionTo (Constants.AnimationDuration, hitGo2.transform.position);
-		hitGo2.transform.positionTo (Constants.AnimationDuration, hitGo.transform.position);
-		yield return new WaitForSeconds (Constants.AnimationDuration);
-
-		List<int> columns = new List<int>();
-
-		columns.Add((int)(hitGo.transform.position.x+8.5f));
-		columns.Add((int)(hitGo2.transform.position.x+8.5f));
-
-		//get the matches via the helper methods
-		var hitGomatchesInfo = shapes.GetMatches (hitGo);
-		var hitGo2matchesInfo = shapes.GetMatches (hitGo2);
-		var totalMatches = hitGomatchesInfo.MatchedBlock.Union (hitGo2matchesInfo.MatchedBlock).Distinct ();
-
-		//if more than 3 matches and no Bonus is contained in the line, we will award a new Bonus
-		bool addBonus = totalMatches.Count () >= Constants.MinimumMatchesForBonus &&
-			!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGomatchesInfo.BonusesContained) &&
-			!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGo2matchesInfo.BonusesContained);
-		
-		Shape hitGoCache = null;
-		if (addBonus) {
-			hitGoCache = new Shape ();
-			//get the game object that was of the same type
-			var sameTypeGo = hitGomatchesInfo.MatchedBlock.Count () > 0 ? hitGo : hitGo2;
-			var shape = sameTypeGo.GetComponent<Shape> ();
-			//cache it
-			hitGoCache.Assign (shape.Type, shape.Row, shape.Column);
-		}
-
-		if (hitGo.GetComponent<Shape> ().Type == NullBlock.name) {
-			shapes.setNullBlock (hitGo);
-			Destroy (hitGo);
-		} else if (hitGo2.GetComponent<Shape> ().Type == NullBlock.name) {
-			shapes.setNullBlock (hitGo2);
-			Destroy (hitGo2);
-		}
-		timesRun += 1;
-
-	RESTART:
-		if (totalMatches.Count () > 0) {
-			//increase score
-			IncreaseScore ((totalMatches.Count () - 2) * Constants.Match3Score);
-		
-			if (timesRun >= 2)
-				IncreaseScore (Constants.SubsequentMatchScore);
-
-			foreach (var item in totalMatches) {
-				if (item != null) {
-					//get the columns that we had a collapse
-					columns.Add (item.GetComponent<Shape> ().Column);
-					if (item.GetComponent<Shape>().IsSameType(playerChar[1].bonus[0].GetComponent<Shape>()))
+		for (int col = 0; col <= Constants.Columns - 1; col++) {
+			//begin from bottom row
+			for (int row = 0; row <= Constants.Rows - 1; row++) {
+				var alpha = Physics2D.Raycast(new Vector2((parent.transform.position.x -4.0f)+col,(parent.transform.position.y - 3.5f)+row),Vector2.right,0.5f);
+				if(alpha.collider == null)
+				{	
+					for (int row2 = row+1; row2 <= Constants.Rows - 1; row2++) 
 					{
-						g1 += 1;
+						var beta = Physics2D.Raycast(new Vector2((parent.transform.position.x -4.0f)+col,(parent.transform.position.y - 3.5f)+row),Vector2.right,0.5f);
+						if(beta.collider != null)
+						{
+							print ("A");
+							return false;
+						}
+						else{
+							print (col + " = " + row2);
+						}
 					}
-					else if (item.GetComponent<Shape>().IsSameType(playerChar[1].bonus[1].GetComponent<Shape>()))
-					{
-						g2 += 1;
-					}
-					shapes.Remove (item);
-					RemoveFromScene (item);
+					break;
 				}
 			}
-		
-			//check and instantiate Bonus if needed
-			if (addBonus)
-				CreateBonus (hitGoCache);
-				addBonus = false;
-
-			//the order the 2 methods below get called is important!!!
-			//collapse the ones gone
-			var collapsedBlockInfo = shapes.Collapse (columns);
-			int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
-
-			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
-			//will wait for both of the above animations
-			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
-			sound.PlaySingle(blockDrop);
-			//search if there are matches with the new/collapsed items
-			totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
-			timesRun++;
-
-			goto RESTART;
-
-		} else {
-
-			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range(0,7));
-			int maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
-			if (maxDistance < 1)
-				maxDistance = 1;
-			while (collapsedBlockInfo.MaxDistance > 0 )
-			{
-			
-				MoveAndAnimate (collapsedBlockInfo.AlteredBlock, maxDistance);
-				//will wait for both of the above animations
-				yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
-			
-				sound.PlaySingle(blockDrop);
-			
-				//search if there are matches with the new/collapsed items
-				totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
-
-				collapsedBlockInfo = shapes.Collapse (columns);
-				maxDistance = Mathf.Max (collapsedBlockInfo.MaxDistance);
-				if (totalMatches.Count() > 0)
-					goto RESTART;
-			}
 		}
-		state = GameState.None;
+		return true;
 	}
 
 	/// Creates a new Bonus based on the shape parameter
@@ -468,7 +466,7 @@ public class ShapesManager : MonoBehaviour
 //		//search if there are matches with the new/collapsed items
 //		var totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
 //	}
-
+		
 	public void attack1(int i){
 		playerChar[i].sprite.GetComponent<Animator> ().Play ("Attack");}
 

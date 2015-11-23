@@ -4,29 +4,30 @@ using System.Collections;
 public class Characters : MonoBehaviour 
 {
 	public Color charColor;
-	public GameObject sprite;
-	public GameObject casing1,casing2,gem1,gem2;
+	public GameObject sprite,casing1,casing2,gem1,gem2;
 	public GameObject[] bonus = new GameObject[2];
-	private Quaternion playRot;
 	public Transform parent;
 	public Sprite BG;
+
+	private Quaternion playRot;
 	private int slider1,slider2;
 	private bool Down1,Down2;
 
 	void Awake () 
 	{ 
-		playRot = new Quaternion(0,0,0,0);
-		if (parent.position.x > 0) 
-		{	playRot = new Quaternion(0,180,0,0);}
 		slider1 = 0;
 		slider2 = 0;
 		Down1 = false;
 		Down2 = false;
+
+		playRot = new Quaternion(0,0,0,0);
+		if (parent.position.x > 0) 
+		{	playRot = new Quaternion(0,180,0,0);  }
+
 	}
 
 	public void setChar(int c,int location)
 	{
-
 		if (c == 1) {
 			setAssassin();
 		} else if (c == 2) {
@@ -111,7 +112,7 @@ public class Characters : MonoBehaviour
 		gem1.transform.position = new Vector3 ((sprite.transform.position.x-1.15f),(sprite.transform.position.y-1.15f),(sprite.transform.position.z));
 		gem2.transform.position = new Vector3 ((sprite.transform.position.x+1.15f),(sprite.transform.position.y-1.15f),(sprite.transform.position.z));
 	}
-
+	
 	public void setBlockBonus(GameObject[] a)
 	{
 		bonus[0] = a[0];
