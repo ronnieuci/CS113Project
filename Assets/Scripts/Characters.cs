@@ -3,11 +3,16 @@ using System.Collections;
 
 public class Characters : MonoBehaviour 
 {
-	public Color charColor;											//Primary color for Character (Used for cursor and spotlight
+	public bool power1,power2;										//Boolean for whether power is charged
+	public Color charColor,fxColor;									//Primary color for Character (Used for cursor and spotlight
+	public int effect1,effect2;
+	public GameManager gm;
 	public GameObject sprite,casing1,casing2,gem1,gem2;				//Gameobject instances for character sprie, gem casings, and gems
 	public GameObject[] bonus = new GameObject[2];					//List of block types (colors) that gives helps to build up their special attacks
+	public ShapesManager sm;
 	public Transform parent;										//"Parent" object to keep Player's objects in relative space to one another. (Packaging)
 	public Sprite BG;												//Links to Background for the Character
+
 
 	private Quaternion playRot;										//Rotation used to flip if player two
 	private int slider1,slider2;									//Integer used as slider for variable gem blinking (gem 1 and gem 2)
@@ -58,10 +63,11 @@ public class Characters : MonoBehaviour
 	/*========================================================================================/
 	 *	 							Format for Set____()									 ||
 	 * 				 1)	 Set Color for Character's cursor and Spotlight						 || 
-	 * 				 2)  Load Sprite Prefab for the character in question					 || 
-	 * 				 3)	 Load Casings for Special Abilities meter gems				 		 || 
-	 * 				 4)	 Load Gems into the Casing, with color based on type				 || 
-	 * 				 5)	 Set Background to use image based on type							 || 
+	 * 				 2)	 Set color for tile effects, and status number						 ||
+	 * 				 3)  Load Sprite Prefab for the character in question					 || 
+	 * 				 4)	 Load Casings for Special Abilities meter gems				 		 || 
+	 * 				 5)	 Load Gems into the Casing, with color based on type				 || 
+	 * 				 6)	 Set Background to use image based on type							 || 
 	 * 																						 ||
 	 *=======================================================================================*/
 
@@ -69,19 +75,25 @@ public class Characters : MonoBehaviour
 	private void setAssassin()
 	{
 		setColor( new Color (0.118f, 1.0f , 0.0f, 0.745f));
+		setfxColor (Color.green);
+		effect1 = 1;
+		effect2 = 2;
 		sprite = Instantiate(Resources.Load("Prefabs/Characters/Assassin"),parent.transform.position,playRot) as GameObject;
-
 		casing1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingGold"),parent.transform.position,playRot) as GameObject;
 		casing2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingSilver"),parent.transform.position,playRot) as GameObject;
 		gem1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/yellow"),parent.transform.position,playRot) as GameObject;
 		gem2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/green"),parent.transform.position,playRot) as GameObject;
 		BG = Resources.Load("Backgrounds/Assassin", typeof(Sprite)) as Sprite;
+
 	}
 
 	//Set Character up as Mage Subset
 	private void setMage()
 	{
 		setColor( new Color (0.47f, 0.0f, 0.77f, 0.745f));
+		setfxColor (Color.magenta);
+		effect1 = 3;
+		effect2 = 4;
 		sprite = Instantiate(Resources.Load("Prefabs/Characters/Mage"),parent.transform.position,playRot) as GameObject;
 		casing1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingGold"),parent.transform.position,playRot) as GameObject;
 		casing2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingSilver"),parent.transform.position,playRot) as GameObject;
@@ -94,6 +106,9 @@ public class Characters : MonoBehaviour
 	private void setWarrior()
 	{
 		setColor( new Color (0.96f, 0.196f, 0.0f, 0.745f));
+		setfxColor (Color.yellow);
+		effect1 = 5;
+		effect2 = 6;
 		sprite = Instantiate(Resources.Load("Prefabs/Characters/Warrior"),parent.transform.position,playRot) as GameObject;	
 		casing1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingGold"),parent.transform.position,playRot) as GameObject;
 		casing2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingSilver"),parent.transform.position,playRot) as GameObject;
@@ -106,6 +121,8 @@ public class Characters : MonoBehaviour
 	private void setBlank()
 	{
 		setColor( new Color (0.0f, 0.0f, 0.0f, 0.0f));
+		effect1 = -1;
+		effect2 = -2;
 		sprite = Instantiate(Resources.Load("Prefabs/Characters/Blank"),parent.transform.position,playRot) as GameObject;
 		casing1 = Instantiate(Resources.Load("Prefabs/Characters/Blank"),parent.transform.position,playRot) as GameObject;
 		casing2 = Instantiate(Resources.Load("Prefabs/Characters/Blank"),parent.transform.position,playRot) as GameObject;
@@ -193,6 +210,7 @@ public class Characters : MonoBehaviour
 				a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, ((float)((500.0f + slider1) / 1000))));
 			} else {
 				a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 1.5f));
+				power1 = true;
 			}
 		}
 	}
@@ -248,10 +266,28 @@ public class Characters : MonoBehaviour
 			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, ((float)((500.0f+slider2)/1000))));
 		} else {
 			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 1.5f));
+			power2 = true;
 		}
 	}
 
 	private void setColor(Color c)
 	{	charColor = c;	 }
+
+	private void setfxColor(Color c)
+	{	fxColor = c;	 }
+
+	public IEnumerator assassinatk1() {
+		if (sm.player == 1) {
+			var a = gm.player2.play;
+			a.pauseCursor(false);
+			yield return new WaitForSeconds (5.0f);
+			a.pauseCursor(true);
+		} else {
+			var a = gm.player1.play;
+			a.pauseCursor(false);
+			yield return new WaitForSeconds (5.0f);
+			a.pauseCursor(true);
+		}
+	}
 
 }

@@ -10,10 +10,12 @@ public class Shape : MonoBehaviour
 	public int Column { get; set; }
 	public int Row { get; set; }
 	public string Type { get; set; }
+	public int status { get; set; }
 	
 	public Shape ()
 	{
 		Bonus = BonusType.None;
+		status = 0;
 	}
 	
 	/// Checks if the current shape is of the same type as the parameter
@@ -46,6 +48,10 @@ public class Shape : MonoBehaviour
 		temp = a.Column;
 		a.Column = b.Column;
 		b.Column = temp;
+	}
+
+	public void setStatus(int s){
+		this.status = s;
 	}
 }
 	

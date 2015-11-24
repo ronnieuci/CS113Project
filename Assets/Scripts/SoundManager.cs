@@ -20,9 +20,6 @@ public class SoundManager : MonoBehaviour {
 		DontDestroyOnLoad (gameObject);
 	}
 
-	void Start()
-	{	}
-	
 	public void PlaySingle(AudioClip clip)
 	{
 		//Set the clip of our efxSource audio source to the clip passed in as a parameter.

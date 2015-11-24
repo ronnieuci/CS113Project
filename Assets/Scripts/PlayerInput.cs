@@ -9,6 +9,7 @@ public class PlayerInput : MonoBehaviour
 	public int x, y;															//Used to make sure row and column are within board
 	public GameObject cursor;													//Pointer to cursor on player's board
 
+	private bool pause;															//Boolean for Assassin power1
 	private KeyCode temp;														//Temporary Key
 	private float tempnum;														//Temporary Number
 		
@@ -20,59 +21,61 @@ public class PlayerInput : MonoBehaviour
 
 	void Update ()
 	{
-		//Move Cursor Left
-		if (Input.GetKeyDown (left)) {
-			if (cursor.transform.localPosition.x > -3) {  
-				cursor.transform.localPosition += Vector3.left;
-				x -= 1;
-			}
+		if (!pause) {
+			//Move Cursor Left
+			if (Input.GetKeyDown (left)) {
+				if (cursor.transform.localPosition.x > -3) {  
+					cursor.transform.localPosition += Vector3.left;
+					x -= 1;
+				}
 		
-		//Move Cursor Right
-		} else if (Input.GetKeyDown (right)) {
-			if (cursor.transform.localPosition.x < 3) { 
-				cursor.transform.localPosition += Vector3.right;
-				x += 1;
-			}
+				//Move Cursor Right
+			} else if (Input.GetKeyDown (right)) {
+				if (cursor.transform.localPosition.x < 3) { 
+					cursor.transform.localPosition += Vector3.right;
+					x += 1;
+				}
 
-		//Move Cursor Up
-		} else if (Input.GetKeyDown (up)) {
-			if (cursor.transform.localPosition.y < 3) { 
-				cursor.transform.localPosition += Vector3.up;
-				y += 1;
-			}
+				//Move Cursor Up
+			} else if (Input.GetKeyDown (up)) {
+				if (cursor.transform.localPosition.y < 3) { 
+					cursor.transform.localPosition += Vector3.up;
+					y += 1;
+				}
 		
-		//Move Cursor Down
-		} else if (Input.GetKeyDown (down)) {
-			if (cursor.transform.localPosition.y > -3) {
-				cursor.transform.localPosition += Vector3.down;
-				y -= 1;
-			}
-		} 
+				//Move Cursor Down
+			} else if (Input.GetKeyDown (down)) {
+				if (cursor.transform.localPosition.y > -3) {
+					cursor.transform.localPosition += Vector3.down;
+					y -= 1;
+				}
+			} 
 
 		//Activate Special Attack #1
 		else if (Input.GetKeyDown (attack1)) {
-			sm.attack1(1);
-		}
+				sm.checkAttack (1);
+			}
 
 		//Activate Special Attack #2
 		else if (Input.GetKeyDown (attack2)) {
-			sm.attack2(1);
-		}
+				sm.checkAttack (2);
+			}
 
 		//Activate Clearance of board and regenerate
 		else if (Input.GetKeyDown (clear)) {
-			sm.ResetBoard ();
-		}
+				sm.ResetBoard ();
+			}
 
 		//Activate Clockwise Rotation of board (WIP)
 		else if (Input.GetKeyDown (shiftcw)) {
-			sm.rotateBoardCW ();
+				sm.rotateBoardCW ();
 			
-		}
+			}
 
 		//Activate CounterClockwise Rotation of board (WIP)
 		else if (Input.GetKeyDown (shiftccw)) {
-			sm.rotateBoardCCW ();
+				sm.rotateBoardCCW ();
+			}
 		}
 	}
 
@@ -81,4 +84,12 @@ public class PlayerInput : MonoBehaviour
 	{
 		return cursor.transform.position;
 	} 
+
+	public void pauseCursor(bool p){
+		if (p) {
+			pause = false;
+		} else {
+			pause = true;
+		}
+	}
 }

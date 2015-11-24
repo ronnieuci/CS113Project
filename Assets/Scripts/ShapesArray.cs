@@ -251,15 +251,88 @@ public class ShapesArray : MonoBehaviour
 		}
 		return emptyItems;
 	}
+	
+	public IEnumerable<GameObject> getAllBlocksOfColor(GameObject k){
+		GameObject[] temp = new GameObject[blockCountofColor(k)];
+		int count = 0;
+		for (int col = 0; col < Constants.Columns; col++) {
+			for (int row = 0; row < Constants.Rows; row++) {
+				if (shapes[row,col].GetComponent<Shape>() != null && this[row,col].GetComponent<Shape>().IsSameType(k.GetComponent<Shape>())){
+					print (col+"===="+row);
+					temp[count] = shapes[row,col];
+					count++;
+				}
+			}
+		}
+		return temp;	
+	}
+
+	public IEnumerable<GameObject> GetAllBlocks(){
+		
+		GameObject[] temp = new GameObject[blockCount()];
+		int count = 0;
+		for (int col = 0; col < Constants.Columns; col++) {
+			for (int row = 0; row < Constants.Rows; row++) {
+				if (shapes[row,col].GetComponent<Shape>() != null){
+					temp[count] = shapes[row,col];
+					count++;
+				}
+			}
+		}
+		return temp;
+	}
+
+	private int blockCountofColor(GameObject k) {
+		int count = 0;
+		for (int col = 0; col < Constants.Columns; col++) {
+			for (int row = 0; row < Constants.Rows; row++) {
+				if (this[row,col] != null && this[row,col].GetComponent<Shape>().IsSameType(k.GetComponent<Shape>())){
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	private int blockCount() {
+		int count = 0;
+		for (int col = 0; col < Constants.Columns; col++) {
+			for (int row = 0; row < Constants.Rows; row++) {
+				if (this[row,col] != null){
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	public IEnumerable<GameObject> getRandomBlocks(int count) {
+		System.Random RNG = new System.Random ();
+		var blockSet = new GameObject[count];
+		for (int c = 0; c < count; c++) {
+			var x = RNG.Next (0,Constants.Rows-1);
+			var y = RNG.Next (0,Constants.Columns-1);
+
+			while (shapes[x,y] == null)
+			{
+				x = RNG.Next (0,Constants.Rows-1);
+				y = RNG.Next (0,Constants.Columns-1);
+			}
+			blockSet[c] = shapes[x,y];
+		}
+		return blockSet;
+	}
 
 
+
+	//STILL IN PROGRESS//
 	//Moving blocks in the array to match CW-rotation
 	public void RotateCW(){
-
+		
 		GameObject[,] temp = new GameObject[Constants.Rows, Constants.Columns];
 		int colC = 0;
 		int rowC = 8;
-
+		
 		for (int col = 0; col < Constants.Columns; col++) {
 			for (int row = 0; row < Constants.Rows; row++) {
 				temp [col, row] = shapes [colC, rowC];
@@ -269,7 +342,7 @@ public class ShapesArray : MonoBehaviour
 		}
 		shapes = temp;
 	}
-
+	
 	//Moving blocks in the array to match CCW-rotation
 	public void RotateCCW(){
 		

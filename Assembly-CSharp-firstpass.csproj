@@ -110,6 +110,7 @@
      <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSplineQuadraticBezierSolver.cs" />
      <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSplineStraightLineSolver.cs" />
      <None Include="Assets\Plugins\GoKit\easing\easeEquationsLicense.txt" />
+     <None Include="Assets\Resources\Materials\Grayscale.shader" />
      <None Include="Assets\Resources\Materials\BGShader.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

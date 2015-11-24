@@ -8,18 +8,21 @@ public class ShapesManager : MonoBehaviour
 {
 	public AudioClip blockDrop,blockSlide;															//Sounds for various events
 	public Characters[] playerChar = new Characters[3];												//Array for characters player is using
-	public GameObject NullBlock;																	//Instance of NullBlock(Used for shape movement)
+	public GameObject NullBlock, gm;																//Instance of NullBlock(Used for shape movement)
 	public GameObject[] BlockPrefabs, ExplosionPrefabs, BonusPrefabs;								//List of Blocks, Special Blocks, and explosion instances
 	public GameObject BG,cursor;																	//Reference to background and cursor for each character
-	public int score;																				//Integer to store score
+	public int score,player;																		//Integer to store score
 	public PlayerInput play;																		//Instance for player's inputs
 	public ShapesArray shapes;																		//Instance of shape array
+	public Shader greyscale;
 	public SoundManager sound;																		//Instance of sound player
 	public Text ScoreText;																			//On-Screen Text for score (Not currently on screen)
 	public Transform parent;																		//Parent pointer for Blocks
 	public Vector2 middlePoint;																		//Middle-point of the gameboard
 	public Vector2 BlockSize = new Vector2 (1.0f, 1.0f);											//Size of each block
 
+	private IEnumerable<GameObject> totalMatches;
+	private bool assnPower,magePower;
 	private float xDiv,yDiv;																		//Used for block and board placement
 	private GameState state = GameState.None;														//Default GameState (used to split up coding in Update)
 	private GameObject hitGo = null;																//Reference for block one when swapping blocks with cursor
@@ -30,14 +33,15 @@ public class ShapesManager : MonoBehaviour
 	private Vector2 swapDirection1, swapDirection2;													//Directions that cursor checks
 	private Vector2[] SpawnPositions;																//No Longer in use (needs to be removed, but currently breaks)
 
+
 	void Awake ()
 	{
 		swapDirection1 = Vector2.right;
 		swapDirection2 = Vector2.left;
 		xDiv = -3.5f; yDiv = -11.5f;
 		backg = BG.GetComponent<SpriteRenderer>();
-		g1 = 0;
-		g2 = 0;
+		g1 = 50;
+		g2 = 50;
 	}
 
 	void Start ()
@@ -49,7 +53,7 @@ public class ShapesManager : MonoBehaviour
 			ch [2] = 5;
 		} else {
 			ch [0] = 5;
-			ch [1] = 3;
+			ch [1] = 1;
 			ch [2] = 5;
 		}
 
@@ -110,7 +114,7 @@ public class ShapesManager : MonoBehaviour
 					state = GameState.Animating;
 					FixSortingLayer (hitGo, hit.collider.gameObject);
 					hitGo2 = hit.collider.gameObject;
-					StartCoroutine (FindMatches ());
+					StartCoroutine (FindMatches (true));
 				}
 			}
 			else if (hit.collider != null && hitGo != hit.collider.gameObject) {
@@ -122,67 +126,84 @@ public class ShapesManager : MonoBehaviour
 					state = GameState.Animating;
 					FixSortingLayer (hitGo, hit.collider.gameObject);
 					hitGo2 = hit.collider.gameObject;
-					StartCoroutine (FindMatches ());
+					StartCoroutine (FindMatches (true));
 				}
 			}
 		}
 	}
 
-	private IEnumerator FindMatches ()
-	{
-		int timesRun = 0;
-		
-		//move the swapped ones
-		sound.PlaySingle (blockSlide);
-		shapes.Swap (hitGo, hitGo2);
-		hitGo.transform.positionTo (Constants.AnimationDuration, hitGo2.transform.position);
-		hitGo2.transform.positionTo (Constants.AnimationDuration, hitGo.transform.position);
-		yield return new WaitForSeconds (Constants.AnimationDuration);
-		
-		//get the matches via the helper methods
-		var hitGomatchesInfo = shapes.GetMatches (hitGo);
-		var hitGo2matchesInfo = shapes.GetMatches (hitGo2);
-		var totalMatches = hitGomatchesInfo.MatchedBlock.Union (hitGo2matchesInfo.MatchedBlock).Distinct ();
-
-		//if more than 3 matches and no Bonus is contained in the line, we will award a new Bonus
-		bool addBonus = totalMatches.Count () >= Constants.MinimumMatchesForBonus &&
-			!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGomatchesInfo.BonusesContained) &&
-			!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGo2matchesInfo.BonusesContained);
-		
+	private IEnumerator FindMatches (bool match){
 		Shape hitGoCache = null;
-		if (addBonus) {
-			hitGoCache = new Shape ();
-			//get the game object that was of the same type
-			var sameTypeGo = hitGomatchesInfo.MatchedBlock.Count () > 0 ? hitGo : hitGo2;
-			var shape = sameTypeGo.GetComponent<Shape> ();
-			//cache it
-			hitGoCache.Assign (shape.Type, shape.Row, shape.Column);
-		}
-		
-		if (hitGo.GetComponent<Shape> ().IsSameType (NullBlock.GetComponent<Shape> ())) {
-			shapes.setNullBlock (hitGo);
-			Destroy (hitGo);
-		} 
+		bool addBonus = false;
 
-		if (hitGo2.GetComponent<Shape> ().IsSameType(NullBlock.GetComponent<Shape>())) {
-			shapes.setNullBlock (hitGo2);
-			Destroy (hitGo2);
+		if (match) {
+			//move the swapped ones
+			sound.PlaySingle (blockSlide);
+			shapes.Swap (hitGo, hitGo2);
+			hitGo.transform.positionTo (Constants.AnimationDuration, hitGo2.transform.position);
+			hitGo2.transform.positionTo (Constants.AnimationDuration, hitGo.transform.position);
+			yield return new WaitForSeconds (Constants.AnimationDuration);
+		
+			//get the matches via the helper methods
+			var hitGomatchesInfo = shapes.GetMatches (hitGo);
+			var hitGo2matchesInfo = shapes.GetMatches (hitGo2);
+			totalMatches = hitGomatchesInfo.MatchedBlock.Union (hitGo2matchesInfo.MatchedBlock).Distinct ();
+		
+			//if more than 3 matches and no Bonus is contained in the line, we will award a new Bonus
+			addBonus = totalMatches.Count () >= Constants.MinimumMatchesForBonus &&
+				!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGomatchesInfo.BonusesContained) &&
+				!BonusTypeUtilities.ContainsDestroyWholeRowColumn (hitGo2matchesInfo.BonusesContained);
+		
+
+			if (addBonus) {
+				hitGoCache = new Shape ();
+				//get the game object that was of the same type
+				var sameTypeGo = hitGomatchesInfo.MatchedBlock.Count () > 0 ? hitGo : hitGo2;
+				var shape = sameTypeGo.GetComponent<Shape> ();
+				//cache it
+				hitGoCache.Assign (shape.Type, shape.Row, shape.Column);
+			}
+		
+			if (hitGo.GetComponent<Shape> ().IsSameType (NullBlock.GetComponent<Shape> ())) {
+				shapes.setNullBlock (hitGo);
+				Destroy (hitGo);
+			} 
+		
+			if (hitGo2.GetComponent<Shape> ().IsSameType (NullBlock.GetComponent<Shape> ())) {
+				shapes.setNullBlock (hitGo2);
+				Destroy (hitGo2);
+			}
 		}
+		int timesRun = 0;
 
 	RESTART:	
 		if (totalMatches.Count () >= Constants.MinimumMatches) {
 			//increase score
-			IncreaseScore ((totalMatches.Count () - 2) * Constants.Match3Score);
 			
-			if (timesRun >= 1)
+			if (!assnPower){
+				IncreaseScore ((totalMatches.Count () - 2) * Constants.Match3Score);
+			}
+			else {
+				IncreaseScore ((totalMatches.Count () - 2) * (Constants.Match3Score-2));
+			}
+
+			if (timesRun >= 1){
 				IncreaseScore (Constants.SubsequentMatchScore);
+				assnPower=false;
+			}
 			
 			foreach (var item in totalMatches) {
+				print (1);
 				if (item != null) {
-					if (item.GetComponent<Shape> ().IsSameType (playerChar [1].bonus [0].GetComponent<Shape> ())) {
-						g1 += 1;
-					} else if (item.GetComponent<Shape> ().IsSameType (playerChar [1].bonus [1].GetComponent<Shape> ())) {
-						g2 += 1;
+					print (item.GetComponent<Shape>().name);
+					if (!assnPower)
+					{
+						if (item.GetComponent<Shape> ().IsSameType (playerChar [1].bonus [0].GetComponent<Shape> ())) {
+							g1 += 1;
+						}
+						else if (item.GetComponent<Shape> ().IsSameType (playerChar [1].bonus [1].GetComponent<Shape> ())) {
+							g2 += 1;
+						}
 					}
 					shapes.Remove (item);
 					RemoveFromScene (item);
@@ -195,15 +216,12 @@ public class ShapesManager : MonoBehaviour
 				addBonus = false;
 			}
 
-			//the order the 2 methods below get called is important!!!
-
 			//collapse the ones gone
 			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range (0, 8));
 			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, collapsedBlockInfo.MaxDistance);
 			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
 			sound.PlaySingle (blockDrop);
-			
-			
+
 			//search if there are matches with the new/collapsed items
 			totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
 			if (totalMatches.Count () >= Constants.MinimumMatches) {
@@ -223,6 +241,7 @@ public class ShapesManager : MonoBehaviour
 				goto RESTART;
 			}
 		}
+		totalMatches = null;
 		state = GameState.None;
 	}
 		
@@ -252,26 +271,39 @@ public class ShapesManager : MonoBehaviour
 		if (shapes != null)
 			ResetBoard ();
 		shapes = new ShapesArray ();
-		SpawnPositions = new Vector2[Constants.Columns];
 
+		
+		var currPrefab = BlockPrefabs;
+
+		if (magePower) {
+			currPrefab = new GameObject[4];
+			for (int a = 0; a < 4; a++) {
+				var p = Random.Range (0, 6);
+				currPrefab [a] = BlockPrefabs [p];
+			}
+		}
+	
+	
+		SpawnPositions = new Vector2[Constants.Columns];
+			
 		for (int row = 0; row < Constants.Rows; row++) 
 		{
 			for (int column = 0; column < Constants.Columns; column++) 
 			{
-				GameObject newBlock = GetRandomBlock ();
+				GameObject newBlock = GetRandomBlock (currPrefab);
 				
 				//check if two previous horizontal are of the same type
 				while (column >= 2 && shapes[row, column - 1].GetComponent<Shape>().IsSameType(newBlock.GetComponent<Shape>()) 
 				       			   && shapes[row, column - 2].GetComponent<Shape>().IsSameType(newBlock.GetComponent<Shape>())) 
 				{
-					newBlock = GetRandomBlock ();
+					newBlock = GetRandomBlock (currPrefab);
 				}
 				
 				//check if two previous vertical are of the same type
 				while (row >= 2 && shapes[row - 1, column].GetComponent<Shape>().IsSameType(newBlock.GetComponent<Shape>())
 				       			&& shapes[row - 2, column].GetComponent<Shape>().IsSameType(newBlock.GetComponent<Shape>())) 
 				{
-					newBlock = GetRandomBlock ();
+					newBlock = GetRandomBlock (currPrefab);
 				}
 				InstantiateAndPlaceNewBlock (row, column, newBlock);
 			}
@@ -301,10 +333,9 @@ public class ShapesManager : MonoBehaviour
 	public void ResetBoard ()
 	{
 		for (int row = 0; row < Constants.Rows; row++) {
-			for (int column = 0; column < Constants.Columns; column++) 
-			{
-				if (shapes[row,column] != null)
-					RemoveFromScene(shapes [row, column]);
+			for (int column = 0; column < Constants.Columns; column++) {
+				if (shapes [row, column] != null)
+					RemoveFromScene (shapes [row, column]);
 			}
 		}
 		InitializeBlockAndSpawnPositions ();
@@ -358,9 +389,9 @@ public class ShapesManager : MonoBehaviour
 		Destroy (item);
 	}
 
-	private GameObject GetRandomBlock ()
+	private GameObject GetRandomBlock (GameObject[] l)
 	{
-		return BlockPrefabs [Random.Range (0, BlockPrefabs.Length)];
+		return l [Random.Range (0, l.Length)];
 	}
 
 	private GameObject[] SetCharBlocks (int character)
@@ -437,9 +468,59 @@ public class ShapesManager : MonoBehaviour
 		parent.transform.Rotate (0, 0, -90);
 	}
 			
-	public void attack1(int i){
-		playerChar[i].sprite.GetComponent<Animator> ().Play ("Attack");}
+	public void checkAttack(int i){	
+		if (i == 1 && playerChar[1].power1) {
+			if(ch[1]==1) {
+				playerChar[1].assassinatk1();
+			}
+			else if(ch[1]==2) {
+				var effect = playerChar[1].effect1;
+				var a = gm.GetComponent<GameManager>().getRandomBlocks(player);
+				attack1 (a,effect);
+				g1 = 0;
+				playerChar[1].power1=false;
+			}
+			else if(ch[1]==3) {
+				var a = gm.GetComponent<GameManager>().getAllBlocks(player);
+				foreach(var block in a){
+					var b = block.GetComponent<SpriteRenderer>();
+					b.material.shader =  greyscale;
+				}
+			}
+		}
+		else if (i == 2 && playerChar[1].power2) {
+			if(ch[1]==1) {
+				var opp = gm.GetComponent<GameManager>().getOtherPlayer(player);
+				opp.assnPower= true;
+				if(countDown(15.0f)){
+					opp.assnPower= false;
+				}
+			}
+			else if(ch[1]==2) {
+				magePower = true;
+				ResetBoard();
+				magePower = false;
+			}
+			if(ch[1]==3) {
+				totalMatches = shapes.getAllBlocksOfColor(GetRandomBlock(BlockPrefabs));
+				StartCoroutine(FindMatches(false));
+			}
+		}
+	}
 
-	public void attack2(int i){
-		playerChar[i].sprite.GetComponent<Animator> ().Play ("Hit");}
+	public void attack1(IEnumerable<GameObject> a, int effect){
+		foreach (GameObject block in a) {
+			var b = block.GetComponent<SpriteRenderer>();
+			b.color = playerChar[1].fxColor;
+			block.GetComponent<Shape>().setStatus(effect);
+		}
+		playerChar[1].sprite.GetComponent<Animator> ().Play ("Attack");}
+
+	public bool countDown(float seconds){
+		float time = seconds;
+		while (time>0) {
+			time -= Time.deltaTime;
+		}
+		return true;
+	}
 }

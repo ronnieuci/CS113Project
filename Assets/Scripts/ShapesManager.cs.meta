@@ -1,10 +1,22 @@
 fileFormatVersion: 2
 guid: 40c14976e71ab48ac8c44afc1a997b4a
-timeCreated: 1444957635
+timeCreated: 1448351590
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - blockDrop: {fileID: 8300000, guid: fad1968d132e0470f8fe31574c24738b, type: 3}
+  - blockSlide: {fileID: 8300000, guid: bf6705de1767440ff987b39b02a8b9c1, type: 3}
+  - NullBlock: {instanceID: 0}
+  - gm: {instanceID: 0}
+  - BG: {instanceID: 0}
+  - cursor: {instanceID: 0}
+  - play: {instanceID: 0}
+  - shapes: {instanceID: 0}
+  - greyscale: {fileID: 4800000, guid: 907940263b91c4c24856ecc9d3e2a118, type: 3}
+  - sound: {instanceID: 0}
+  - ScoreText: {instanceID: 0}
+  - parent: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
