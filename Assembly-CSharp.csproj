@@ -59,6 +59,15 @@
      <Compile Include="Assets\Scripts\ShapesManager.cs" />
      <Compile Include="Assets\Scripts\SoundManager.cs" />
      <Compile Include="Assets\Scripts\Utilities.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\menuScript.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\p1c1b.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\p1c2b.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\p1c3b.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\p2c1b.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\p2c2b.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\p2c3b.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\playerReady.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\startFight.cs" />
      <None Include="Assets\Plugins\GoKit\easing\easeEquationsLicense.txt" />
      <None Include="Assets\Resources\Materials\Grayscale.shader" />
      <None Include="Assets\Resources\Materials\BGShader.shader" />

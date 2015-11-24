@@ -40,23 +40,13 @@ public class ShapesManager : MonoBehaviour
 		swapDirection2 = Vector2.left;
 		xDiv = -3.5f; yDiv = -11.5f;
 		backg = BG.GetComponent<SpriteRenderer>();
-		g1 = 50;
-		g2 = 50;
+		g1 = 0;
+		g2 = 0;
 	}
 
 	void Start ()
 	{
-		//Test Characters
-		if (parent.position.x > 0) {
-			ch [0] = 5;
-			ch [1] = 1;
-			ch [2] = 5;
-		} else {
-			ch [0] = 5;
-			ch [1] = 3;
-			ch [2] = 5;
-		}
-
+		ch [1] = gm.GetComponent<GameManager> ().loadCharacter (player);
 		InitializeTypesOnPrefabShapesAndBonuses ();
 		InitializeVariables ();
 		InitializeBlockAndSpawnPositions ();
