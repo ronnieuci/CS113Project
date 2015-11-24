@@ -112,8 +112,8 @@ public class Characters : MonoBehaviour
 		sprite = Instantiate(Resources.Load("Prefabs/Characters/Warrior"),parent.transform.position,playRot) as GameObject;	
 		casing1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingGold"),parent.transform.position,playRot) as GameObject;
 		casing2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingSilver"),parent.transform.position,playRot) as GameObject;
-		gem1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/orange"),parent.transform.position,playRot) as GameObject;
-		gem2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/red"),parent.transform.position,playRot) as GameObject;
+		gem1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/red"),parent.transform.position,playRot) as GameObject;
+		gem2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/orange"),parent.transform.position,playRot) as GameObject;
 		BG = Resources.Load("Backgrounds/Warrior", typeof(Sprite)) as Sprite;
 	}
 
@@ -159,17 +159,16 @@ public class Characters : MonoBehaviour
 	{
 		animateGem1 (g1);
 		animateGem2 (g2);
+		print (g1 + " and " + g2);
 	}
 
 	//Gem Animation #1
 	private void animateGem1(int gemCount)
 	{
-		if (gemCount != 0) {
-
+		if (gemCount > 0 && gemCount < 50) {
+			power1=false;
 			if (!Down1) {
-				if (gemCount < 0) {
-					slider1 = 0; 
-				} else if (gemCount >= 0 && gemCount < 10) {
+				if (gemCount >= 0 && gemCount < 10) {
 					slider1 += 3;
 				} else if (gemCount >= 10 && gemCount < 20) {
 					slider1 += 6;
@@ -182,6 +181,7 @@ public class Characters : MonoBehaviour
 				} else {
 					Down1 = true;
 				}
+
 			} else if (Down1) {
 				if (gemCount < 5 && gemCount >= 0) {
 					slider1 += -3;
@@ -202,28 +202,27 @@ public class Characters : MonoBehaviour
 			} else if (slider1 <= 0) {
 				Down1 = false;
 			}
-
-			var a = gem1.GetComponent<Renderer> ();
-			if (gemCount <= 0) {
-				a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 0.4f));
-			} else if (gemCount > 0 && gemCount < 50) {
-				a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, ((float)((500.0f + slider1) / 1000))));
-			} else {
-				a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 1.5f));
-				power1 = true;
-			}
+		}
+	
+		var a = gem1.GetComponent<Renderer> ();
+		if (gemCount <= 0) {
+			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 0.4f));
+		} else if (gemCount > 0 && gemCount < 50) {
+			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, ((float)((500.0f + slider1) / 1000))));
+		} else {
+			a.material.SetColor ("_Color", new Color (a.material.color.r, a.material.color.g, a.material.color.b, 1.5f));
+			power1 = true;
 		}
 	}
 
 	//Gem Animation #2
 	private void animateGem2(int gemCount)
 	{
-		if (gemCount != 0) {
-				
+
+		if (gemCount > 0 && gemCount < 50) {
+			power2=false;
 				if (!Down2) {
-					if (gemCount < 0) {
-						slider2 = 0; 
-					} else if (gemCount >= 0 && gemCount < 10) {
+					if (gemCount >= 0 && gemCount < 10) {
 						slider2 += 3;
 					} else if (gemCount >= 10 && gemCount < 20) {
 						slider2 += 6;

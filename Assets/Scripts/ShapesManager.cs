@@ -53,7 +53,7 @@ public class ShapesManager : MonoBehaviour
 			ch [2] = 5;
 		} else {
 			ch [0] = 5;
-			ch [1] = 1;
+			ch [1] = 3;
 			ch [2] = 5;
 		}
 
@@ -448,28 +448,10 @@ public class ShapesManager : MonoBehaviour
 		}
 		throw new System.Exception ("Wrong type");
 	}
-
-	public void rotateBoardCW ()
-	{	
-		parent.transform.Rotate (0, 0, 90);
-
-		GameObject[,] ret = new GameObject[Constants.Rows, Constants.Columns];
-		
-		for (int i = 0; i < Constants.Rows; ++i) {
-			for (int j = 0; j < Constants.Columns; ++j) {
-				ret[i, j] = shapes[i, 8 - j - 1];
-			}
-		}
-		shapes.shapes = ret;
-	}
-
-	public void rotateBoardCCW ()
-	{
-		parent.transform.Rotate (0, 0, -90);
-	}
-			
+				
 	public void checkAttack(int i){	
 		if (i == 1 && playerChar[1].power1) {
+			g1=0;
 			if(ch[1]==1) {
 				playerChar[1].assassinatk1();
 			}
@@ -477,8 +459,6 @@ public class ShapesManager : MonoBehaviour
 				var effect = playerChar[1].effect1;
 				var a = gm.GetComponent<GameManager>().getRandomBlocks(player);
 				attack1 (a,effect);
-				g1 = 0;
-				playerChar[1].power1=false;
 			}
 			else if(ch[1]==3) {
 				var a = gm.GetComponent<GameManager>().getAllBlocks(player);
@@ -489,6 +469,7 @@ public class ShapesManager : MonoBehaviour
 			}
 		}
 		else if (i == 2 && playerChar[1].power2) {
+			g2=0;
 			if(ch[1]==1) {
 				var opp = gm.GetComponent<GameManager>().getOtherPlayer(player);
 				opp.assnPower= true;
@@ -522,5 +503,24 @@ public class ShapesManager : MonoBehaviour
 			time -= Time.deltaTime;
 		}
 		return true;
+	}
+
+	public void rotateBoardCW ()
+	{	
+		parent.transform.Rotate (0, 0, 90);
+		
+		GameObject[,] ret = new GameObject[Constants.Rows, Constants.Columns];
+		
+		for (int i = 0; i < Constants.Rows; ++i) {
+			for (int j = 0; j < Constants.Columns; ++j) {
+				ret[i, j] = shapes[i, 8 - j - 1];
+			}
+		}
+		shapes.shapes = ret;
+	}
+	
+	public void rotateBoardCCW ()
+	{
+		parent.transform.Rotate (0, 0, -90);
 	}
 }
