@@ -1,11 +1,14 @@
 fileFormatVersion: 2
-guid: fa838de4292c74acb9f96d913f177fd0
-timeCreated: 1448130825
+guid: 51cfb7c6b9d6d4980ac3fc39a84bdf9d
+timeCreated: 1448361114
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: assassin gothit_0
-    21300002: assassin gothit_1
+    21300000: mage defeat_0
+    21300002: mage defeat_1
+    21300004: mage defeat_2
+    21300006: mage defeat_3
+    21300008: mage defeat_4
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -52,23 +55,53 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: assassin gothit_0
+    - name: mage defeat_0
       rect:
         serializedVersion: 2
-        x: 8
-        y: 1
-        width: 142
-        height: 195
+        x: 9
+        y: 4
+        width: 129
+        height: 214
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: assassin gothit_1
+    - name: mage defeat_1
       rect:
         serializedVersion: 2
-        x: 174
+        x: 146
+        y: 4
+        width: 131
+        height: 203
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mage defeat_2
+      rect:
+        serializedVersion: 2
+        x: 289
         y: 1
-        width: 138
-        height: 196
+        width: 131
+        height: 203
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mage defeat_3
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 5
+        width: 131
+        height: 203
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mage defeat_4
+      rect:
+        serializedVersion: 2
+        x: 568
+        y: 2
+        width: 131
+        height: 203
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

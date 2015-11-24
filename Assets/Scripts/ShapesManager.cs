@@ -49,7 +49,7 @@ public class ShapesManager : MonoBehaviour
 		//Test Characters
 		if (parent.position.x > 0) {
 			ch [0] = 5;
-			ch [1] = 2;
+			ch [1] = 1;
 			ch [2] = 5;
 		} else {
 			ch [0] = 5;
@@ -193,9 +193,7 @@ public class ShapesManager : MonoBehaviour
 			}
 			
 			foreach (var item in totalMatches) {
-				print (1);
 				if (item != null) {
-					print (item.GetComponent<Shape>().name);
 					if (!assnPower)
 					{
 						if (item.GetComponent<Shape> ().IsSameType (playerChar [1].bonus [0].GetComponent<Shape> ())) {

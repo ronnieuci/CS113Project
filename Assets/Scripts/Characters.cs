@@ -159,7 +159,6 @@ public class Characters : MonoBehaviour
 	{
 		animateGem1 (g1);
 		animateGem2 (g2);
-		print (g1 + " and " + g2);
 	}
 
 	//Gem Animation #1

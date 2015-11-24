@@ -1,15 +1,13 @@
 fileFormatVersion: 2
-guid: a38e46664ddc44698ba51be621ddb4a4
-timeCreated: 1448360707
+guid: 535e217cc8d0449bf8f54460c7714093
+timeCreated: 1448360677
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: assassin idle_0
-    21300002: assassin idle_1
-    21300004: assassin idle_2
-    21300006: assassin idle_3
-    21300008: assassin idle_4
-    21300010: assassin idle_5
+    21300000: assassin defeat_0
+    21300002: assassin defeat_1
+    21300004: assassin defeat_2
+    21300006: assassin defeat_3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -56,63 +54,43 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: assassin idle_0
+    - name: assassin defeat_0
       rect:
         serializedVersion: 2
-        x: 8
-        y: 1
+        x: 2
+        y: 6
         width: 142
         height: 195
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: assassin idle_1
+    - name: assassin defeat_1
       rect:
         serializedVersion: 2
-        x: 168
-        y: 0
+        x: 162
+        y: 5
         width: 142
         height: 188
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: assassin idle_2
+    - name: assassin defeat_2
       rect:
         serializedVersion: 2
-        x: 330
-        y: 0
-        width: 142
-        height: 195
+        x: 320
+        y: 4
+        width: 153
+        height: 183
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: assassin idle_3
+    - name: assassin defeat_3
       rect:
         serializedVersion: 2
-        x: 487
-        y: 0
-        width: 142
-        height: 188
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: assassin idle_4
-      rect:
-        serializedVersion: 2
-        x: 653
-        y: 0
-        width: 142
-        height: 194
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: assassin idle_5
-      rect:
-        serializedVersion: 2
-        x: 812
-        y: 0
-        width: 142
-        height: 190
+        x: 476
+        y: 3
+        width: 147
+        height: 183
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
