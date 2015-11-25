@@ -217,6 +217,7 @@ public class Characters : MonoBehaviour
 	//Gem Animation #2
 	private void animateGem2(int gemCount)
 	{
+		gemCount *= 2;
 
 		if (gemCount > 0 && gemCount < 50) {
 			power2=false;

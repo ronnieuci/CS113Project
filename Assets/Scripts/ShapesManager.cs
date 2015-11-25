@@ -67,6 +67,7 @@ public class ShapesManager : MonoBehaviour
 		{ }
 		backg.sprite = playerChar [1].BG;
 		cursor.GetComponent<SpriteRenderer> ().color = playerChar [1].charColor;
+		cursor.GetComponent<SpriteRenderer> ().color = new Color (playerChar [1].charColor.r, playerChar [1].charColor.g, playerChar [1].charColor.b, playerChar [1].charColor.a + 5.5f);
 	}
 
 	// Update is called once per frame
@@ -122,7 +123,7 @@ public class ShapesManager : MonoBehaviour
 		}
 	}
 
-	private IEnumerator FindMatches (bool match){
+	private IEnumerator FindMatches (bool match) {
 		Shape hitGoCache = null;
 		bool addBonus = false;
 
@@ -150,6 +151,7 @@ public class ShapesManager : MonoBehaviour
 				//get the game object that was of the same type
 				var sameTypeGo = hitGomatchesInfo.MatchedBlock.Count () > 0 ? hitGo : hitGo2;
 				var shape = sameTypeGo.GetComponent<Shape> ();
+
 				//cache it
 				hitGoCache.Assign (shape.Type, shape.Row, shape.Column);
 			}
@@ -208,14 +210,17 @@ public class ShapesManager : MonoBehaviour
 			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range (0, 8));
 			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, collapsedBlockInfo.MaxDistance);
 			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
-			sound.PlaySingle (blockDrop);
+
+//			print (collapsedBlockInfo.MaxDistance);
+//			if(collapsedBlockInfo.MaxDistance > 1){
+//				sound.PlaySingle (blockDrop);
+//			}
 
 			//search if there are matches with the new/collapsed items
-			totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock);
-			if (totalMatches.Count () >= Constants.MinimumMatches) {
-				timesRun++;
-				goto RESTART;
-			}
+			totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock); //////CHECK FOR PIECES THAT ARE NOT MATCHED BUT STILL CHANGE
+
+			timesRun++;
+			goto RESTART;
 		} else {
 			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range (0, 8));
 			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, collapsedBlockInfo.MaxDistance);
