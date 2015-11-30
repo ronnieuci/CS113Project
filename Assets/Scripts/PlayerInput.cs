@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PlayerInput : MonoBehaviour
 {
+	public bool inputBlocked;
 	public KeyCode up, down, left, right;										//Keys for Movement directions
 	public KeyCode move, clear, shiftcw, shiftccw, swap, attack1, attack2;		//Keys for special inputs
 	public ShapesManager sm;													//Pointer to player's Shapemanager
@@ -15,66 +16,70 @@ public class PlayerInput : MonoBehaviour
 		
 	void Start ()
 	{
+		inputBlocked = false;
 		x = 3;
 		y = 3;
 	}
 
 	void Update ()
 	{
-		if (!pause) {
-			//Move Cursor Left
-			if (Input.GetKeyDown (left)) {
-				if (cursor.transform.localPosition.x > -3) {  
-					cursor.transform.localPosition += Vector3.left;
-					x -= 1;
-				}
-		
-				//Move Cursor Right
-			} else if (Input.GetKeyDown (right)) {
-				if (cursor.transform.localPosition.x < 3) { 
-					cursor.transform.localPosition += Vector3.right;
-					x += 1;
-				}
 
-				//Move Cursor Up
-			} else if (Input.GetKeyDown (up)) {
-				if (cursor.transform.localPosition.y < 3) { 
-					cursor.transform.localPosition += Vector3.up;
-					y += 1;
-				}
+		if (!inputBlocked) {
+			if (!pause) {
+				//Move Cursor Left
+				if (Input.GetKeyDown (left)) {
+					if (cursor.transform.localPosition.x > -3) {  
+						cursor.transform.localPosition += Vector3.left;
+						x -= 1;
+					}
 		
-				//Move Cursor Down
-			} else if (Input.GetKeyDown (down)) {
-				if (cursor.transform.localPosition.y > -3) {
-					cursor.transform.localPosition += Vector3.down;
-					y -= 1;
-				}
-			} 
+					//Move Cursor Right
+				} else if (Input.GetKeyDown (right)) {
+					if (cursor.transform.localPosition.x < 3) { 
+						cursor.transform.localPosition += Vector3.right;
+						x += 1;
+					}
+
+					//Move Cursor Up
+				} else if (Input.GetKeyDown (up)) {
+					if (cursor.transform.localPosition.y < 3) { 
+						cursor.transform.localPosition += Vector3.up;
+						y += 1;
+					}
+		
+					//Move Cursor Down
+				} else if (Input.GetKeyDown (down)) {
+					if (cursor.transform.localPosition.y > -3) {
+						cursor.transform.localPosition += Vector3.down;
+						y -= 1;
+					}
+				} 
 
 		//Activate Special Attack #1
 		else if (Input.GetKeyDown (attack1)) {
-				sm.checkAttack (1);
-			}
+					sm.checkAttack (1);
+				}
 
 		//Activate Special Attack #2
 		else if (Input.GetKeyDown (attack2)) {
-				sm.checkAttack (2);
-			}
+					sm.checkAttack (2);
+				}
 
 		//Activate Clearance of board and regenerate
 		else if (Input.GetKeyDown (clear)) {
-				sm.ResetBoard ();
-			}
+					sm.ResetBoard ();
+				}
 
 		//Activate Clockwise Rotation of board (WIP)
 		else if (Input.GetKeyDown (shiftcw)) {
-				sm.rotateBoardCW ();
+					sm.rotateBoardCW ();
 			
-			}
+				}
 
 		//Activate CounterClockwise Rotation of board (WIP)
 		else if (Input.GetKeyDown (shiftccw)) {
-				sm.rotateBoardCCW ();
+					sm.rotateBoardCCW ();
+				}
 			}
 		}
 	}

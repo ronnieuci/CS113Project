@@ -258,7 +258,6 @@ public class ShapesArray : MonoBehaviour
 		for (int col = 0; col < Constants.Columns; col++) {
 			for (int row = 0; row < Constants.Rows; row++) {
 				if (shapes[row,col].GetComponent<Shape>() != null && this[row,col].GetComponent<Shape>().IsSameType(k.GetComponent<Shape>())){
-					print (col+"===="+row);
 					temp[count] = shapes[row,col];
 					count++;
 				}
@@ -323,40 +322,43 @@ public class ShapesArray : MonoBehaviour
 		return blockSet;
 	}
 
-
-
 	//STILL IN PROGRESS//
 	//Moving blocks in the array to match CW-rotation
 	public void RotateCW(){
-		
-		GameObject[,] temp = new GameObject[Constants.Rows, Constants.Columns];
-		int colC = 0;
-		int rowC = 8;
-		
+		GameObject[,] temp = new GameObject[Constants.Rows,Constants.Columns];
+		int rTemp = 0;
+
 		for (int col = 0; col < Constants.Columns; col++) {
+			int cTemp = Constants.Rows-1;
 			for (int row = 0; row < Constants.Rows; row++) {
-				temp [col, row] = shapes [colC, rowC];
-				rowC -= 1;
+				if(this.shapes[rTemp,cTemp] != null){
+					temp[row,col] = this.shapes[rTemp,cTemp];
+					temp[row,col].GetComponent<Shape>().Column = col;
+					temp[row,col].GetComponent<Shape>().Row = row;
+				}
+				cTemp--;
 			}
-			colC += 1;
+			rTemp++;
 		}
-		shapes = temp;
+		this.shapes = temp;
 	}
 	
-	//Moving blocks in the array to match CCW-rotation
 	public void RotateCCW(){
-		
-		GameObject[,] temp = new GameObject[Constants.Rows, Constants.Columns];
-		int colC = 0;
-		int rowC = 8;
+		GameObject[,] temp = new GameObject[Constants.Rows,Constants.Columns];
+		int rTemp = 0;
 		
 		for (int col = 0; col < Constants.Columns; col++) {
+			int cTemp = Constants.Rows-1;
 			for (int row = 0; row < Constants.Rows; row++) {
-				temp [col, row] = shapes [colC, rowC];
-				rowC -= 1;
+				if(this.shapes[row,col] != null){
+					temp[rTemp,cTemp] = this.shapes[row,col];
+					temp[rTemp,cTemp].GetComponent<Shape>().Column = cTemp;
+					temp[rTemp,cTemp].GetComponent<Shape>().Row = rTemp;
+				}
+				cTemp--;
 			}
-			colC += 1;
+			rTemp++;
 		}
-		shapes = temp;
+		this.shapes = temp;
 	}
 }

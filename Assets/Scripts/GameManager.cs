@@ -41,11 +41,9 @@ public class GameManager : MonoBehaviour {
 		string p;
 		if (player == 1) {
 			p = PlayerPrefs.GetString ("char1");
-			print ("1"+p);
 		} 
 		else {
 			p = PlayerPrefs.GetString ("char2");			
-			print ("2"+p);
 		}
 		return charStrtoInt (p);
 	}

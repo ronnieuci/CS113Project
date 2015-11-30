@@ -22,8 +22,7 @@ public class ShapesManager : MonoBehaviour
 	public Vector2 BlockSize = new Vector2 (1.0f, 1.0f);											//Size of each block
 
 	private IEnumerable<GameObject> totalMatches;
-	private bool assnPower,magePower;
-	private float xDiv,yDiv;																		//Used for block and board placement
+	private bool assnPower,magePower;																//Used for block and board placement
 	private GameState state = GameState.None;														//Default GameState (used to split up coding in Update)
 	private GameObject hitGo = null;																//Reference for block one when swapping blocks with cursor
 	private GameObject hitGo2 = null;																//Reference for block two when swapping blocks with cursor		
@@ -38,7 +37,6 @@ public class ShapesManager : MonoBehaviour
 	{
 		swapDirection1 = Vector2.right;
 		swapDirection2 = Vector2.left;
-		xDiv = -3.5f; yDiv = -11.5f;
 		backg = BG.GetComponent<SpriteRenderer>();
 		g1 = 0;
 		g2 = 0;
@@ -165,9 +163,12 @@ public class ShapesManager : MonoBehaviour
 				shapes.setNullBlock (hitGo2);
 				Destroy (hitGo2);
 			}
+		} else {
+			var blankMatches = shapes.GetMatches(NullBlock);
+			totalMatches = blankMatches.MatchedBlock;
 		}
 		int timesRun = 0;
-
+	
 	RESTART:	
 		if (totalMatches.Count () >= Constants.MinimumMatches) {
 			//increase score
@@ -209,12 +210,7 @@ public class ShapesManager : MonoBehaviour
 			//collapse the ones gone
 			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range (0, 8));
 			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, collapsedBlockInfo.MaxDistance);
-			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
-
-//			print (collapsedBlockInfo.MaxDistance);
-//			if(collapsedBlockInfo.MaxDistance > 1){
-//				sound.PlaySingle (blockDrop);
-//			}
+			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration*collapsedBlockInfo.MaxDistance );
 
 			//search if there are matches with the new/collapsed items
 			totalMatches = shapes.GetMatches (collapsedBlockInfo.AlteredBlock); //////CHECK FOR PIECES THAT ARE NOT MATCHED BUT STILL CHANGE
@@ -224,7 +220,7 @@ public class ShapesManager : MonoBehaviour
 		} else {
 			var collapsedBlockInfo = shapes.Collapse (Enumerable.Range (0, 8));
 			MoveAndAnimate (collapsedBlockInfo.AlteredBlock, collapsedBlockInfo.MaxDistance);
-			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration);
+			yield return new WaitForSeconds (Constants.MoveAnimationMinDuration*collapsedBlockInfo.MaxDistance);
 			sound.PlaySingle (blockDrop);
 
 			//search if there are matches with the new/collapsed items
@@ -306,7 +302,7 @@ public class ShapesManager : MonoBehaviour
 
 	private void InstantiateAndPlaceNewBlock (int row, int column, GameObject newBlock)
 	{
-		GameObject go = Instantiate (newBlock, middlePoint + new Vector2 (xDiv +(column * BlockSize.x) + parent.transform.position.x , yDiv + Constants.Columns + (BlockSize.y * row)), Quaternion.identity) as GameObject;
+		GameObject go = Instantiate (newBlock, new Vector2 (parent.transform.position.x+ middlePoint.x + (column * BlockSize.x),parent.transform.position.y+ middlePoint.y + (BlockSize.y * row)), Quaternion.identity) as GameObject;
 
 		//assign the specific properties
 		go.GetComponent<Shape> ().Assign (newBlock.GetComponent<Shape> ().Type, row, column);
@@ -316,10 +312,6 @@ public class ShapesManager : MonoBehaviour
 	
 	private void SetupSpawnPositions ()
 	{
-		//create the spawn positions for the new shapes (will pop from the 'ceiling')
-		for (int column = 0; column < Constants.Columns; column++) {
-			SpawnPositions [column] = middlePoint + new Vector2 ((column * BlockSize.x) + parent.transform.position.x, (Constants.Rows * BlockSize.y));
-		}
 	}
 
 	/// Destroy all Block gameobjects and resets board
@@ -349,8 +341,8 @@ public class ShapesManager : MonoBehaviour
 	private void CreateBonus (Shape hitGoCache)
 	{
 		GameObject Bonus = Instantiate (GetBonusFromType (hitGoCache.Type), middlePoint
-			+ new Vector2 (xDiv + (hitGoCache.Column * BlockSize.x) + parent.transform.position.x,
-		              	  xDiv + (hitGoCache.Row * BlockSize.y) + parent.transform.position.y), Quaternion.identity)
+			+ new Vector2 ((hitGoCache.Column * BlockSize.x) + parent.transform.position.x,
+		              	  + (hitGoCache.Row * BlockSize.y) + parent.transform.position.y), Quaternion.identity)
 			as GameObject;
 		Bonus.transform.parent = parent;
 		shapes [hitGoCache.Row, hitGoCache.Column] = Bonus;
@@ -369,7 +361,7 @@ public class ShapesManager : MonoBehaviour
 	{
 		foreach (var item in movedGameObjects) {
 			if (item != null) {
-				item.transform.positionTo (Constants.MoveAnimationMinDuration * distance, middlePoint + new Vector2 ((xDiv + (item.GetComponent<Shape> ().Column * BlockSize.x) + parent.transform.position.x), (xDiv + (item.GetComponent<Shape> ().Row * BlockSize.y)) + parent.transform.position.y));
+				item.transform.positionTo (Constants.MoveAnimationMinDuration * distance, middlePoint + new Vector2 (((item.GetComponent<Shape> ().Column * BlockSize.x) + parent.transform.position.x), ( (item.GetComponent<Shape> ().Row * BlockSize.y)) + parent.transform.position.y));
 			}
 		}
 	}
@@ -500,20 +492,24 @@ public class ShapesManager : MonoBehaviour
 
 	public void rotateBoardCW ()
 	{	
-		parent.transform.Rotate (0, 0, 90);
-		
-		GameObject[,] ret = new GameObject[Constants.Rows, Constants.Columns];
-		
-		for (int i = 0; i < Constants.Rows; ++i) {
-			for (int j = 0; j < Constants.Columns; ++j) {
-				ret[i, j] = shapes[i, 8 - j - 1];
-			}
-		}
-		shapes.shapes = ret;
+		shapes.RotateCW ();
+		parent.transform.Rotate (0, 0, -90);
+		StartCoroutine (FindMatches(false));
+
 	}
 	
 	public void rotateBoardCCW ()
 	{
-		parent.transform.Rotate (0, 0, -90);
+		shapes.RotateCCW ();
+		parent.transform.Rotate (0, 0, 90);
+		StartCoroutine (FindMatches (false));
+		holdingTime (2.0f);
+	}
+
+	public IEnumerator holdingTime(float time)
+	{
+		play.inputBlocked = true;
+		yield return new WaitForSeconds (time);
+		play.inputBlocked = false;
 	}
 }
