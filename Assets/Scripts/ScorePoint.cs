@@ -8,6 +8,7 @@ public class ScorePoint : MonoBehaviour {
 	public ScorePoint score;				//Tab/Arrow on Scoreboard
 	private bool gameOver;					//Is the Game over?
 
+
 	//Set Default settings
 	void Start () {
 		score.transform.localPosition = new Vector3 (0, -.05f, 0);
@@ -20,11 +21,11 @@ public class ScorePoint : MonoBehaviour {
 		if (!gameOver) 
 		{
 			//Find difference in score
-			float x = ((p2.score - p1.score));
+			float x =  p2.score - p1.score;
 
 			//Move Arrow based on the score
 			score.transform.localPosition = new Vector3 (((6 * x) / winScore), -.05f, 0);
-		
+
 			//Determine if game is over, and if it is, who wins?
 			if ((p2.score - p1.score) > winScore) {
 				score.transform.localPosition = new Vector3 (6, -.05f, 0);

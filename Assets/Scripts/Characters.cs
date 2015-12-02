@@ -7,7 +7,7 @@ public class Characters : MonoBehaviour
 	public Color charColor,fxColor;									//Primary color for Character (Used for cursor and spotlight
 	public int effect1,effect2;
 	public GameManager gm;
-	public GameObject sprite,casing1,casing2,gem1,gem2;				//Gameobject instances for character sprie, gem casings, and gems
+	public GameObject sprite, casing1, casing2, gem1, gem2;			//Gameobject instances for character sprie, gem casings, and gems
 	public GameObject[] bonus = new GameObject[2];					//List of block types (colors) that gives helps to build up their special attacks
 	public ShapesManager sm;
 	public Transform parent;										//"Parent" object to keep Player's objects in relative space to one another. (Packaging)
