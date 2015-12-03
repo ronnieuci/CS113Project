@@ -5,7 +5,7 @@ public class PlayerInput : MonoBehaviour
 {
 	public bool inputBlocked;
 	public KeyCode up, down, left, right;										//Keys for Movement directions
-	public KeyCode move, clear, shiftcw, shiftccw, attack1, attack2,swap;		//Keys for special inputs
+	public KeyCode move, clear, shiftcw, shiftccw, swap, attack1, attack2;		//Keys for special inputs
 	public ShapesManager sm;													//Pointer to player's Shapemanager
 	public int x, y;															//Used to make sure row and column are within board
 	public GameObject cursor;													//Pointer to cursor on player's board
@@ -27,7 +27,7 @@ public class PlayerInput : MonoBehaviour
 		if (!inputBlocked) {
 			if (!pause) {
 				//Move Cursor Left
-				if (Input.GetKeyDown (left)){
+				if (Input.GetKeyDown (left)) {
 					if (cursor.transform.localPosition.x > -3) {  
 						cursor.transform.localPosition += Vector3.left;
 						x -= 1;

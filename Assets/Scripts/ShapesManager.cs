@@ -10,7 +10,7 @@ public class ShapesManager : MonoBehaviour
 	public Characters[] playerChar = new Characters[3];												//Array for characters player is using
 	public GameObject NullBlock, gm;																//Instance of NullBlock(Used for shape movement)
 	public GameObject[] BlockPrefabs, ExplosionPrefabs, BonusPrefabs;								//List of Blocks, Special Blocks, and explosion instances
-	public GameObject BG,cursor,scoreBar;															//Reference to background and cursor for each character
+	public GameObject BG,cursor;																	//Reference to background and cursor for each character
 	public int score,player;																		//Integer to store score
 	public PlayerInput play;																		//Instance for player's inputs
 	public ShapesArray shapes;																		//Instance of shape array
@@ -65,9 +65,7 @@ public class ShapesManager : MonoBehaviour
 		{ }
 		backg.sprite = playerChar [1].BG;
 		cursor.GetComponent<SpriteRenderer> ().color = playerChar [1].charColor;
-		cursor.GetComponent<SpriteRenderer> ().color = new Color (playerChar [1].charColor.r, playerChar [1].charColor.g, playerChar [1].charColor.b, playerChar [1].charColor.a -0.15f);
-		scoreBar.GetComponent<SpriteRenderer> ().color = new Color (playerChar [1].charColor.r, playerChar [1].charColor.g, playerChar [1].charColor.b, playerChar [1].charColor.a -0.15f);
-
+		cursor.GetComponent<SpriteRenderer> ().color = new Color (playerChar [1].charColor.r, playerChar [1].charColor.g, playerChar [1].charColor.b, playerChar [1].charColor.a + 5.5f);
 	}
 
 	// Update is called once per frame

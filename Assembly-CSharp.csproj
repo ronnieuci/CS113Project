@@ -59,7 +59,6 @@
      <Compile Include="Assets\Scripts\ShapesManager.cs" />
      <Compile Include="Assets\Scripts\SoundManager.cs" />
      <Compile Include="Assets\Scripts\Utilities.cs" />
-     <Compile Include="Assets\Scripts\_MenuScripts\menuPlayerInput.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\menuScript.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\p1c1b.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\p1c2b.cs" />
