@@ -59,23 +59,28 @@
      <Compile Include="Assets\Scripts\ShapesManager.cs" />
      <Compile Include="Assets\Scripts\SoundManager.cs" />
      <Compile Include="Assets\Scripts\Utilities.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\Button.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\charButton.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\charSelect.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\cursorInput.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\load.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\menuScript.cs" />
-     <Compile Include="Assets\Scripts\_MenuScripts\p1c1b.cs" />
-     <Compile Include="Assets\Scripts\_MenuScripts\p1c2b.cs" />
-     <Compile Include="Assets\Scripts\_MenuScripts\p1c3b.cs" />
-     <Compile Include="Assets\Scripts\_MenuScripts\p2c1b.cs" />
-     <Compile Include="Assets\Scripts\_MenuScripts\p2c2b.cs" />
-     <Compile Include="Assets\Scripts\_MenuScripts\p2c3b.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\playerReady.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\startFight.cs" />
      <None Include="Assets\Plugins\GoKit\easing\easeEquationsLicense.txt" />
      <None Include="Assets\Resources\Materials\Grayscale.shader" />
      <None Include="Assets\Resources\Materials\BGShader.shader" />
+ <Reference Include="UnityEngine.Advertisements">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Analytics">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
