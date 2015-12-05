@@ -1,8 +1,15 @@
-# CS113Project: Space Cats
+## Space Cats
 
+<h6>
+CS113: Computer Game Development<br>
+University of California, Irvine<br>
+</h6>
+
+* * *
+
+### The Team 
 Team Name: Gale
 
-Team:
 * Ricky Shields - Main Programmer
 * Dolly Pham - Artwork
 * Tina Bui - Artwork
