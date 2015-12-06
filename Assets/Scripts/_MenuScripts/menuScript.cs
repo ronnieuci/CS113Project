@@ -20,8 +20,10 @@ public class menuScript : MonoBehaviour {
 		winScore = 100;
 		volNum = 50;
 
-		if(PlayerPrefs.GetInt("Select")==1)
-			this.loadScreen(0,1);
+		if (PlayerPrefs.GetInt ("Select") == 1) {
+			this.loadScreen (0, 1);
+			PlayerPrefs.SetInt ("Select", 0);
+		}
 	}
 
 	void Update() {

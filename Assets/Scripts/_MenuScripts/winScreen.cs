@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class winScreen : MonoBehaviour {
 
@@ -10,12 +13,20 @@ public class winScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = PlayerPrefs.GetInt ("winner");
+		PlayerPrefs.SetInt ("winner", -1);
+		print (player);
 		character = PlayerPrefs.GetInt ("CharWin");
+		PlayerPrefs.SetInt ("CharWin", -1);
+		print(character);
 
-		msg.GetComponent<SpriteRenderer> ().sprite = m [player];
-		emb.GetComponent<SpriteRenderer> ().sprite = t [character];
-		pic.GetComponent<SpriteRenderer> ().sprite = p [character];
-		bg.GetComponent<SpriteRenderer> ().sprite  = b [character];
+		var a = msg.GetComponent<SpriteRenderer> ();
+		a.sprite = m [player];
+		var e = emb.GetComponent<SpriteRenderer> ();
+		e.sprite = t [character];
+		var c = pic.GetComponent<SpriteRenderer> ();
+		c.sprite = p [character];
+		var d = bg.GetComponent<SpriteRenderer> ();
+		d.sprite  = b [character];
 	}
 
 	public void action(bool c){

@@ -14,12 +14,14 @@ public class PlayerInput : MonoBehaviour
 	public bool paused;														//Boolean for Assassin power1
 	private KeyCode temp;														//Temporary Key
 	private float tempnum;														//Temporary Number
-		
+	private CharacterController characterController;
+
 	void Start ()
 	{
 		inputBlocked = false;
 		x = 3;
 		y = 3;
+		characterController = GetComponent<CharacterController>();
 	}
 
 	void Update ()
@@ -42,6 +44,28 @@ public class PlayerInput : MonoBehaviour
 		}
 
 		if (!inputBlocked) {
+
+//			if(cursor.transform.localPosition.x < 3){
+//				if (Input.GetAxis ("L_XAxis_"+sm.player.ToString()) > 0.75f){
+//					cursor.transform.position = new Vector3(cursor.transform.position.x+1,cursor.transform.position.y,cursor.transform.position.z);
+//				}
+//			}
+//			if(cursor.transform.localPosition.x >  -3){
+//				if (Input.GetAxis ("L_XAxis_"+sm.player.ToString()) < -0.75f){
+//					cursor.transform.position = new Vector2(cursor.transform.position.x-1,cursor.transform.position.y);
+//				}
+//			}
+//			if (cursor.transform.localPosition.y > -3.5) {
+//				if (Input.GetAxis ("L_YAxis_"+sm.player.ToString()) > 0.75f){
+//					cursor.transform.position = new Vector2(cursor.transform.position.x,cursor.transform.position.y-1);
+//				}
+//			}
+//			if (cursor.transform.localPosition.y < 3.5) {
+//				if (Input.GetAxis ("L_YAxis_"+sm.player.ToString()) < -0.75f){
+//					cursor.transform.position = new Vector2(cursor.transform.position.x,cursor.transform.position.y+1);
+//				}
+//			}
+
 			//Move Cursor Left
 			if (Input.GetKeyDown (left)) {
 				if (cursor.transform.localPosition.x > -3) {  

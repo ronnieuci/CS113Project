@@ -61,8 +61,8 @@ public class ShapesManager : MonoBehaviour
 		StartCoroutine(holdingTimeStart());
 	}
 
-	public int getCharNum(int i){
-		return ch [i];
+	public int getCharNum(){
+		return ch [1];
 	}
 	void setCharacters(int[] c)
 	{

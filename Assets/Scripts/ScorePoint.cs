@@ -32,14 +32,14 @@ public class ScorePoint : MonoBehaviour {
 
 			} else if ((p2.score - p1.score) < -winScore) {
 				score.transform.localPosition = new Vector3 (-6, -.05f, 0);
-				setWinner(p2);
+				setWinner(p1);
 			}
 		}
 	}
 
 	void setWinner(ShapesManager p){
 		PlayerPrefs.SetInt ("winner", p.player);
-		PlayerPrefs.SetInt ("CharWin", p.getCharNum(1));
+		PlayerPrefs.SetInt ("CharWin", p.getCharNum()-1);
 		Application.LoadLevel ("Winner");
 	}
 }

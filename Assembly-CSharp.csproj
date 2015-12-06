@@ -67,6 +67,7 @@
      <Compile Include="Assets\Scripts\_MenuScripts\ButtonVol.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\ButtonWin.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\cursorInput.cs" />
+     <Compile Include="Assets\Scripts\_MenuScripts\defaultControls.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\gameStartButton.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\menuScript.cs" />
      <Compile Include="Assets\Scripts\_MenuScripts\settingMenuCounts.cs" />
