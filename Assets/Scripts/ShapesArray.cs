@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class ShapesArray : MonoBehaviour
+public class ShapesArray
 {
 
     public GameObject[,] shapes = new GameObject[Constants.Rows, Constants.Columns];		//Array used to map or manage blocks
@@ -19,7 +19,7 @@ public class ShapesArray : MonoBehaviour
             try
             {	return shapes[row, column];		}
             catch (Exception ex)
-            {	throw;	}
+            {	throw ex;	}
         }
         set
         {	shapes[row, column] = value;	}

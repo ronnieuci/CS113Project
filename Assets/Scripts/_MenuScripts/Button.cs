@@ -22,8 +22,7 @@ public class Button : MonoBehaviour {
 			}
 		} else {
 			a.color = Color.white;
-
-			}
 		}
 	}
+}
 

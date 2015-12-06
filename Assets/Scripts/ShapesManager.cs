@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 public class ShapesManager : MonoBehaviour
 {
-	public AudioClip blockDrop,blockSlide;															//Sounds for various events
+	public AudioClip blockDrop,blockSlide;													//Sounds for various events
 	public Characters[] playerChar = new Characters[3];												//Array for characters player is using
-	public GameObject NullBlock, gm;																//Instance of NullBlock(Used for shape movement)
+	public GameManager gm;
+	public GameObject BG,NullBlock, cursor, countdown, scoreBar, atkFlash, whiteScreen;														//Instance of NullBlock(Used for shape movement)
 	public GameObject[] BlockPrefabs, ExplosionPrefabs, BonusPrefabs;								//List of Blocks, Special Blocks, and explosion instances
-	public GameObject BG,cursor;																	//Reference to background and cursor for each character
 	public int score,player;																		//Integer to store score
 	public PlayerInput play;																		//Instance for player's inputs
 	public ShapesArray shapes;																		//Instance of shape array
@@ -22,35 +22,48 @@ public class ShapesManager : MonoBehaviour
 	public Vector2 BlockSize = new Vector2 (1.0f, 1.0f);											//Size of each block
 
 	private IEnumerable<GameObject> totalMatches;
-	private bool assnPower,magePower;																//Used for block and board placement
+	private bool assnPower,magePower, start;																//Used for block and board placement
 	private GameState state = GameState.None;														//Default GameState (used to split up coding in Update)
 	private GameObject hitGo = null;																//Reference for block one when swapping blocks with cursor
 	private GameObject hitGo2 = null;																//Reference for block two when swapping blocks with cursor		
 	private int g1,g2;																				//Integer to track number of Special attack gems accumulated
 	private int[] ch = new int[3];																	//Integer Array to store character choices in menu
-	private SpriteRenderer backg;																	//Reference to Background for each character
+	private SpriteRenderer backg,atkPic;																	//Reference to Background for each character
 	private Vector2 swapDirection1, swapDirection2;													//Directions that cursor checks
-	private Vector2[] SpawnPositions;																//No Longer in use (needs to be removed, but currently breaks)
-
 
 	void Awake ()
 	{
+
 		swapDirection1 = Vector2.right;
 		swapDirection2 = Vector2.left;
 		backg = BG.GetComponent<SpriteRenderer>();
-		g1 = 0;
-		g2 = 0;
+		atkPic = atkFlash.GetComponent<SpriteRenderer>();
+		g1 = 50;
+		g2 = 50;
 	}
 
 	void Start ()
 	{
-		ch [1] = gm.GetComponent<GameManager> ().loadCharacter (player);
+		startGame ();
+	}
+
+	public void startGame(){
+		ch [1] = gm.GetComponent<GameManager> ().getChar (player);
 		InitializeTypesOnPrefabShapesAndBonuses ();
 		InitializeVariables ();
 		InitializeBlockAndSpawnPositions ();
 		setCharacters (ch);
 	}
-	
+
+	void beginGame(){
+		play.inputBlocked = true;
+		countdown.SetActive (true);
+		StartCoroutine(holdingTimeStart());
+	}
+
+	public int getCharNum(int i){
+		return ch [i];
+	}
 	void setCharacters(int[] c)
 	{
 		int m = 0;
@@ -60,17 +73,22 @@ public class ShapesManager : MonoBehaviour
 			playerChar[m].setBlockBonus(SetCharBlocks(i));
 			m+=1;
 		}
-
-		if (parent.position.x > 0) 
-		{ }
 		backg.sprite = playerChar [1].BG;
+		atkPic.sprite = playerChar [1].atk;
 		cursor.GetComponent<SpriteRenderer> ().color = playerChar [1].charColor;
 		cursor.GetComponent<SpriteRenderer> ().color = new Color (playerChar [1].charColor.r, playerChar [1].charColor.g, playerChar [1].charColor.b, playerChar [1].charColor.a + 5.5f);
+		scoreBar.GetComponent<SpriteRenderer>().color = playerChar [1].charColor;
 	}
 
 	// Update is called once per frame
 	void FixedUpdate (){
-		
+
+		if (!start) {
+			beginGame();
+			StartCoroutine(holdingTime());
+			start=true;
+		}
+
 		playerChar [1].animatetheGems(g1,g2);
 
 		if (state == GameState.None) {
@@ -145,13 +163,12 @@ public class ShapesManager : MonoBehaviour
 		
 
 			if (addBonus) {
-				hitGoCache = new Shape ();
+				hitGoCache = GetRandomBlock (BlockPrefabs).GetComponent<Shape>();
 				//get the game object that was of the same type
 				var sameTypeGo = hitGomatchesInfo.MatchedBlock.Count () > 0 ? hitGo : hitGo2;
 				var shape = sameTypeGo.GetComponent<Shape> ();
-
 				//cache it
-				hitGoCache.Assign (shape.Type, shape.Row, shape.Column);
+				hitGoCache.Assign (hitGoCache.Type, shape.Row, shape.Column);
 			}
 		
 			if (hitGo.GetComponent<Shape> ().IsSameType (NullBlock.GetComponent<Shape> ())) {
@@ -257,11 +274,8 @@ public class ShapesManager : MonoBehaviour
 
 	public void InitializeBlockAndSpawnPositions ()
 	{	
-		if (shapes != null)
-			ResetBoard ();
 		shapes = new ShapesArray ();
 
-		
 		var currPrefab = BlockPrefabs;
 
 		if (magePower) {
@@ -272,9 +286,6 @@ public class ShapesManager : MonoBehaviour
 			}
 		}
 	
-	
-		SpawnPositions = new Vector2[Constants.Columns];
-			
 		for (int row = 0; row < Constants.Rows; row++) 
 		{
 			for (int column = 0; column < Constants.Columns; column++) 
@@ -434,44 +445,78 @@ public class ShapesManager : MonoBehaviour
 		throw new System.Exception ("Wrong type");
 	}
 				
-	public void checkAttack(int i){	
-		if (i == 1 && playerChar[1].power1) {
-			g1=0;
-			if(ch[1]==1) {
-				playerChar[1].assassinatk1();
-			}
-			else if(ch[1]==2) {
-				var effect = playerChar[1].effect1;
-				var a = gm.GetComponent<GameManager>().getRandomBlocks(player);
-				attack1 (a,effect);
-			}
-			else if(ch[1]==3) {
-				var a = gm.GetComponent<GameManager>().getAllBlocks(player);
-				foreach(var block in a){
-					var b = block.GetComponent<SpriteRenderer>();
-					b.material.shader =  greyscale;
+	public void checkAttack(int i){
+		if (gm.powerEnabled) {
+			if (i == 1 && playerChar [1].power1) {
+				g1 = 0;
+				if (ch [1] == 1) {
+					playerChar [1].assassinatk1 ();
+				} else if (ch [1] == 2) {
+					var effect = playerChar [1].effect1;
+					var a = gm.GetComponent<GameManager> ().getRandomBlocks (player);
+					attack1 (a, effect);
+				} else if (ch [1] == 3) {
+					var a = gm.GetComponent<GameManager> ().getAllBlocks (player);
+					foreach (var block in a) {
+						var b = block.GetComponent<SpriteRenderer> ();
+						b.material.shader = greyscale;
+					}
+				}
+			} else if (i == 2 && playerChar [1].power2) {
+				g2 = 0;
+				if (ch [1] == 1) {
+					var opp = gm.GetComponent<GameManager> ().getOtherPlayer (player);
+					opp.assnPower = true;
+					if (countDown (15.0f)) {
+						opp.assnPower = false;
+					}
+				} else if (ch [1] == 2) {
+					magePower = true;
+					ResetBoard ();
+					magePower = false;
+				}
+				if (ch [1] == 3) {
+					totalMatches = shapes.getAllBlocksOfColor (GetRandomBlock (BlockPrefabs));
+					StartCoroutine (FindMatches (false));
 				}
 			}
+			StartCoroutine(attackFlash());
 		}
-		else if (i == 2 && playerChar[1].power2) {
-			g2=0;
-			if(ch[1]==1) {
-				var opp = gm.GetComponent<GameManager>().getOtherPlayer(player);
-				opp.assnPower= true;
-				if(countDown(15.0f)){
-					opp.assnPower= false;
-				}
+	}
+
+	public IEnumerator attackFlash(){
+		atkPic.gameObject.SetActive (true);
+		atkPic.color = new Color (1, 1, 1, 0);
+		for (int a=0; a<=255; a+=10) {
+			var b = (float)a;
+			atkPic.color = new Color(1,1,1,(b/255));
+			yield return new WaitForSeconds(0.01f);
+		}
+
+		whiteScreen.SetActive (true);
+		var w = whiteScreen.GetComponent<SpriteRenderer> ();
+		for (int r=0; r<3; r++) {
+			w.color = new Color (1, 1, 1, 0);
+			for (int a=0; a<=255; a+=40) {
+				var b = (float)a;
+				w.color = new Color (1, 1, 1, (b / 255));
+				yield return new WaitForSeconds (0.01f);
 			}
-			else if(ch[1]==2) {
-				magePower = true;
-				ResetBoard();
-				magePower = false;
-			}
-			if(ch[1]==3) {
-				totalMatches = shapes.getAllBlocksOfColor(GetRandomBlock(BlockPrefabs));
-				StartCoroutine(FindMatches(false));
+			for (int a=255; a>=0; a-=50) {
+				var b = (float)a;
+				w.color = new Color (1, 1, 1, (b / 255));
+				yield return new WaitForSeconds (0.01f);
 			}
 		}
+		for (int a=255; a>=0; a-=10) {
+			var b = (float)a;
+			atkPic.color = new Color(1,1,1,(b/255));
+			yield return new WaitForSeconds(0.01f);
+			
+		}
+		yield return new WaitForSeconds (0.1f);
+
+
 	}
 
 	public void attack1(IEnumerable<GameObject> a, int effect){
@@ -503,13 +548,22 @@ public class ShapesManager : MonoBehaviour
 		shapes.RotateCCW ();
 		parent.transform.Rotate (0, 0, 90);
 		StartCoroutine (FindMatches (false));
-		holdingTime (2.0f);
+		StartCoroutine (holdingTime ());
 	}
-
-	public IEnumerator holdingTime(float time)
+	
+	IEnumerator holdingTime()
 	{
 		play.inputBlocked = true;
-		yield return new WaitForSeconds (time);
+		yield return new WaitForSeconds(2);
 		play.inputBlocked = false;
+	}
+
+	IEnumerator holdingTimeStart()
+	{
+		play.inputBlocked = true;
+		yield return new WaitForSeconds(3);
+		countdown.SetActive (false);
+		play.inputBlocked = false;
+
 	}
 }

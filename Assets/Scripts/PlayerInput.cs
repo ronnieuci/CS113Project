@@ -4,13 +4,14 @@ using System.Collections;
 public class PlayerInput : MonoBehaviour
 {
 	public bool inputBlocked;
+	public GameManager gm;
 	public KeyCode up, down, left, right;										//Keys for Movement directions
 	public KeyCode move, clear, shiftcw, shiftccw, swap, attack1, attack2, pause;//Keys for special inputs
 	public ShapesManager sm;													//Pointer to player's Shapemanager
 	public int x, y;															//Used to make sure row and column are within board
 	public GameObject cursor;													//Pointer to cursor on player's board
 
-	private bool paused;															//Boolean for Assassin power1
+	public bool paused;														//Boolean for Assassin power1
 	private KeyCode temp;														//Temporary Key
 	private float tempnum;														//Temporary Number
 		
@@ -25,12 +26,20 @@ public class PlayerInput : MonoBehaviour
 	{
 		if (Input.GetKeyDown (pause)) {
 			if (Time.timeScale == 1) {
-				Time.timeScale = 0;
+				gm.paused = true;
+				inputBlocked = true;
 			} else {
-				Time.timeScale = 1;
+				gm.paused = false;
+				inputBlocked = false;
 			}
 		}
 
+		if (gm.paused){
+			inputBlocked = true;
+		}
+		else{
+			inputBlocked = false;
+		}
 
 		if (!inputBlocked) {
 			//Move Cursor Left
@@ -84,10 +93,7 @@ public class PlayerInput : MonoBehaviour
 			//Activate CounterClockwise Rotation of board (WIP)
 			else if (Input.GetKeyDown (shiftccw)) {
 				sm.rotateBoardCCW ();
-			} else if (Input.GetKeyDown (pause)) {
-				paused = true;
 			}
-		
 		}
 	}
 

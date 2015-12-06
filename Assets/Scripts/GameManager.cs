@@ -8,8 +8,42 @@ public class GameManager : MonoBehaviour {
 
 	public ShapesManager player1,player2;
 	public float pscore1, pscore2;
+	public int scoreToWin, volume;
+	public int p1,p2;
+	public bool powerEnabled,paused;
 	public SoundManager sound;
-	
+
+	void Start(){
+		getSettings ();
+	}
+
+	public void getSettings(){
+		p1 = PlayerPrefs.GetInt ("char1");
+		p2 = PlayerPrefs.GetInt ("char2");
+		scoreToWin = PlayerPrefs.GetInt ("toWin");
+		volume = PlayerPrefs.GetInt ("volume");
+		usePower(); 
+	}
+
+	public void usePower() {
+		var s = PlayerPrefs.GetString ("powers");
+		if (s.ToLower () == "true") {
+			powerEnabled = true;
+		} else { 
+			powerEnabled = false;
+		}
+	}
+
+	public int getChar(int player){
+		if (player == 1) {
+			return p1;
+		} else if (player == 2) {
+			return p2;
+		} else {
+			return 0;
+		}
+	}
+
 	public IEnumerable<GameObject> getRandomBlocks(int attacker) {
 		if (attacker == 1) {
 			return( player2.shapes.getRandomBlocks(8));
@@ -37,30 +71,12 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public int loadCharacter(int player){
-		string p;
-		if (player == 1) {
-			p = PlayerPrefs.GetString ("char1");
-		} 
-		else {
-			p = PlayerPrefs.GetString ("char2");			
-		}
-		return charStrtoInt (p);
-	}
-
-	private int charStrtoInt(string p){
-		if (p == "assassin"){
-			return(1);
-		}
-		else if (p == "mage"){
-			return(2);
-		}
-		else if (p == "warrior"){
-			return(3);
+	void Update(){
+		if (paused) {
+			Time.timeScale = 0;
 		}
 		else{
-			return 0;
+			Time.timeScale = 1;
 		}
 	}
-
 }

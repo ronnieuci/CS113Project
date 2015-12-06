@@ -28,13 +28,18 @@ public class ScorePoint : MonoBehaviour {
 			//Determine if game is over, and if it is, who wins?
 			if ((p2.score - p1.score) > winScore) {
 				score.transform.localPosition = new Vector3 (6, -.05f, 0);
-				print ("Player 2 Wins!");
-				gameOver=true;
+				setWinner(p2);
+
 			} else if ((p2.score - p1.score) < -winScore) {
 				score.transform.localPosition = new Vector3 (-6, -.05f, 0);
-				print ("Player 1 Wins!");
-				gameOver=true;
+				setWinner(p2);
 			}
 		}
+	}
+
+	void setWinner(ShapesManager p){
+		PlayerPrefs.SetInt ("winner", p.player);
+		PlayerPrefs.SetInt ("CharWin", p.getCharNum(1));
+		Application.LoadLevel ("Winner");
 	}
 }

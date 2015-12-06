@@ -11,7 +11,7 @@ public class Characters : MonoBehaviour
 	public GameObject[] bonus = new GameObject[2];					//List of block types (colors) that gives helps to build up their special attacks
 	public ShapesManager sm;
 	public Transform parent;										//"Parent" object to keep Player's objects in relative space to one another. (Packaging)
-	public Sprite BG;												//Links to Background for the Character
+	public Sprite BG,atk;												//Links to Background for the Character
 
 
 	private Quaternion playRot;										//Rotation used to flip if player two
@@ -84,6 +84,7 @@ public class Characters : MonoBehaviour
 		gem1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/yellow"),parent.transform.position,playRot) as GameObject;
 		gem2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/green"),parent.transform.position,playRot) as GameObject;
 		BG = Resources.Load("Backgrounds/Assassin", typeof(Sprite)) as Sprite;
+		atk = Resources.Load("Prefabs/Characters/Assassin_board_attack", typeof(Sprite)) as Sprite;
 
 	}
 
@@ -100,6 +101,7 @@ public class Characters : MonoBehaviour
 		gem1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/blue"),parent.transform.position,playRot) as GameObject;
 		gem2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/purple"),parent.transform.position,playRot) as GameObject;
 		BG = Resources.Load("Backgrounds/Mage", typeof(Sprite)) as Sprite;
+		atk = Resources.Load("Prefabs/Characters/Mage_board_attack", typeof(Sprite)) as Sprite;
 	}
 
 	//Set Character up as Warrior Subset
@@ -115,6 +117,7 @@ public class Characters : MonoBehaviour
 		gem1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/red"),parent.transform.position,playRot) as GameObject;
 		gem2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/orange"),parent.transform.position,playRot) as GameObject;
 		BG = Resources.Load("Backgrounds/Warrior", typeof(Sprite)) as Sprite;
+		atk = Resources.Load("Prefabs/Characters/Warrior_board_attack", typeof(Sprite)) as Sprite;
 	}
 
 	//Set all settings as blank (Allow more than one character used at a time, if we get to it)

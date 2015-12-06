@@ -7,7 +7,7 @@ public class cursorInput : MonoBehaviour {
 	public GameObject cursor, chsprite;
 	public RuntimeAnimatorController[] sprites;
 	public Color tint;
-	public int character;
+	public int character,player;
 
 	// Use this for initialization
 	void Start () {
@@ -17,17 +17,17 @@ public class cursorInput : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKey(up) && cursor.transform.position.y < 9) {
-			cursor.transform.positionTo (0.01f, new Vector2(cursor.transform.position.x,cursor.transform.position.y+0.25f));
+		if (Input.GetKey(up) && cursor.transform.position.y < 10) {
+			cursor.transform.positionTo (0.005f, new Vector2(cursor.transform.position.x,cursor.transform.position.y+0.4f));
 		}
-		if (Input.GetKey (dn) && cursor.transform.position.y > -9) {
-			cursor.transform.positionTo (0.01f, new Vector2(cursor.transform.position.x,cursor.transform.position.y-0.25f));
+		if (Input.GetKey (dn) && cursor.transform.position.y > -10) {
+			cursor.transform.positionTo (0.005f, new Vector2(cursor.transform.position.x,cursor.transform.position.y-0.4f));
 		}
-		if (Input.GetKey (lt) && cursor.transform.position.x > -13) {
-			cursor.transform.positionTo (0.01f, new Vector2(cursor.transform.position.x-0.25f,cursor.transform.position.y));
+		if (Input.GetKey (lt) && cursor.transform.position.x > -17.5f) {
+			cursor.transform.positionTo (0.005f, new Vector2(cursor.transform.position.x-0.4f,cursor.transform.position.y));
 		}
-		if (Input.GetKey (rt) && cursor.transform.position.x < 14) {
-			cursor.transform.positionTo (0.01f, new Vector2(cursor.transform.position.x+0.25f,cursor.transform.position.y));
+		if (Input.GetKey (rt) && cursor.transform.position.x < 17.5f) {
+			cursor.transform.positionTo (0.005f, new Vector2(cursor.transform.position.x+0.4f,cursor.transform.position.y));
 		}
 
 		showChar (character);
