@@ -1,15 +1,6 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/_MenuScripts/cursorInput.cs">
-    <Files>
-      <File FileName="Assets/Scripts/_MenuScripts/defaultControls.cs" Line="10" Column="38" />
-      <File FileName="Assets/Scripts/GameManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PlayerInput.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/_MenuScripts/cursorInput.cs" Line="54" Column="29" />
-      <File FileName="Assets/Scripts/_MenuScripts/winCursor.cs" Line="20" Column="20" />
-      <File FileName="Assets/Scripts/_MenuScripts/ButtonWin.cs" Line="1" Column="1" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

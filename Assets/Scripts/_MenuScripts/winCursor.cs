@@ -7,14 +7,12 @@ public class winCursor : MonoBehaviour {
 	public KeyCode select;
 
 	private Vector3 move;
-	private CharacterController characterController;
 	private defaultControls dc = new defaultControls();
 	private int player;
 
 		
 		// Use this for initialization
 	void Start () {
-		characterController = GetComponent<CharacterController>();
 		player = PlayerPrefs.GetInt ("winner");
 		dc.setControls (player);
 		select = dc.swap;

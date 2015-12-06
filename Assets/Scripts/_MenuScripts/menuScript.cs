@@ -9,7 +9,8 @@ public class menuScript : MonoBehaviour {
 	public Sprite[] screenBG;
 	public cursorInput p1,p2;
 	public bool ready,powers;
-	public int winScore, volNum;
+	public int winScore;
+	public float volNum;
 	public settingMenuCounts sm;
 	
 	// Use this for initialization
@@ -18,7 +19,7 @@ public class menuScript : MonoBehaviour {
 		ready = false;
 		powers = true;
 		winScore = 100;
-		volNum = 50;
+		volNum = 50.0f;
 
 		if (PlayerPrefs.GetInt ("Select") == 1) {
 			this.loadScreen (0, 1);
@@ -73,7 +74,7 @@ public class menuScript : MonoBehaviour {
 		PlayerPrefs.SetInt ("char1", player1.character);
 		PlayerPrefs.SetInt("char2", player2.character);
 		PlayerPrefs.SetInt ("toWin", winScore);
-		PlayerPrefs.SetInt ("volume", volNum);
+		PlayerPrefs.SetFloat ("volume", volNum);
 		PlayerPrefs.SetString ("powers", powers.ToString ()); 
 	}
 }

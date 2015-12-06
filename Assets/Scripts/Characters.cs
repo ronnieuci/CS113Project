@@ -4,7 +4,7 @@ using System.Collections;
 public class Characters : MonoBehaviour 
 {
 	public bool power1,power2;										//Boolean for whether power is charged
-	public Color charColor,fxColor;									//Primary color for Character (Used for cursor and spotlight
+	public Color charColor,fxColor,atkC1,atkC2;									//Primary color for Character (Used for cursor and spotlight
 	public int effect1,effect2;
 	public GameManager gm;
 	public GameObject sprite,casing1,casing2,gem1,gem2;				//Gameobject instances for character sprie, gem casings, and gems
@@ -78,6 +78,8 @@ public class Characters : MonoBehaviour
 		setfxColor (Color.green);
 		effect1 = 1;
 		effect2 = 2;
+		atkC2 = new Color (0, 1, 0, 0);
+		atkC1 = new Color (1, 1, 0, 0);
 		sprite = Instantiate(Resources.Load("Prefabs/Characters/Assassin"),parent.transform.position,playRot) as GameObject;
 		casing1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingGold"),parent.transform.position,playRot) as GameObject;
 		casing2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingSilver"),parent.transform.position,playRot) as GameObject;
@@ -95,6 +97,8 @@ public class Characters : MonoBehaviour
 		setfxColor (Color.magenta);
 		effect1 = 3;
 		effect2 = 4;
+		atkC2 = new Color(0,0,1,0);
+		atkC1 = new Color(1,0,1,0);
 		sprite = Instantiate(Resources.Load("Prefabs/Characters/Mage"),parent.transform.position,playRot) as GameObject;
 		casing1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingGold"),parent.transform.position,playRot) as GameObject;
 		casing2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingSilver"),parent.transform.position,playRot) as GameObject;
@@ -111,6 +115,8 @@ public class Characters : MonoBehaviour
 		setfxColor (Color.yellow);
 		effect1 = 5;
 		effect2 = 6;
+		atkC2 = new Color(1,0,0,0);
+		atkC1 = new Color(1,(155.0f/255),0,0);
 		sprite = Instantiate(Resources.Load("Prefabs/Characters/Warrior"),parent.transform.position,playRot) as GameObject;	
 		casing1 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingGold"),parent.transform.position,playRot) as GameObject;
 		casing2 = Instantiate(Resources.Load("Prefabs/Characters/Gems/casingSilver"),parent.transform.position,playRot) as GameObject;

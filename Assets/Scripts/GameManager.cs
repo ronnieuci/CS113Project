@@ -7,22 +7,20 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 
 	public ShapesManager player1,player2;
-	public float pscore1, pscore2;
-	public int scoreToWin, volume;
-	public int p1,p2;
+	public float pscore1, pscore2, volume;
+	public int scoreToWin, p1, p2;
 	public bool powerEnabled,paused;
 	public SoundManager sound;
 
 	void Start(){
 		getSettings ();
-		print (Application.platform);
 	}
 
 	public void getSettings(){
 		p1 = PlayerPrefs.GetInt ("char1");
 		p2 = PlayerPrefs.GetInt ("char2");
 		scoreToWin = PlayerPrefs.GetInt ("toWin");
-		volume = PlayerPrefs.GetInt ("volume");
+		volume = PlayerPrefs.GetFloat ("volume");
 		usePower(); 
 	}
 

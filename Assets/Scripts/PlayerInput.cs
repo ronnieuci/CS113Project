@@ -14,7 +14,6 @@ public class PlayerInput : MonoBehaviour
 	public bool paused;														//Boolean for Assassin power1
 	private KeyCode temp;														//Temporary Key
 	private float tempnum;														//Temporary Number
-	private CharacterController characterController;
 	private defaultControls dc = new defaultControls();
 
 	void Start ()
@@ -22,7 +21,6 @@ public class PlayerInput : MonoBehaviour
 		inputBlocked = false;
 		x = 3;
 		y = 3;
-		characterController = GetComponent<CharacterController>();
 		dc.setControls (sm.player);
 	}
 

@@ -38,8 +38,8 @@ public class ShapesManager : MonoBehaviour
 		swapDirection2 = Vector2.left;
 		backg = BG.GetComponent<SpriteRenderer>();
 		atkPic = atkFlash.GetComponent<SpriteRenderer>();
-		g1 = 50;
-		g2 = 50;
+		g1 = 0;
+		g2 = 0;
 	}
 
 	void Start ()
@@ -448,6 +448,9 @@ public class ShapesManager : MonoBehaviour
 	public void checkAttack(int i){
 		if (gm.powerEnabled) {
 			if (i == 1 && playerChar [1].power1) {
+				
+				var w = whiteScreen.GetComponent<SpriteRenderer> ();
+				w.color = playerChar [1].atkC1;
 				g1 = 0;
 				if (ch [1] == 1) {
 					playerChar [1].assassinatk1 ();
@@ -462,7 +465,12 @@ public class ShapesManager : MonoBehaviour
 						b.material.shader = greyscale;
 					}
 				}
+				playerChar [1].power1 = false;
+				StartCoroutine(attackFlash());
 			} else if (i == 2 && playerChar [1].power2) {
+				
+				var w = whiteScreen.GetComponent<SpriteRenderer> ();
+				w.color = playerChar [1].atkC2;
 				g2 = 0;
 				if (ch [1] == 1) {
 					var opp = gm.GetComponent<GameManager> ().getOtherPlayer (player);
@@ -479,8 +487,9 @@ public class ShapesManager : MonoBehaviour
 					totalMatches = shapes.getAllBlocksOfColor (GetRandomBlock (BlockPrefabs));
 					StartCoroutine (FindMatches (false));
 				}
+				playerChar [1].power2 = false;
+				StartCoroutine(attackFlash());
 			}
-			StartCoroutine(attackFlash());
 		}
 	}
 
@@ -496,21 +505,21 @@ public class ShapesManager : MonoBehaviour
 		whiteScreen.SetActive (true);
 		var w = whiteScreen.GetComponent<SpriteRenderer> ();
 		for (int r=0; r<3; r++) {
-			w.color = new Color (1, 1, 1, 0);
+			w.color = new Color (w.color.r, w.color.g, w.color.b, 0);
 			for (int a=0; a<=255; a+=40) {
 				var b = (float)a;
-				w.color = new Color (1, 1, 1, (b / 255));
+				w.color = new Color (w.color.r, w.color.g, w.color.b, (b / 255));
 				yield return new WaitForSeconds (0.01f);
 			}
 			for (int a=255; a>=0; a-=50) {
 				var b = (float)a;
-				w.color = new Color (1, 1, 1, (b / 255));
+				w.color = new Color (w.color.r, w.color.g, w.color.b, (b / 255));
 				yield return new WaitForSeconds (0.01f);
 			}
 		}
 		for (int a=255; a>=0; a-=10) {
 			var b = (float)a;
-			atkPic.color = new Color(1,1,1,(b/255));
+			atkPic.color = new Color(w.color.r, w.color.g, w.color.b,(b/255));
 			yield return new WaitForSeconds(0.01f);
 			
 		}
