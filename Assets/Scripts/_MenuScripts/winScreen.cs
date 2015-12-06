@@ -13,10 +13,8 @@ public class winScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = PlayerPrefs.GetInt ("winner");
-		PlayerPrefs.SetInt ("winner", -1);
 		print (player);
 		character = PlayerPrefs.GetInt ("CharWin");
-		PlayerPrefs.SetInt ("CharWin", -1);
 		print(character);
 
 		var a = msg.GetComponent<SpriteRenderer> ();

@@ -26,7 +26,7 @@ public class winCursor : MonoBehaviour {
 		
 		
 		if(cursor.transform.position.y > -17.5f && cursor.transform.position.y < 17.5f)
-			move.x = Input.GetAxis ("L_XAxis_1") * 20;
+			move.x = Input.GetAxis (("L_XAxis_"+player.ToString())) * 20;
 		if(cursor.transform.position.y < 10 && cursor.transform.position.y > -10)
 			move.y = Input.GetAxis ("L_YAxis_1") * -20;
 
