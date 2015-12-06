@@ -36,35 +36,56 @@ public class PlayerInput : MonoBehaviour
 			}
 		}
 
-		if (gm.paused){
+		if (gm.paused) {
 			inputBlocked = true;
-		}
-		else{
+		} else {
 			inputBlocked = false;
 		}
 
 		if (!inputBlocked) {
 
-//			if(cursor.transform.localPosition.x < 3){
-//				if (Input.GetAxis ("L_XAxis_"+sm.player.ToString()) > 0.75f){
-//					cursor.transform.position = new Vector3(cursor.transform.position.x+1,cursor.transform.position.y,cursor.transform.position.z);
+//			if (cursor.transform.localPosition.x < 3) {
+//				if (Input.GetAxis ("L_XAxis_" + sm.player.ToString ()) == 1.0f) {
+//					cursor.transform.localPosition += Vector3.right;				
 //				}
 //			}
-//			if(cursor.transform.localPosition.x >  -3){
-//				if (Input.GetAxis ("L_XAxis_"+sm.player.ToString()) < -0.75f){
-//					cursor.transform.position = new Vector2(cursor.transform.position.x-1,cursor.transform.position.y);
+//			if (cursor.transform.localPosition.x > -3) {
+//				if (Input.GetAxis ("L_XAxis_" + sm.player.ToString ()) == 1.0f) {
+//					cursor.transform.localPosition += Vector3.left;
 //				}
 //			}
 //			if (cursor.transform.localPosition.y > -3.5) {
-//				if (Input.GetAxis ("L_YAxis_"+sm.player.ToString()) > 0.75f){
-//					cursor.transform.position = new Vector2(cursor.transform.position.x,cursor.transform.position.y-1);
+//				if (Input.GetAxis ("L_YAxis_" + sm.player.ToString ()) == 1.0f) {
+//					cursor.transform.localPosition += Vector3.down;
 //				}
 //			}
 //			if (cursor.transform.localPosition.y < 3.5) {
-//				if (Input.GetAxis ("L_YAxis_"+sm.player.ToString()) < -0.75f){
-//					cursor.transform.position = new Vector2(cursor.transform.position.x,cursor.transform.position.y+1);
-//				}
+//				if (Input.GetAxis ("L_YAxis_" + sm.player.ToString ()) < -0.75f) {
+//					cursor.transform.localPosition += Vector3.up;				}
 //			}
+		
+			if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer) {
+				if (Input.GetAxis ("DPad_XAxis_" + sm.player.ToString ()) == 1.0f) {
+					cursor.transform.localPosition += Vector3.right;
+					while (Input.GetAxis ("DPad_XAxis_"+sm.player.ToString()) > 0) {
+					}
+				}
+				if (Input.GetAxis ("DPad_XAxis_" + sm.player.ToString ()) == -1.0f) {
+					cursor.transform.localPosition += Vector3.left;
+					while (Input.GetAxis ("DPad_XAxis_"+sm.player.ToString()) < 0) {
+					}
+				}
+				if (Input.GetAxis ("DPad_YAxis_" + sm.player.ToString ()) == 1.0f) {
+					cursor.transform.localPosition += Vector3.up;
+					while (Input.GetAxis ("DPad_YAxis_"+sm.player.ToString()) > 0) {
+					}
+				}
+				if (Input.GetAxis ("DPad_YAxis_" + sm.player.ToString ()) == -1.0f) {
+					cursor.transform.localPosition += Vector3.down;
+					while (Input.GetAxis ("DPad_YAxis_"+sm.player.ToString()) < 0) {
+					}
+				}
+			}
 
 			//Move Cursor Left
 			if (Input.GetKeyDown (dc.left)) {
