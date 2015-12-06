@@ -2,17 +2,22 @@
 using System.Collections;
 
 public class winCursor : MonoBehaviour {
-
-	public KeyCode up, dn, lt, rt, select;
 	public GameObject cursor;
 	public Color tint;
+	public KeyCode select;
 
 	private Vector3 move;
 	private CharacterController characterController;
+	private defaultControls dc = new defaultControls();
+	private int player;
+
 		
 		// Use this for initialization
 	void Start () {
 		characterController = GetComponent<CharacterController>();
+		player = PlayerPrefs.GetInt ("winner");
+		dc.setControls (player);
+		select = dc.swap;
 	}
 		
 		// Update is called once per frame
@@ -27,16 +32,16 @@ public class winCursor : MonoBehaviour {
 		if(cursor.transform.position.y < 10 && cursor.transform.position.y > -10)
 			move.y = Input.GetAxis ("L_YAxis_1") * -20;
 
-			if (Input.GetKey(up) && cursor.transform.position.y < 10) {
-				cursor.transform.positionTo (0.005f, new Vector2(cursor.transform.position.x,cursor.transform.position.y+0.4f));
+		if (Input.GetKey(dc.up) && cursor.transform.position.y < 10) {
+			cursor.transform.positionTo (0.005f, new Vector2(cursor.transform.position.x,cursor.transform.position.y+0.4f));
 			}
-			if (Input.GetKey (dn) && cursor.transform.position.y > -10) {
+		if (Input.GetKey (dc.down) && cursor.transform.position.y > -10) {
 				cursor.transform.positionTo (0.005f, new Vector2(cursor.transform.position.x,cursor.transform.position.y-0.4f));
 			}
-			if (Input.GetKey (lt) && cursor.transform.position.x > -17.5f) {
+		if (Input.GetKey (dc.left) && cursor.transform.position.x > -17.5f) {
 				cursor.transform.positionTo (0.005f, new Vector2(cursor.transform.position.x-0.4f,cursor.transform.position.y));
 			}
-			if (Input.GetKey (rt) && cursor.transform.position.x < 17.5f) {
+		if (Input.GetKey (dc.right) && cursor.transform.position.x < 17.5f) {
 				cursor.transform.positionTo (0.005f, new Vector2(cursor.transform.position.x+0.4f,cursor.transform.position.y));
 			}
 		}

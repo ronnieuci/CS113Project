@@ -15,6 +15,7 @@ public class PlayerInput : MonoBehaviour
 	private KeyCode temp;														//Temporary Key
 	private float tempnum;														//Temporary Number
 	private CharacterController characterController;
+	private defaultControls dc = new defaultControls();
 
 	void Start ()
 	{
@@ -22,6 +23,7 @@ public class PlayerInput : MonoBehaviour
 		x = 3;
 		y = 3;
 		characterController = GetComponent<CharacterController>();
+		dc.setControls (sm.player);
 	}
 
 	void Update ()
@@ -67,28 +69,28 @@ public class PlayerInput : MonoBehaviour
 //			}
 
 			//Move Cursor Left
-			if (Input.GetKeyDown (left)) {
+			if (Input.GetKeyDown (dc.left)) {
 				if (cursor.transform.localPosition.x > -3) {  
 					cursor.transform.localPosition += Vector3.left;
 					x -= 1;
 				}
 		
 				//Move Cursor Right
-			} else if (Input.GetKeyDown (right)) {
+			} else if (Input.GetKeyDown (dc.right)) {
 				if (cursor.transform.localPosition.x < 3) { 
 					cursor.transform.localPosition += Vector3.right;
 					x += 1;
 				}
 
 				//Move Cursor Up
-			} else if (Input.GetKeyDown (up)) {
+			} else if (Input.GetKeyDown (dc.up)) {
 				if (cursor.transform.localPosition.y < 3) { 
 					cursor.transform.localPosition += Vector3.up;
 					y += 1;
 				}
 		
 				//Move Cursor Down
-			} else if (Input.GetKeyDown (down)) {
+			} else if (Input.GetKeyDown (dc.down)) {
 				if (cursor.transform.localPosition.y > -3) {
 					cursor.transform.localPosition += Vector3.down;
 					y -= 1;
@@ -96,26 +98,26 @@ public class PlayerInput : MonoBehaviour
 			}
 
 			//Activate Special Attack #1
-			else if (Input.GetKeyDown (attack1)) {
+			else if (Input.GetKeyDown (dc.attack1)) {
 				sm.checkAttack (1);
 			}
 
 			//Activate Special Attack #2
-			else if (Input.GetKeyDown (attack2)) {
+			else if (Input.GetKeyDown (dc.attack2)) {
 				sm.checkAttack (2);
 			}
 
 			//Activate Clearance of board and regenerate
-			else if (Input.GetKeyDown (clear)) {
+			else if (Input.GetKeyDown (dc.clear)) {
 				sm.ResetBoard ();
 			}
 
 			//Activate Clockwise Rotation of board (WIP)
-			else if (Input.GetKeyDown (shiftcw)) {
+			else if (Input.GetKeyDown (dc.shiftcw)) {
 				sm.rotateBoardCW ();
 			}
 			//Activate CounterClockwise Rotation of board (WIP)
-			else if (Input.GetKeyDown (shiftccw)) {
+			else if (Input.GetKeyDown (dc.shiftccw)) {
 				sm.rotateBoardCCW ();
 			}
 		}

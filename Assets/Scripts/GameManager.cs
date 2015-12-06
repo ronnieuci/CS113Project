@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
 
 	void Start(){
 		getSettings ();
+		print (Application.platform);
 	}
 
 	public void getSettings(){
