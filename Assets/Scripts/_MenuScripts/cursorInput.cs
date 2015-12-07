@@ -22,7 +22,7 @@ public class cursorInput : MonoBehaviour {
 		dc.setControls (player);
 		select = dc.swap;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
@@ -30,13 +30,31 @@ public class cursorInput : MonoBehaviour {
 		move.y = 0;
 
 		
-		if(cursor.transform.position.y > -17.5f && cursor.transform.position.y < 17.5f)
+		if(cursor.transform.position.x > -17.5f)
 			move.x = Input.GetAxis ("L_XAxis_"+player.ToString()) * 20;
-		if(cursor.transform.position.y < 10 && cursor.transform.position.y > -10)
+		else if(cursor.transform.position.x < 17.5f)
+			move.x = Input.GetAxis ("L_XAxis_"+player.ToString()) * 20;
+
+		if(cursor.transform.position.y < 10)
+			move.y = Input.GetAxis ("L_YAxis_"+player.ToString()) * -20;
+		else if(cursor.transform.position.y > -10)
 			move.y = Input.GetAxis ("L_YAxis_"+player.ToString()) * -20;
 
 
 		characterController.Move(move * Time.deltaTime);
+		if (cursor.transform.position.y > 10) {
+			cursor.transform.position = new Vector3 (cursor.transform.position.x, 10,cursor.transform.position.z);
+		}
+		else if (cursor.transform.position.y < -10) {
+			cursor.transform.position = new Vector3 (cursor.transform.position.x, -10,cursor.transform.position.z);
+		}
+
+		if (cursor.transform.position.x > 17.5f) {
+			cursor.transform.position = new Vector3 (17.5f, cursor.transform.position.y,cursor.transform.position.z);
+		}
+		else if (cursor.transform.position.x < -17.5f) {
+			cursor.transform.position = new Vector3 (-17.5f, cursor.transform.position.y,cursor.transform.position.z);
+		}
 
 
 
