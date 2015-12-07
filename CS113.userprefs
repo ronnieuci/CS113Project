@@ -1,35 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/_MenuScripts/winScreen.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/_MenuScripts/defaultControls.cs">
     <Files>
-      <File FileName="Assets/Scripts/Characters.cs" Line="308" Column="4" />
-      <File FileName="Assets/Scripts/Constants.cs" Line="16" Column="2" />
-      <File FileName="Assets/Scripts/Enums.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameManager.cs" Line="2" Column="22" />
-      <File FileName="Assets/Scripts/AlteredBlockInfo.cs" Line="4" Column="19" />
-      <File FileName="Assets/Scripts/MatchesInfo.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PlayerInput.cs" Line="16" Column="39" />
-      <File FileName="Assets/Scripts/ScorePoint.cs" Line="43" Column="3" />
-      <File FileName="Assets/Scripts/Shape.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ShapeInfo.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ShapesArray.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ShapesManager.cs" Line="84" Column="2" />
-      <File FileName="Assets/Scripts/SoundManager.cs" Line="10" Column="112" />
-      <File FileName="Assets/Scripts/Utilities.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/_MenuScripts/Button.cs" Line="9" Column="23" />
-      <File FileName="Assets/Scripts/_MenuScripts/ButtonChar.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/_MenuScripts/ButtonNum.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/_MenuScripts/ButtonPowers.cs" Line="10" Column="2" />
-      <File FileName="Assets/Scripts/_MenuScripts/ButtonStart.cs" Line="10" Column="2" />
-      <File FileName="Assets/Scripts/_MenuScripts/ButtonVol.cs" Line="13" Column="3" />
-      <File FileName="Assets/Scripts/_MenuScripts/ButtonWin.cs" Line="23" Column="3" />
-      <File FileName="Assets/Scripts/_MenuScripts/cursorInput.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/_MenuScripts/defaultControls.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/_MenuScripts/gameStartButton.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/_MenuScripts/menuScript.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/_MenuScripts/settingMenuCounts.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/_MenuScripts/winCursor.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/_MenuScripts/winScreen.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

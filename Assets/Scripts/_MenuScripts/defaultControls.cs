@@ -23,17 +23,17 @@ public class defaultControls  {
 				attack2 = KeyCode.Joystick1Button19;
 				pause = KeyCode.Joystick1Button0;
 			} else {
-				up = KeyCode.W;
-				down = KeyCode.S;
-				left = KeyCode.A;
-				right = KeyCode.D;
-				back = KeyCode.B;
-				clear = KeyCode.C;
-				shiftcw = KeyCode.X;
-				shiftccw = KeyCode.Z;
-				swap = KeyCode.Space;
-				attack1 = KeyCode.Q;
-				attack2 = KeyCode.E;
+				up = KeyCode.Joystick2Button5;
+				down = KeyCode.Joystick2Button6;
+				left = KeyCode.Joystick2Button7;
+				right = KeyCode.Joystick2Button8;
+				back = KeyCode.Joystick2Button10;
+				clear = KeyCode.Joystick2Button17;
+				shiftcw = KeyCode.Joystick2Button14;
+				shiftccw = KeyCode.Joystick2Button13;
+				swap = KeyCode.Joystick2Button16;
+				attack1 = KeyCode.Joystick2Button18;
+				attack2 = KeyCode.Joystick2Button19;
 				pause = KeyCode.Joystick2Button0;
 			}
 		} else if (platform == RuntimePlatform.WindowsEditor || platform == RuntimePlatform.WindowsPlayer) {
