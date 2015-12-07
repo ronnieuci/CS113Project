@@ -18,7 +18,11 @@ public class Button : MonoBehaviour {
 		if (hit.collider != null && hit.collider.gameObject == this.gameObject) {
 			a.color = tint;
 			if(Input.GetKeyDown(cursor.GetComponent<cursorInput>().select)){
-				ms.loadScreen(curr,next);
+				if(gameObject.name != "quit")
+					ms.loadScreen(curr,next);
+				else
+					Application.Quit();
+
 			}
 		} else {
 			a.color = Color.white;
