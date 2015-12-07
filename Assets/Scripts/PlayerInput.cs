@@ -22,6 +22,7 @@ public class PlayerInput : MonoBehaviour
 		x = 3;
 		y = 3;
 		dc.setControls (sm.player);
+		swap = dc.swap;
 	}
 
 	void Update ()
