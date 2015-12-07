@@ -5,15 +5,15 @@ public class PlayerInput : MonoBehaviour
 {
 	public bool inputBlocked;
 	public GameManager gm;
-	public KeyCode up, down, left, right;										//Keys for Movement directions
-	public KeyCode move, clear, shiftcw, shiftccw, swap, attack1, attack2, pause;//Keys for special inputs
-	public ShapesManager sm;													//Pointer to player's Shapemanager
-	public int x, y;															//Used to make sure row and column are within board
-	public GameObject cursor;													//Pointer to cursor on player's board
+	public KeyCode up, down, left, right;											//Keys for Movement directions
+	public KeyCode move, clear, shiftcw, shiftccw, swap, attack1, attack2, pause;	//Keys for special inputs
+	public ShapesManager sm;														//Pointer to player's Shapemanager
+	public int x, y;																//Used to make sure row and column are within board
+	public GameObject cursor;														//Pointer to cursor on player's board
 
-	public bool paused;														//Boolean for Assassin power1
-	private KeyCode temp;														//Temporary Key
-	private float tempnum;														//Temporary Number
+	public bool paused;																//Boolean for Assassin power1
+	private KeyCode temp;															//Temporary Key
+	private float tempnum;															//Temporary Number
 	private defaultControls dc = new defaultControls();
 
 	void Start ()
@@ -44,27 +44,6 @@ public class PlayerInput : MonoBehaviour
 		}
 
 		if (!inputBlocked) {
-
-//			if (cursor.transform.localPosition.x < 3) {
-//				if (Input.GetAxis ("L_XAxis_" + sm.player.ToString ()) == 1.0f) {
-//					cursor.transform.localPosition += Vector3.right;				
-//				}
-//			}
-//			if (cursor.transform.localPosition.x > -3) {
-//				if (Input.GetAxis ("L_XAxis_" + sm.player.ToString ()) == 1.0f) {
-//					cursor.transform.localPosition += Vector3.left;
-//				}
-//			}
-//			if (cursor.transform.localPosition.y > -3.5) {
-//				if (Input.GetAxis ("L_YAxis_" + sm.player.ToString ()) == 1.0f) {
-//					cursor.transform.localPosition += Vector3.down;
-//				}
-//			}
-//			if (cursor.transform.localPosition.y < 3.5) {
-//				if (Input.GetAxis ("L_YAxis_" + sm.player.ToString ()) < -0.75f) {
-//					cursor.transform.localPosition += Vector3.up;				}
-//			}
-		
 			if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer) {
 				if (Input.GetAxis ("DPad_XAxis_" + sm.player.ToString ()) == 1.0f) {
 					cursor.transform.localPosition += Vector3.right;

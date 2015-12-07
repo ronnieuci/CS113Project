@@ -7,8 +7,7 @@ public class ButtonStart : MonoBehaviour {
 	public Color tint;
 	public GameObject cursor;
 	public int curr,next;
-	
-	
+
 	void Start(){	}
 	
 	void Update(){

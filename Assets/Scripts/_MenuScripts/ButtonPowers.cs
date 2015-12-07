@@ -7,8 +7,7 @@ public class ButtonPowers : MonoBehaviour {
 	private Color tint;
 	public GameObject cursor;
 	public settingMenuCounts sm;
-	
-	
+
 	void Start(){
 		tint = sm.selColor;
 	}

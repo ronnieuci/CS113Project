@@ -49,9 +49,11 @@ public class ShapesManager : MonoBehaviour
 
 	public void startGame(){
 		ch [1] = gm.GetComponent<GameManager> ().getChar (player);
+
 		InitializeTypesOnPrefabShapesAndBonuses ();
 		InitializeVariables ();
 		InitializeBlockAndSpawnPositions ();
+
 		setCharacters (ch);
 	}
 
@@ -73,10 +75,13 @@ public class ShapesManager : MonoBehaviour
 			playerChar[m].setBlockBonus(SetCharBlocks(i));
 			m+=1;
 		}
+
 		backg.sprite = playerChar [1].BG;
 		atkPic.sprite = playerChar [1].atk;
+
 		cursor.GetComponent<SpriteRenderer> ().color = playerChar [1].charColor;
 		cursor.GetComponent<SpriteRenderer> ().color = new Color (playerChar [1].charColor.r, playerChar [1].charColor.g, playerChar [1].charColor.b, playerChar [1].charColor.a + 5.5f);
+	
 		scoreBar.GetComponent<SpriteRenderer>().color = playerChar [1].charColor;
 	}
 

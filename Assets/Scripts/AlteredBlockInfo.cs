@@ -6,21 +6,23 @@ using UnityEngine;
 
 public class AlteredBlockInfo
 {
-    private List<GameObject> newBlock { get; set; }
-    public int MaxDistance { get; set; }
+	private List<GameObject> newBlock { get; set; }
 
-    /// Returns distinct list of altered Blocks
-    public IEnumerable<GameObject> AlteredBlock
-    {
-        get	{	return newBlock.Distinct();	}
-    }
+	public int MaxDistance { get; set; }
 
-    public void AddBlock(GameObject go){
-        if (!newBlock.Contains(go))
-            newBlock.Add(go);
-    }
+	/// Returns distinct list of altered Blocks
+	public IEnumerable<GameObject> AlteredBlock {
+		get	{ return newBlock.Distinct ();	}
+	}
 
-    public AlteredBlockInfo(){
-        newBlock = new List<GameObject>();
-    }
+	public void AddBlock (GameObject go)
+	{
+		if (!newBlock.Contains (go))
+			newBlock.Add (go);
+	}
+
+	public AlteredBlockInfo ()
+	{
+		newBlock = new List<GameObject> ();
+	}
 }

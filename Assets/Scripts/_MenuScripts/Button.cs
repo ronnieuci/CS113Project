@@ -8,7 +8,6 @@ public class Button : MonoBehaviour {
 	public GameObject cursor;
 	public int curr,next;
 
-
 	void Start(){	}
 
 	void Update(){

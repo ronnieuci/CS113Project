@@ -16,9 +16,9 @@ public class ButtonWin : MonoBehaviour {
 		a.color = tint;
 			if(Input.GetKeyDown(cursor.GetComponent<winCursor>().select)){
 				ws.action(another);
+			}
+		} else {
+			a.color = Color.white;
 		}
-	} else {
-		a.color = Color.white;
-	}
 	}
 }

@@ -40,6 +40,7 @@ public class ScorePoint : MonoBehaviour {
 	void setWinner(ShapesManager p){
 		PlayerPrefs.SetInt ("winner", p.player);
 		PlayerPrefs.SetInt ("CharWin", p.getCharNum()-1);
+
 		Application.LoadLevel ("Winner");
 	}
 }
