@@ -5,8 +5,9 @@ public class cursorInput : MonoBehaviour {
 
 
 	public KeyCode select;
-	public GameObject cursor, chsprite;
+	public GameObject cursor, chsprite, info;
 	public RuntimeAnimatorController[] sprites;
+	public Sprite[] spInfo;
 	public Color tint;
 	public int character,player;
 
@@ -85,8 +86,11 @@ public class cursorInput : MonoBehaviour {
 	public void showChar(int c)
 	{
 		var a = chsprite.GetComponent<Animator>();
+		info.SetActive (true);
+		var b = info.GetComponent<SpriteRenderer> ();
 		if (c >= 0){
 			a.runtimeAnimatorController = sprites[c];
+			b.sprite = spInfo[c];
 		}
 	}
 }
