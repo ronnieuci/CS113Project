@@ -21,7 +21,7 @@ Fall 2015<br>
 **Overview:** 
 This game is created for the CS 113 Computer Game Development class at UC Irvine (Fall 2015). Space Cats is a two player versus puzzle game. Game is controlled through the XBox 360 controller.
 
-** Description: **
+**Description:**
 Space Cats is a two player puzzle game similar to Pokemon Puzzle League and Bejeweled. The game is targeted for Mac OSX but Windows support is planned. Xbox controllers are required to play the game. There is no AI so two players are required as well. When players are ready to play, they start the game and will be taken to the character selection screen, where they can decide between 3 characters - Assassin, Mage, and Warrior. Two randomly generated boards will appear side-by-side, with a countdown telling the players when to start. The players will commence matching blocks until the game is finished. Throughout the game, power-ups will be available special to the character that they choose. The player wins and the game ends when they outscore their opponent by the selected points.
 
 
